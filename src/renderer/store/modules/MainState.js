@@ -1,9 +1,3 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-
-// import { createPersistedState, createSharedMutations } from 'vuex-electron'
-import { createPersistedState } from 'vuex-electron'
-
 const state = {
   isOnTest: false,
   cycle: 10,
@@ -16,8 +10,8 @@ const state = {
 
 const mutations = {
   // 更改当前系统测试状态标识
-  setIsOnTest: (state, isOnTest) => {
-    state.isOnTest = isOnTest
+  setIsOnTest: (state, testState) => {
+    state.isOnTest = testState
   },
   // 更改当前是否启动进入测试
   switchIsTestPreparing: (state, isPreparing) => {
@@ -66,48 +60,11 @@ const mutations = {
 }
 
 const actions = {
-  setIsOnTestTask ({commit}, isOnTest) {
-    // do something async
-    commit('setIsOnTest', isOnTest)
-  },
-  setCycleTask ({commit}, cycle) {
-    commit('setCycle', cycle)
-  },
-  switchIsTestPreparingTask ({commit}, isPreparing) {
-    commit('switchIsTestPreparing', isPreparing)
-  },
-  setIsSenddingTask ({commit}, isSendding) {
-    commit('setIsSendding', isSendding)
-  },
-  addToSelectedEquipmentsTask ({commit}, equipment) {
-    commit('addToSelectedEquipments', equipment)
-  },
-  dropFromSelectedEquipmentsTask ({commit}, equipment) {
-    commit('dropFromSelectedEquipments', equipment)
-  },
-  clearAllSelectedEquipmentsTask ({commit}) {
-    commit('clearAllSelectedEquipments')
-  },
-  setSelectedEquipmentsTask ({commit}, equipments) {
-    commit('setSelectedEquipments', equipments)
-  },
-  setEquiptmentsTask ({commit}, equipments) {
-    commit('setEquiptments', equipments)
-  },
-  resetEquipmentsTask ({commit}) {
-    commit('resetEquipments')
-  }
+
 }
 
-Vue.use(Vuex)
-
-export default new Vuex.Store({
+export default {
   state,
   mutations,
-  actions,
-  plugins: [
-    createPersistedState()
-    // createSharedMutations()
-  ],
-  strict: process.env.NODE_ENV !== 'production'
-})
+  actions
+}

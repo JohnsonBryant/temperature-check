@@ -17,7 +17,7 @@
     "pack": "npm run pack:main && npm run pack:renderer",
     "pack:main": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.main.config.js",
     "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
-    "postinstall": "npm run lint:fix"
+    "postinstall": "electron-builder install-app-deps && npm run lint:fix"
   },
   "build": {
     "productName": "温湿度检测",
@@ -47,10 +47,7 @@
       "icon": "build/icons/icon.icns"
     },
     "win": {
-      "icon": "build/icons/icon.ico",
-      "target": [
-        "portable"
-      ]
+      "icon": "build/icons/icon.ico"
     },
     "linux": {
       "icon": "build/icons"
@@ -58,9 +55,12 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "binary-parser": "^1.5.0",
+    "electron-json-storage": "^4.1.8",
     "element-ui": "^2.13.0",
+    "moment": "^2.24.0",
     "serialport": "^8.0.5",
-    "tableify": "^1.1.0",
+    "sqlite3": "^4.1.1",
     "vue": "^2.5.16",
     "vue-electron": "^1.0.6",
     "vue-router": "^3.0.1",

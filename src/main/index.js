@@ -1,7 +1,7 @@
 'use strict'
 
 import { app, BrowserWindow } from 'electron'
-
+import MenuBuilder from './menu.js'
 /**
  * Set `__static` path to static files in production
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
@@ -20,7 +20,7 @@ function createWindow () {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
-    height: 563,
+    height: 780,
     useContentSize: true,
     width: 1000
   })
@@ -30,6 +30,9 @@ function createWindow () {
   mainWindow.on('closed', () => {
     mainWindow = null
   })
+
+  const menuBuilder = new MenuBuilder(mainWindow)
+  menuBuilder.buildMenu()
 }
 
 app.on('ready', createWindow)
