@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, dialog } from 'electron'
 import MenuBuilder from './menu.js'
 /**
  * Set `__static` path to static files in production
@@ -22,7 +22,7 @@ function createWindow () {
   mainWindow = new BrowserWindow({
     height: 780,
     useContentSize: true,
-    width: 1000
+    width: 1280
   })
 
   mainWindow.loadURL(winURL)
@@ -33,6 +33,19 @@ function createWindow () {
 
   const menuBuilder = new MenuBuilder(mainWindow)
   menuBuilder.buildMenu()
+
+  mainWindow.on('close', (event) => {
+    let response = dialog.showMessageBox({
+      type: 'warning',
+      title: '提示',
+      buttons: ['取消', '确定'],
+      cancelId: 0,
+      message: '请确保测试数据已保存后，再退出系统！'
+    })
+    if (response === 0) {
+      event.preventDefault()
+    }
+  })
 }
 
 app.on('ready', createWindow)

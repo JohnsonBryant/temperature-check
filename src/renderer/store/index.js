@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 // import { createPersistedState, createSharedMutations } from 'vuex-electron'
-import { createPersistedState } from 'vuex-electron'
+// import { createPersistedState } from 'vuex-electron'
 
 const state = {
   isOnTest: false,
@@ -11,7 +11,8 @@ const state = {
   isTestPreparing: false,
   selectedEquipments: [],
   equipments: [],
-  deviceTestData: []
+  deviceTestData: [],
+  duplicatedEquipment: {}
 }
 
 const mutations = {
@@ -62,6 +63,14 @@ const mutations = {
   // 启动测试失败、或者停止测试时触发， 用于清空测试仪器信息数组
   resetEquipments: (state) => {
     state.equipments = []
+  },
+  // 复制设备时，使用选中的设备信息更新 duplicatedEquipment
+  setDuplicatedEquipment: (state, equipment) => {
+    state.duplicatedEquipment = equipment
+  },
+  // 使用完后，重置duplicatedEquipment
+  reSetDuplicatedEquipment: (state) => {
+    state.duplicatedEquipment = {}
   }
 }
 
@@ -96,6 +105,12 @@ const actions = {
   },
   resetEquipmentsTask ({commit}) {
     commit('resetEquipments')
+  },
+  setDuplicatedEquipmentTask ({commit}, equipment) {
+    commit('setDuplicatedEquipment', equipment)
+  },
+  reSetDuplicatedEquipmentTask ({commit}) {
+    commit('reSetDuplicatedEquipment')
   }
 }
 
@@ -106,7 +121,7 @@ export default new Vuex.Store({
   mutations,
   actions,
   plugins: [
-    createPersistedState()
+    // createPersistedState()
     // createSharedMutations()
   ],
   strict: process.env.NODE_ENV !== 'production'

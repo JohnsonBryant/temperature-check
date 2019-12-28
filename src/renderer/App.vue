@@ -1,15 +1,6 @@
 <template>
   <div id="app">
-    <div class="top">
-      <el-button
-      class="top-item"
-      :type="this.serialportIsOpen ? 'warning' : 'primary'" 
-      @click="OpenSerialPort">{{this.serialportIsOpen ? 'Close' : 'Open' }}</el-button>
-      <div class="top-item">{{isOnTest}}</div>
-    </div>
-    <div class="main">
-      <router-view></router-view>
-    </div>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -38,55 +29,49 @@ export default {
     ...mapState(['isOnTest'])
   },
   mounted () {
-    this.storage.get('config', (err, data) => {
-      if (err) {
-        this.addMessage(err)
-      }
-      this.AppConf = data
-      this.OpenSerialPort()
-    })
+    this.InitApp()
+    this.initAppTitle()
   },
   methods: {
     ...mapActions(['setIsOnTestTask']),
-    OpenSerialPort () {
-      this.InitSerialPort()
+    InitApp () {
+      this.$storage.get('config', (err, data) => {
+        if (err) {
+          this.addMessage(err)
+          return
+        }
+        this.AppConf = data
+        this.InitSerialPort()
+      })
     },
     InitSerialPort () {
       let AppConf = this.AppConf
-      if (this.serialport === null) {
-        this.serialport = new SerialPort(AppConf.SerialPortName, {
-          baudRate: AppConf.BaudRate
-        })
-        // 打开串口
-        this.serialport.open(() => {
-          // serialport.write(`Open serialport ${Config.serialportName} successed!`)
-        })
-        // 串口错误
-        this.serialport.on('error', (message) => {
-          console.error(message)
-        })
-        // 串口数据接收
-        this.serialport.on('data', (data) => {
-          if (!data) {
-            return
-          }
-          let bufLen = this.program.buf.length + data.length
-          this.program.buf = Buffer.concat([this.program.buf, data], bufLen)
-          this.processbuf()
-        })
-        this.serialportIsOpen = true
-        this.setIsOnTestTask(true)
-      } else {
-        this.serialport.close()
-        this.serialport = null
-        this.serialportIsOpen = false
-        this.setIsOnTestTask(false)
-      }
+      this.$port.serialport = new SerialPort(AppConf.SerialPortName, {
+        baudRate: AppConf.BaudRate
+      })
+      // 打开串口
+      this.$port.serialport.open(() => {
+        // serialport.write(`Open serialport ${Config.serialportName} successed!`)
+      })
+      // 串口错误
+      this.$port.serialport.on('error', (message) => {
+        console.error(message)
+      })
+      // 串口数据接收
+      this.$port.serialport.on('data', (data) => {
+        if (!data) {
+          return
+        }
+        let bufLen = this.program.buf.length + data.length
+        this.program.buf = Buffer.concat([this.program.buf, data], bufLen)
+        this.processbuf()
+      })
+      this.serialportIsOpen = true
     },
     processbuf () {
-      while (this.program.buf.length > this.Packet.minlen) {
+      while (this.program.buf.length > this.$Packet.minlen) {
         if (this.program.buf[0] === 0xAA && this.program.buf[1] === 0x55) {
-          let packlen = this.program.buf.readUInt8(3) + this.Packet.minlen
+          let packlen = this.program.buf.readUInt8(3) + this.$Packet.minlen
           if (this.program.buf.length < packlen) {
             break
           }
@@ -112,7 +97,7 @@ export default {
         // }
         this.parseSensorData(packbuf)
       } else {
-        let DirectivePack = this.Packet.DirectivePackParser.parse(packbuf)
+        let DirectivePack = this.$Packet.DirectivePackParser.parse(packbuf)
         this.directiveAction(DirectivePack) // 处理各种数据指令事件
       }
     },
@@ -121,7 +106,7 @@ export default {
         let IDS = this.$store.state.MainState.IDS
         let AppConf = this.AppConf
         // 解析处理传感器数据
-        let DataPack = this.Packet.DataPackParser.parse(packbuf)
+        let DataPack = this.$Packet.DataPackParser.parse(packbuf)
         this.addMessage(`${this.myutil.nowtime()} 收到传感器数据`)
         if (IDS.includes(DataPack.deviceID)) {
           // 传感器ID在配置中， 对应测试中的某个仪器
@@ -243,6 +228,15 @@ export default {
       this.$message({
         message: message,
         type: messageType === undefined ? 'info' : messageType
+      })
+    },
+    initAppTitle () {
+      this.$storage.get('appConfig', (err, data) => {
+        if (err) {
+          this.addMessage(err)
+          return
+        }
+        document.getElementsByTagName('title')[0].text = data.title
       })
     }
   }
