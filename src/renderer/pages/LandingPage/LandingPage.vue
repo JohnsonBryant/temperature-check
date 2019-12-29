@@ -9,8 +9,6 @@
               <!-- 新增测试仪器按钮 -->
               <div class="top-bar-control-item">
                 <el-button @click="routerToAdd" size="medium">新增仪器</el-button>
-                <!-- <router-link to="/addEquipment">
-                </router-link> -->
               </div>
               <div class="top-bar-control-item">
                 <el-badge class="selectEqBtn" :value="selectedEquipments.length">
@@ -187,8 +185,7 @@ export default {
       'setDuplicatedEquipmentTask',
       'addToSelectedEquipmentsTask',
       'dropFromSelectedEquipmentsTask',
-      'clearAllSelectedEquipmentsTask',
-      'switchIsTestPreparingTask'
+      'clearAllSelectedEquipmentsTask'
     ]),
     GetSystemState () {
       return this.isOnTest
@@ -261,7 +258,6 @@ export default {
         return
       }
       this.addMessage('进入测试管理页，请配置测试信息，开始测试！')
-      this.switchIsTestPreparingTask(true)
       this.$router.push({path: '/testConfig'}) // 路由到测试管理页，将已选择设备信息转移到设备管理页
     },
     routerToAdd () {

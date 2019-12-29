@@ -22,6 +22,7 @@
       <test-item 
         :equipment="item.equipment"
         :updateTime="item.updateTime"
+        :packNumber="item.packNumber"
         :test-data="item.testData"
         :temps="item.temps"
         :humis="item.humis"
@@ -32,7 +33,9 @@
 </template>
 
 <script>
-import {mapState, mapActions} from 'vuex'
+import {mapState
+  // , mapActions
+} from 'vuex'
 import TestItem from './TestItem'
 import 'echarts/lib/chart/line'
 
@@ -96,6 +99,7 @@ export default {
     ...mapState(['isOnTest', 'equipments']),
     DeviceTestDatas () {
       const equipments = this.equipments
+      // const equipments = JSON.parse(JSON.stringify(this.equipments))
       let deviceTestDatas = []
       equipments.forEach((ele, index, equipments) => {
         let deviceTestData = {}
@@ -137,6 +141,7 @@ export default {
           humiData: deviationHumi
         })
         deviceTestData.updateTime = dataLen === 0 ? '' : ele.data['time'][dataLen - 1]
+        deviceTestData.packNumber = dataLen
         deviceTestData.temps = this.prepareGraphData('温度', 'temp', ele.data)
         deviceTestData.humis = this.prepareGraphData('湿度', 'humi', ele.data)
         deviceTestDatas.push(deviceTestData)
@@ -148,7 +153,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['']),
+    // ...mapActions(['']),
     prepareGraphData (title, key, sensorData) {
       let data = JSON.parse(JSON.stringify(template))
       data.title.text = title

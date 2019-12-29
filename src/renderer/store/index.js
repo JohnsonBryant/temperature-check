@@ -1,28 +1,25 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
 // import { createPersistedState, createSharedMutations } from 'vuex-electron'
 // import { createPersistedState } from 'vuex-electron'
 
 const state = {
-  isOnTest: false,
-  cycle: 10,
-  isSendding: true,
-  isTestPreparing: false,
-  selectedEquipments: [],
-  equipments: [],
-  deviceTestData: [],
-  duplicatedEquipment: {}
+  isOnTest: false, // 系统是否在测试状态标志
+  cycle: 120, // 测试周期，启动测试
+  isSendding: true, // 测试是否周期获取字节点数据
+  selectedEquipments: [], // 选择的测试仪器数据
+  equipments: [], // 打包后的测试数据结构
+  IDS: [], // 测试仪器配置的传感器ID集合
+  duplicatedEquipment: {}, // 复制传感器时，临时存储位置
+  searchedSensorIDs: [], // 搜索传感器，收到应答结果的存储位置
+  TestTime: '', // 测试开始时间
+  sensorDataNotInTest: []
 }
 
 const mutations = {
   // 更改当前系统测试状态标识
   setIsOnTest: (state, isOnTest) => {
     state.isOnTest = isOnTest
-  },
-  // 更改当前是否启动进入测试
-  switchIsTestPreparing: (state, isPreparing) => {
-    state.isTestPreparing = isPreparing
   },
   // 更改周期
   setCycle: (state, cycle) => {
@@ -56,6 +53,10 @@ const mutations = {
   setSelectedEquipments: (state, equipments) => {
     state.selectedEquipments.splice(0, state.selectedEquipments.length, ...equipments)
   },
+  // 设置测试仪器配置的传感器ID集合
+  setIDS: (state, IDS) => {
+    state.IDS.splice(0, state.IDS.length, ...IDS)
+  },
   // 启动测试时， 初始化设置测试仪器数组
   setEquiptments: (state, equipments) => {
     state.equipments.splice(0, state.equipments.length, ...equipments)
@@ -71,6 +72,27 @@ const mutations = {
   // 使用完后，重置duplicatedEquipment
   reSetDuplicatedEquipment: (state) => {
     state.duplicatedEquipment = {}
+  },
+  // 接收到搜索传感器应答时， 将传感器ID增加到 searchedSensorIDs
+  addToSearchedSensorIDs: (state, deviceID) => {
+    let searchedSensorIDs = state.searchedSensorIDs
+    if (!searchedSensorIDs.includes(deviceID)) {
+      searchedSensorIDs.push(deviceID)
+    }
+  },
+  // 清空 searchedSensorIDs
+  clearSearchedSensorIDs: (state) => {
+    state.searchedSensorIDs = []
+  },
+  // setTestTime 测试开始时间
+  setTestTime: (state, timeStr) => {
+    state.TestTime = timeStr
+  },
+  addToSensorDataNotInTest: (state, pack) => {
+    state.sensorDataNotInTest.push(pack)
+  },
+  clearSensorDataNotInTest: (state) => {
+    state.sensorDataNotInTest.splice(0, state.state.sensorDataNotInTest.length)
   }
 }
 
@@ -81,9 +103,6 @@ const actions = {
   },
   setCycleTask ({commit}, cycle) {
     commit('setCycle', cycle)
-  },
-  switchIsTestPreparingTask ({commit}, isPreparing) {
-    commit('switchIsTestPreparing', isPreparing)
   },
   setIsSenddingTask ({commit}, isSendding) {
     commit('setIsSendding', isSendding)
@@ -100,6 +119,9 @@ const actions = {
   setSelectedEquipmentsTask ({commit}, equipments) {
     commit('setSelectedEquipments', equipments)
   },
+  setIDSTask ({commit}, IDS) {
+    commit('setIDS', IDS)
+  },
   setEquiptmentsTask ({commit}, equipments) {
     commit('setEquiptments', equipments)
   },
@@ -111,6 +133,21 @@ const actions = {
   },
   reSetDuplicatedEquipmentTask ({commit}) {
     commit('reSetDuplicatedEquipment')
+  },
+  addToSearchedSensorIDsTask ({commit}, deviceID) {
+    commit('addToSearchedSensorIDs', deviceID)
+  },
+  clearSearchedSensorIDsTask ({commit}) {
+    commit('clearSearchedSensorIDs')
+  },
+  setTestTimeTask ({commit}, timeStr) {
+    commit('setTestTime', timeStr)
+  },
+  addToSensorDataNotInTestTask ({commit}, pack) {
+    commit('addToSensorDataNotInTest', pack)
+  },
+  clearSensorDataNotInTestTask ({commit}) {
+    commit('clearSensorDataNotInTest')
   }
 }
 

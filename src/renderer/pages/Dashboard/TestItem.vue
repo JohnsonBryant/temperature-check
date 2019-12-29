@@ -18,7 +18,7 @@
       </el-col>
       <el-col :span="6">
         <el-card class="test-item-data" shadow="always">
-          <h4>数据更新时间：{{updateTime}}</h4>
+          <h4>数据更新时间：{{updateTime}}, 总包数：{{packNumber}}</h4>
           <div class="test-item-testdata">
             <el-table
               :data="testData"
@@ -58,7 +58,7 @@ export default {
   name: 'TestItem',
   components: {
   },
-  props: ['equipment', 'updateTime', 'testData', 'temps', 'humis'],
+  props: ['equipment', 'updateTime', 'packNumber', 'testData', 'temps', 'humis'],
   computed: {
     equipmentTitle () {
       return `

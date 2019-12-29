@@ -3,7 +3,7 @@
     <el-card shadow="always">
       功能配置页
     </el-card>
-    <el-card shadow="always" class="wk-container">
+    <div class="wk-container">
       <el-row style="margin-bottom:10px;">
         <el-col :span="24">
           <div>
@@ -169,7 +169,7 @@
           </div>
         </el-col>
       </el-row>
-    </el-card>
+    </div>
   </div>
 </template>
 
@@ -251,18 +251,19 @@ export default {
       rulesSerialPort: rules.SerialPort,
       rulesBattery: rules.Battery,
       rulesidSetting: rules.idSetting,
-      rulestestTemplate: rules.testTemplate,
-      searchedSensorIDs: [] // 存储搜索传感器功能搜索到的传感器ID
+      rulestestTemplate: rules.testTemplate
     }
   },
   beforeMount () {
     this.initConfig()
   },
   computed: {
-    ...mapState(['isOnTest'])
+    ...mapState(['isOnTest', 'searchedSensorIDs'])
   },
   methods: {
-    ...mapActions(['setIsOnTestTask']),
+    ...mapActions([
+      'clearSearchedSensorIDsTask'
+    ]),
     initConfig () {
       // 获取当前程序配置信息，并初始化 data.config
       this.$storage.get('config', (err, data) => {
@@ -393,17 +394,14 @@ export default {
       })
     },
     SerachSensorClick () {
-      // 重置当前缓存 搜索传感器ID的变量
-      const searchedSensorIDs = this.searchedSensorIDs
-      if (searchedSensorIDs.length !== 0) {
-        this.searchedSensorIDs.splice(0, this.searchedSensorIDs.length)
-      }
+      // 调用串口发送数据到主节点
       let bufstr = 'AA55' + 'A1' + '06' + '0B' + '00' + '00000000' + '0000'
       let buf = Buffer.from(bufstr, 'hex')
-      // 调用串口发送数据到主节点
       this.$port.serialport.write(buf, (err) => {
         if (!err) {
           this.addMessage('搜索传感器指令发送成功', 'success')
+          // 重置当前缓存 搜索传感器ID的变量
+          this.clearSearchedSensorIDsTask()
         } else {
           this.addMessage('串口写入错误，搜索传感器指令发送失败！', 'warning')
         }
@@ -491,17 +489,6 @@ export default {
         message: message,
         type: messageType
       })
-    }
-  },
-  sockets: {
-    directiveSearchSensors: function (pack) {
-      // websocket 接收传感器指令包
-      let searchedSensorIDs = this.searchedSensorIDs
-      if (!searchedSensorIDs.includes(pack.deviceID)) {
-        searchedSensorIDs.push(pack.deviceID)
-      } else {
-        this.addMessage('搜索传感器，重复接收到传感器' + pack.deviceID.toString() + '的应答', 'warning')
-      }
     }
   }
 }

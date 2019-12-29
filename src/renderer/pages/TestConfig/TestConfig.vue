@@ -61,6 +61,7 @@
 <script>
 import {mapState, mapActions} from 'vuex'
 import Vue from 'vue'
+import moment from 'moment'
 import TestConfigItem from './TestConfigItem'
 
 export default {
@@ -84,13 +85,17 @@ export default {
     }
   },
   beforeMount () {
-    setTimeout(this.initTestDeviceInfo, 500)
-
-    // 获取测试模板信息，并初始化 data.testTemplate
-    this.InitTestTemplate()
+    this.initTestDeviceInfo() // 使用 store 变量初始化页面
+    this.InitTestTemplate() // 获取测试模板信息，并初始化 data.testTemplate
   },
   computed: {
-    ...mapState(['isOnTest', 'cycle', 'isSendding', 'equipments', 'isTestPreparing', 'selectedEquipments']),
+    ...mapState([
+      'isOnTest',
+      'cycle',
+      'isSendding',
+      'equipments',
+      'selectedEquipments'
+    ]),
     getCurrentState () {
       return (this.testDeviceInfo.length === 0) && !this.isOnTest
     }
@@ -100,18 +105,18 @@ export default {
       'setIsOnTestTask',
       'setCycleTask',
       'setIsSenddingTask',
+      'setIDSTask',
       'setEquiptmentsTask',
-      'resetEquipmentsTask'
+      'resetEquipmentsTask',
+      'setTestTimeTask'
     ]),
     InitTestTemplate () {
       this.$storage.get('testTemplate', (err, data) => {
         if (err) {
-          this.addMessage(`获取测试模板错误，请重启程序！`)
+          this.addMessage(`获取测试模板错误，请重启程序！`, 'warning')
           return
         }
         this.setData(this.testTemplate, data)
-        // this.localeCycle = this.testTemplate.cycle
-        // this.localeIsSendding = this.testTemplate.isSendding
       })
     },
     initTestDeviceInfo () {
@@ -124,10 +129,7 @@ export default {
           ele.config.IDS = ele.config.IDS.join(',')
         })
         this.testDeviceInfo.splice(0, this.testDeviceInfo.length, ...equipments)
-        return
-      }
-
-      if (this.isTestPreparing) {
+      } else {
         // 检查当前是否为选择了测试仪器，并点击了进入测试按钮， 是，则使用已选择仪器数组作为数据源进行初始化
         let equipments = JSON.parse(JSON.stringify(this.selectedEquipments))
         let testDeviceInfo = equipments.map(ele => {
@@ -158,7 +160,7 @@ export default {
     startTest () {
       // 检查当前是否在 测试状态
       if (this.isOnTest) {
-        this.addMessage('当前系统处于测试转态，请勿重复操作！', 'info')
+        this.addMessage('当前系统处于测试转态，请勿重复操作！', 'warning')
         return
       }
       let cycle = parseInt(this.localeCycle)
@@ -172,18 +174,18 @@ export default {
       // 检查是否具备启动测试条件
       // 周期参数错误
       if (!this.$myutil.isPositiveInteger(cycle)) {
-        this.addMessage('周期错误，周期必须为数值，且应大于或等于1 ！')
+        this.addMessage('周期错误，周期必须为数值，且应大于或等于1 ！', 'warning')
         return
       }
       // 测试仪器信息错误，或测试仪器为空
       if (!Array.isArray(selectedEquipments) || selectedEquipments.length === 0) {
-        this.addMessage('空仪器错误，必须选择一个测试仪器并配置完成后，才能进行测试 ！')
+        this.addMessage('空仪器错误，必须选择一个测试仪器并配置完成后，才能进行测试 ！', 'warning')
         return
       }
       // 测试仪器信息检查
       // 检查到重复的两个仪器
       if (devicesTemp.some((item, index, arr) => arr.indexOf(item) !== arr.lastIndexOf(item))) {
-        this.addMessage('仪器重复错误，不允许在同一次测试中出现两个相同的仪器 ！')
+        this.addMessage('仪器重复错误，不允许在同一次测试中出现两个相同的仪器 ！', 'warning')
         return
       }
       // 测试仪器下挂载的其他传感器ID的转换及检查
@@ -195,7 +197,7 @@ export default {
         ele.config.IDS = ids
       })
       if (IDS.some((item) => !this.$myutil.isInteger(item) || (item > 255 || item < 0))) {
-        this.addMessage('传感器挂载的其他ID输入有错误，请检查后重试 ！')
+        this.addMessage('传感器挂载的其他ID输入有错误，请检查后重试 ！', 'warning')
         return
       }
       // 测试仪器下挂载的传感器ID检查
@@ -204,23 +206,20 @@ export default {
       })
       // 检查到无效的ID，所有传感器ID均必须为数值，且在0-255范围内
       if (allID.some((item) => !this.$myutil.isInteger(item) || (item > 255 || item < 0))) {
-        this.addMessage('传感器ID错误，ID只接受0-255之间的数值 ！')
+        this.addMessage('传感器ID错误，ID只接受0-255之间的数值 ！', 'warning')
         return
       }
       // 检查到重复传感器ID
       if (allID.some((item, index, arr) => arr.indexOf(item) !== arr.lastIndexOf(item))) {
-        this.addMessage('传感器ID错误，测试仪器下挂载的传感器ID存在重复，请检查后重试 ！')
+        this.addMessage('传感器ID错误，测试仪器下挂载的传感器ID存在重复，请检查后重试 ！', 'warning')
         return
       }
       // 检查到测试仪器配置温湿度示值存在非数值。测试仪器配置的温湿度示值有效性检查，必须为数值
       if (selectedEquipments.some((item) => !this.$myutil.isValidNumber(parseFloat(item.config.temp)) || !this.$myutil.isValidNumber(parseFloat(item.config.humi)))) {
-        this.addMessage('测试仪器的温湿度示值输入错误，温湿度示值必须为有效数值 ！')
+        this.addMessage('测试仪器的温湿度示值输入错误，温湿度示值必须为有效数值 ！', 'warning')
         return
       }
       // 数据检验完成
-      // 清空 store.state 中已选择仪器数组
-      this.clearAllSelectedEquipmentsTask()
-
       // 拓展 selectedEquipments, 添加用于存储传感器数据、检测数据及对应数据时间的键值对
       selectedEquipments.forEach((equipment) => {
         let data = {}
@@ -246,6 +245,7 @@ export default {
       })
       this.setCycleTask(cycle)
       this.setIsSenddingTask(isSendding)
+      this.setIDSTask(allID)
       this.setEquiptmentsTask(selectedEquipments) // 初始化设置 store.state 中的测试仪器信息数组
       // 给后台启动测试信号，所有测试设备信息传送到后端程序
       if (this.localeIsSendding) {
@@ -255,6 +255,7 @@ export default {
           if (!err) {
             this.addMessage('启动测试成功！', 'success')
             this.setIsOnTestTask(true)
+            this.setTestTimeTask(this.nowtime())
             this.$router.push({path: '/dashboard'})
           } else {
             this.addMessage('串口写入错误，启动测试失败！', 'warning')
@@ -264,6 +265,7 @@ export default {
       } else {
         this.addMessage('启动测试成功！', 'success')
         this.setIsOnTestTask(true)
+        this.setTestTimeTask(this.nowtime())
         this.$router.push({path: '/dashboard'})
       }
     },
@@ -279,6 +281,9 @@ export default {
         message: message,
         type: messageType !== undefined ? messageType : 'info'
       })
+    },
+    nowtime () {
+      return moment().format('YYYY_MM_DD_HH_mm_ss')
     }
   }
 }

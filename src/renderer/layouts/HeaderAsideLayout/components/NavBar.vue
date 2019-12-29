@@ -4,6 +4,7 @@
       <el-button 
         class="main-control-btn" 
         type="success" round
+        :disabled="!isOnTest"
         @click="StopTest"
         >停止测试</el-button>
       <el-button
@@ -19,6 +20,8 @@
 <script>
 import {mapState, mapActions} from 'vuex'
 import XLSX from 'xlsx'
+import path from 'path'
+const dialog = require('electron').remote.dialog
 
 export default {
   name: 'NavBar',
@@ -27,7 +30,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isOnTest'])
+    ...mapState(['isOnTest', 'equipments'])
   },
   methods: {
     ...mapActions(['setIsOnTestTask']),
@@ -59,48 +62,75 @@ export default {
       })
     },
     ExportData () {
+      if (this.equipments.length === 0) {
+        this.addMessage(`当前无测试数据，未导出文件！`, 'warning')
+        return
+      }
+
+      let o = dialog.showOpenDialog({
+        title: '保存文件',
+        properties: ['openDirectory', 'createDirectory'],
+        filters: [{
+          name: 'Spreadsheets'
+        }]
+      })
+      if (o === undefined) {
+        this.addMessage(`未选择导出文件的存储位置，取消导出文件！`, 'warning')
+        return
+      }
+
+      let equipments = JSON.parse(JSON.stringify(this.equipments))
       // forloop all equipments, flat equipment.data, save data to excel
-      let sensorData = [
-        {'仪器名称': '温湿度检测仪-GH-100-01-001'},
-        {
-          '中心点(ID1)温度': '1',
-          'ID2温度': '1',
-          'ID3温度': '1',
-          '温度均匀度': '1',
-          '温度波动度': '1',
-          '温度偏差': '1',
-          '中心点(ID1)湿度': '1',
-          'ID2湿度': '1',
-          'ID3湿度': '1',
-          '湿度均匀度': '1',
-          '湿度波动度': '1',
-          '湿度偏差': '1'
-        }
-      ]
-      let columnHeaders = ['仪器名称', '温度示值', '中心点(ID1)温度', 'ID2温度', 'ID3温度', '温度均匀度', '温度波动度', '温度偏差', '湿度示值', '中心点(ID1)湿度', 'ID2湿度', 'ID3湿度', '湿度均匀度', '湿度波动度', '湿度偏差']
-      let excelName = '测试仪器1检测数据.xlsx'
-      this.SaveJsonToExcel(excelName, sensorData, columnHeaders)
-      // save graph image
-      // alert('数据下载成功！')
+      equipments.forEach((equipment, index, equipments) => {
+        this.SaveJsonToExcel(o[0], equipment)
+      })
+      this.addMessage(`数据文件导出到 ${o[0]} 成功！`, 'success')
     },
-    SaveJsonToExcel (fileName = 'sheetjs.xlsx', data = [], header = []) {
-      /* generate new workbook object */
-      var wb = XLSX.utils.book_new()
-      var wsName = '检测数据'
-      /* make worksheet */
-      let dataExport = data === [] ? [
-        { S: 1, h: 2, e: 3, e_1: 4, t: 5, J: 6, S_1: 7 },
-        { S: 2, h: 3, e: 4, e_1: 5, t: 6, J: 7, S_1: 8 },
-        { t: 6, J: 7, S_1: 8 }
-      ] : data
-      var ws = XLSX.utils.json_to_sheet(dataExport, {header: header})
-      XLSX.utils.book_append_sheet(wb, ws, wsName) /* Add the worksheet to the workbook */
-      XLSX.writeFile(wb, fileName) /* generate file and force a download */
+    SaveJsonToExcel (dir = './', equipmentData = {}, exportTime = '') {
+      let excelName = path.join(dir, `/${this.getPeviceName(equipmentData.device)}_${exportTime}.xlsx`)
+      let data = equipmentData.data
+      let packNum = data.evennessTemp.length
+      let IDS = equipmentData.config.IDS.slice().sort((a, b) => a - b)
+      let centerID = equipmentData.config.centerID
+      let tempConfig = equipmentData.config.temp
+      let humiConfig = equipmentData.config.humi
+      let sensorDataTemp = [] /* pack data to array of array */
+      let sensorDataHumi = []
+      // let columnHeadersTemp = ['温度示值', '中心点(ID1)温度', 'ID2温度', 'ID3温度', '温度均匀度', '温度波动度', '温度偏差']
+      // let columnHeadersHumi = ['湿度示值', '中心点(ID1)湿度', 'ID2湿度', 'ID3湿度', '湿度均匀度', '湿度波动度', '湿度偏差']
+      let columnHeadersTemp = ['温度示值', '温度均匀度', '温度波动度', '温度偏差', `中心点(ID${centerID})温度`]
+      let columnHeadersHumi = ['湿度示值', '湿度均匀度', '湿度波动度', '湿度偏差', `中心点(ID${centerID})湿度`]
+      IDS.forEach((id, index, ids) => {
+        columnHeadersTemp.push(`ID${id}温度`)
+        columnHeadersHumi.push(`ID${id}湿度`)
+      })
+      sensorDataTemp.push(columnHeadersTemp)
+      sensorDataHumi.push(columnHeadersHumi)
+      for (let i = 0; i < packNum; i++) {
+        let rowTemp = [tempConfig, data.evennessTemp[i], data.fluctuationTemp[i], data.deviationTemp[i], data[centerID]['temp'][i]]
+        let rowHumi = [humiConfig, data.evennessHumi[i], data.fluctuationHumi[i], data.deviationHumi[i], data[centerID]['humi'][i]]
+        let startKey = rowHumi.length
+        for (let j = 0; j < IDS.length; j++) {
+          rowTemp.push(data[IDS[j]]['temp'][startKey + j])
+          rowHumi.push(data[IDS[j]]['humi'][startKey + j])
+        }
+        sensorDataTemp.push(rowTemp)
+        sensorDataHumi.push(rowHumi)
+      }
+      let wb = XLSX.utils.book_new() /* generate new workbook object */
+      let wsTemp = XLSX.utils.aoa_to_sheet(sensorDataTemp) /* transfer array of array to worksheet */
+      let wsHumi = XLSX.utils.aoa_to_sheet(sensorDataHumi)
+      XLSX.utils.book_append_sheet(wb, wsTemp, '温度检测数据') /* Add the worksheet to the workbook */
+      XLSX.utils.book_append_sheet(wb, wsHumi, '湿度检测数据')
+      XLSX.writeFile(wb, excelName) /* generate file and force a download */
+    },
+    getPeviceName (device) {
+      return `${device.company}_${device.em}_${device.deviceName}_${device.deviceType}_${device.deviceID}`
     },
     addMessage (message, messageType) {
       this.$message({
         message: message,
-        type: messageType === undefined ? messageType : 'info'
+        type: messageType !== undefined ? messageType : 'info'
       })
     }
   }
