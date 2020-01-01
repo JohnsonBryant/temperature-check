@@ -15,6 +15,8 @@ import { initConf } from './utils/conf.js'
 import Packet from './utils/packetParser.js'
 import myutil from './utils/myutil.js'
 
+initConf()
+
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 
 Vue.use(ElementUI)
@@ -36,5 +38,3 @@ new Vue({
   store,
   template: '<App/>'
 }).$mount('#app')
-
-initConf()

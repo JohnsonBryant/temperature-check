@@ -99,6 +99,16 @@ function Min (data) {
   return Math.min.apply(null, arr)
 }
 
+export const debounce = function (fn, delay) {
+  let timer
+  return function () {
+    clearTimeout(timer)
+    timer = setTimeout(function (context, args) {
+      fn.apply(context, args)
+    }, delay, this, arguments)
+  }
+}
+
 export default {
   nowtime,
   nowDate,
@@ -108,5 +118,6 @@ export default {
   isPositiveInteger,
   Average,
   Min,
-  Max
+  Max,
+  debounce
 }

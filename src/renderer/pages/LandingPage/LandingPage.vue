@@ -18,7 +18,7 @@
               <div class="top-bar-control-item">
                 <!-- 搜索委托单位（测试仪器）搜索框 -->
                 <el-input 
-                  @change="getEquipmentByCompany"
+                  @input="getEquipmentByCompany"
                   v-model="searchText"
                   placeholder="请输入委托单位"
                   class="searchEqBox"
@@ -30,7 +30,6 @@
         <el-card shadow="always" class="wk-container" >
           <!-- 已添加测试仪器信息展示表格，表格分页，表格可根据委托单位进行自定义检索表内已有信息 -->
           <el-table
-            ref="filterTable"
             :data="equipments"
             border resizable
             >
@@ -71,23 +70,33 @@
               <template slot-scope="scope">
                 <el-button
                   @click="handleAddToTest(scope.$index, scope.row)"
-                  :disabled="GetSystemState()"
+                  :disabled="isOnTest"
                   size="mini"
                 >选择</el-button>
                 <el-button
                   @click="handleDuplicate(scope.$index, scope.row)"
-                  :disabled="GetSystemState()"
+                  :disabled="isOnTest"
                   size="mini"
                 >复制</el-button>
                 <el-button
                   @click="handleDelete(scope.$index, scope.row)"
-                  :disabled="GetSystemState()"
+                  :disabled="isOnTest"
                   size="mini"
                   type="danger"
                 >删除</el-button>
               </template>
             </el-table-column>
           </el-table>
+
+          <el-pagination
+            class="pagination"
+            background
+            layout="prev, pager, next"
+            :current-page.sync="page.currentPageNum"
+            :page-size="page.size"
+            :total="page.total"
+            @current-change="equipmentsCurrentChange">
+          </el-pagination>
         </el-card>
       </el-col>
     </el-row>
@@ -99,64 +108,66 @@
       :modal="false"
       :show-close="false"
       :withHeader="false"
-      size="60%"
+      size="50"
       >
-      <el-divider content-position="center">已选择仪器仪器</el-divider>
-      <el-table
-        border resizable
-        :data="selectedEquipments"
-        style="width: 100%; margin-top: 0px;">
-        <el-table-column
-          prop="company"
-          label="委托单位"
-          min-width="160"
-        >
-        </el-table-column>
-        <el-table-column
-          prop="deviceName"
-          label="仪器名称"
-          min-width="150">
-        </el-table-column>
-        <el-table-column
-          prop="deviceType"
-          label="仪器型号"
-          min-width="90">
-        </el-table-column>
-        <el-table-column
-          prop="deviceID"
-          label="仪器编号"
-          min-width="90">
-        </el-table-column>
-        <el-table-column
-          prop="em"
-          label="仪器厂家"
-          min-width="160">
-        </el-table-column>
-        <el-table-column
-          prop="insertDate"
-          label="日期"
-          min-width="130"
-        >
-        </el-table-column>
-        <el-table-column label="操作"
-          min-width="200"
-        >
-          <template slot-scope="scope">
-            <el-button
-              size="mini"
-              type="danger"
-              @click="deleteSelectedEquipment(scope.$index, scope.row)"
-              :disabled="GetSystemState()">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table> 
+      <div class="selectEp-container">
+        <!-- <el-divider content-position="center">已选择仪器仪器</el-divider> -->
+        <el-table
+          border resizable
+          :data="selectedEquipments"
+          style="width: 100%; margin-top: 0px;">
+          <el-table-column
+            prop="company"
+            label="委托单位"
+            min-width="160"
+          >
+          </el-table-column>
+          <el-table-column
+            prop="deviceName"
+            label="仪器名称"
+            min-width="150">
+          </el-table-column>
+          <el-table-column
+            prop="deviceType"
+            label="仪器型号"
+            min-width="90">
+          </el-table-column>
+          <el-table-column
+            prop="deviceID"
+            label="仪器编号"
+            min-width="90">
+          </el-table-column>
+          <el-table-column
+            prop="em"
+            label="仪器厂家"
+            min-width="160">
+          </el-table-column>
+          <el-table-column
+            prop="insertDate"
+            label="日期"
+            min-width="130"
+          >
+          </el-table-column>
+          <el-table-column label="操作"
+            min-width="200"
+          >
+            <template slot-scope="scope">
+              <el-button
+                size="mini"
+                type="danger"
+                @click="deleteSelectedEquipment(scope.$index, scope.row)"
+                :disabled="isOnTest">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
       <div class="selectEp-footer">
         <el-button class="selectEp-footer-btn left" type="info" round
           @click="clearSelected"
-          :disabled="GetSystemState()">清空选择</el-button>
+          :disabled="isOnTest">清空选择</el-button>
         <el-button class="selectEp-footer-btn right" type="success" round
           @click="startTest"
-          :disabled="GetSystemState()">进入测试</el-button>
+          :disabled="isOnTest">进入测试</el-button>
       </div>
     </el-drawer>
   </div>
@@ -164,6 +175,8 @@
 
 <script>
 import {mapState, mapActions} from 'vuex'
+import {debounce} from '../../utils/myutil.js'
+
 export default {
   name: 'landing-page',
   data () {
@@ -171,11 +184,16 @@ export default {
       drawerSelectEq: false, // 控制已选中测试仪器的下拉抽屉的显示
       directionSelectEq: 'ttb',
       searchText: '', // 测试仪器检索搜索框输入内容
+      page: {
+        total: 0,
+        currentPageNum: 1,
+        size: 8
+      },
       equipments: [] // 后端获取的测试仪器数据， 用于用户操作， 选择、复制、删除
     }
   },
   beforeMount () {
-    this.getLatestFiveEq()
+    this.getEquipments()
   },
   computed: {
     ...mapState(['isOnTest', 'selectedEquipments'])
@@ -187,20 +205,39 @@ export default {
       'dropFromSelectedEquipmentsTask',
       'clearAllSelectedEquipmentsTask'
     ]),
-    GetSystemState () {
-      return this.isOnTest
-    },
-    getLatestFiveEq () {
-      // 获取最近添加的五条测试仪器信息
-      this.$sqliteDB.queryData('select id, company, em, deviceName, deviceType, deviceID, insertDate from equipment order by insertDate desc limit 5;', (rows) => {
-        this.equipments.splice(0, this.equipments.length, ...rows)
+    getEquipments () {
+      // 获取最近添加的测试仪器信息
+      let that = this
+      new Promise(function (resolve, reject) {
+        let sql
+        if (that.searchText === '') {
+          sql = `select count(*) as total from equipment`
+        } else {
+          sql = `select count(*) as total from equipment where company like "%${that.searchText}%"`
+        }
+        that.$sqliteDB.queryData(sql, (rows) => {
+          resolve(rows)
+        })
       })
+        .then(function (rows) {
+          that.page.total = rows[0].total
+          let sql = ''
+          if (that.searchText === '') {
+            sql = `select id, company, em, deviceName, deviceType, deviceID, insertDate from equipment order by insertDate desc limit ${that.page.size} offset ${that.page.size * (that.page.currentPageNum - 1)};`
+          } else {
+            sql = `select id, company, em, deviceName, deviceType, deviceID, insertDate from equipment where company like "%${that.searchText}%" order by insertDate desc limit ${that.page.size} offset ${that.page.size * (that.page.currentPageNum - 1)};`
+          }
+          that.$sqliteDB.queryData(sql, (rows) => {
+            that.equipments.splice(0, that.equipments.length, ...rows)
+          })
+        })
     },
-    getEquipmentByCompany (company) {
-      let sql = `select id, company, em, deviceName, deviceType, deviceID, insertDate from equipment where company like "%${company}%" order by insertDate desc;`
-      this.$sqliteDB.queryData(sql, (rows) => {
-        this.equipments.splice(0, this.equipments.length, ...rows)
-      })
+    getEquipmentByCompany: debounce(function (company) {
+      this.page.currentPageNum = 1
+      this.getEquipments()
+    }, 500),
+    equipmentsCurrentChange (current) {
+      this.getEquipments()
     },
     handleDelete (index, row) { // 从数据库中删除测试仪器
       this.$confirm(`<strong>此操作将永久删除该测试仪器,是否继续?</strong>`, '提示', {
@@ -306,11 +343,7 @@ export default {
 }
 
 .selectEp-footer{
-  position: absolute;
-  bottom: 10px;
-  left: 0;
-  right: 0;
-  width: 100%;
+  padding: 5px 0;
   text-align: center;
 }
 
@@ -321,9 +354,20 @@ export default {
   margin-left: 20px;
 }
 
-.wk-container{
-  margin-top: 10px;
-  min-height: 75vh;  
+.selectEp-container{
+  height: 400px;
+  overflow-y: auto;
 }
 
+.wk-container{
+  margin-top: 10px;
+  min-height: 75vh;
+  max-height: 75vh;
+  overflow-y: auto;
+}
+
+.landing-page .pagination{
+  text-align: center;
+  margin-top: 0.5rem;
+}
 </style>

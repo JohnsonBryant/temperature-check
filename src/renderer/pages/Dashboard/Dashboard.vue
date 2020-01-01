@@ -75,7 +75,13 @@ const template = {
     data: [] // 根据数据生成， 数据时间数组， 对应曲线图的 X 轴
   },
   yAxis: {
-    type: 'value'
+    type: 'value',
+    max: function (value) {
+      return value.max + (value.max - value.min) * 0.1
+    },
+    min: function (value) {
+      return value.min - (value.max - value.min) * 0.1
+    }
   },
   series: [
     {

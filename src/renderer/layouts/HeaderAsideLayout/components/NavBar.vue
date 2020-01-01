@@ -1,7 +1,14 @@
 <template>
   <el-menu class="navbar" mode="horizontal">
     <div class="main-control">
-      <el-button 
+      <div class="main-control-nav">
+        <div class="main-control-nav-state">
+          <img :src="stateImgeUrl" :alt="stateImageAlt" class="state-img main-control-nav-state-item">
+          <span class="main-control-nav-state-item">{{stateImageAlt}}</span>
+        </div>
+
+      </div>
+      <el-button
         class="main-control-btn" 
         type="success" round
         :disabled="!isOnTest"
@@ -30,7 +37,13 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isOnTest', 'equipments'])
+    ...mapState(['isOnTest', 'equipments']),
+    stateImgeUrl () {
+      return 'static/img/' + (this.isOnTest ? 'on' : 'off') + '.png'
+    },
+    stateImageAlt () {
+      return '系统状态：' + (this.isOnTest ? '测试中' : '未测试')
+    }
   },
   methods: {
     ...mapActions(['setIsOnTestTask']),
@@ -139,11 +152,29 @@ export default {
 
 <style>
 .navbar .main-control{
+  width: 100%;
   display: flex;
   align-self: center;
-  top: 0;
-  right: 25px;
-  height: 64px;
+}
+
+.navbar .main-control-nav {
+  display: flex;
+  flex-grow: 1;
+  justify-content: flex-start;
+}
+
+.navbar .main-control-nav-state{
+  display: flex;
+}
+
+.navbar .state-img{
+  width:40px;
+  height:40px;
+}
+
+.navbar .main-control-nav-state-item{
+  align-self:center;
+  margin-right: 10px;
 }
 
 .navbar .main-control .main-control-btn{

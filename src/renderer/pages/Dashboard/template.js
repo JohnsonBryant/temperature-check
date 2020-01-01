@@ -50,7 +50,13 @@ export default {
       data: ['10:01', '10:02', '10:03']
     },
     yAxis: {
-      type: 'value'
+      type: 'value',
+      max: function (value) {
+        return value.max + (value.max - value.min) * 0.1
+      },
+      min: function (value) {
+        return value.min - (value.max - value.min) * 0.1
+      }
     },
     series: [
       {
@@ -104,7 +110,13 @@ export default {
       data: ['10:01', '10:02', '10:03']
     },
     yAxis: {
-      type: 'value'
+      type: 'value',
+      max: function (value) {
+        return value.max + (value.max - value.min) * 0.1
+      },
+      min: function (value) {
+        return value.min - (value.max - value.min) * 0.1
+      }
     },
     series: [
       {
