@@ -3,14 +3,14 @@
     <div class="main-control">
       <div class="main-control-nav">
         <div class="main-control-nav-state">
-          <img :src="stateImgeUrl" :alt="stateImageAlt" class="state-img main-control-nav-state-item">
+          <span class="main-control-nav-state-item breath"
+            :style="{animationName: isOnTest ? 'green-breath' : 'red-breath'}"></span>
           <span class="main-control-nav-state-item">{{stateImageAlt}}</span>
         </div>
-
       </div>
       <el-button
         class="main-control-btn" 
-        type="success" round
+        type="primary" round
         :disabled="!isOnTest"
         @click="StopTest"
         >停止测试</el-button>
@@ -151,15 +151,26 @@ export default {
 </script>
 
 <style>
+.navbar {
+  display: flex;
+  flex-direction: row-reverse;
+  min-height: 6rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border: 1px solid #EBEEF5;
+  border-radius: 4px;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+}
+
 .navbar .main-control{
-  width: 100%;
   display: flex;
   align-self: center;
+  width: 100%;
 }
 
 .navbar .main-control-nav {
-  display: flex;
   flex-grow: 1;
+  display: flex;
   justify-content: flex-start;
 }
 
@@ -167,19 +178,47 @@ export default {
   display: flex;
 }
 
-.navbar .state-img{
-  width:40px;
-  height:40px;
-}
-
 .navbar .main-control-nav-state-item{
   align-self:center;
-  margin-right: 10px;
+  margin-right: 1rem;
 }
 
 .navbar .main-control .main-control-btn{
   align-self: center;
-  margin-left: 30px;
+  margin-left: 3rem;
+}
+
+.breath {
+  width: 4rem;
+  height: 4rem;
+  line-height: 4rem;
+  text-align: center;
+  display: inline-block;
+  border-radius: 100%;
+  color: #fff;
+  animation: red-breath 3s ease-in-out infinite alternate;
+}
+
+@keyframes red-breath {
+  0% {
+    border: 2rem solid rgba(255, 0, 0, 0.3);
+    box-shadow: 0 0 0 rgba(255, 0, 0, 0), 0 0 0 rgba(255, 0, 0, 0) inset;
+  }
+  100% {
+    border: 2rem solid rgba(255, 0, 0, 1);
+    box-shadow: 0 0 1rem rgba(255, 0, 0, 1), 0 0 .5rem rgba(255, 0, 0, 0.6) inset;
+  }
+}
+
+@keyframes green-breath {
+  0% {
+    border: 2rem solid rgba(0, 255, 0, 0.3);
+    box-shadow: 0 0 0 rgba(0, 255, 0, 0), 0 0 0 rgba(0, 255, 0, 0) inset;
+  }
+  100% {
+    border: 2rem solid rgba(0, 255, 0, 1);
+    box-shadow: 0 0 1rem rgba(0, 255, 0, 1), 0 0 .5rem rgba(0, 255, 0, 0.6) inset;
+  }
 }
 </style>
 

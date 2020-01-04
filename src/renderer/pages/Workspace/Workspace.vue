@@ -1,174 +1,162 @@
 <template>
-  <div class="workspace">
-    <el-card shadow="always">
-      功能配置页
-    </el-card>
-    <div class="wk-container">
-      <el-row style="margin-bottom:10px;">
-        <el-col :span="24">
-          <div>
+  <div class="workspace main-page">
+    <div class="main-page-title top-bar">
+      <span class="top-bar-item">功能配置页</span>
+    </div>
+    <div class="main-page-container">
+      <div class="wk-item">
+        <h4 class="wk-item-title">参数配置</h4>
+        <el-divider></el-divider>
+        <div class="wk-item-container">
+          <div class="wk-item-pie box1">
+            <el-form :model="SerialPort" :rules="rulesSerialPort" ref="SerialPort" >
+              <el-row :gutter="10">
+                <el-col :span="10">
+                  <el-form-item prop="SerialPortName">
+                    <el-input placeholder="输入串口号" v-model.trim="SerialPort.SerialPortName" :disabled="isOnTest">
+                      <template slot="prepend">串口号：</template>
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="10">
+                  <el-form-item prop="BaudRate">
+                    <el-input placeholder="输入波特率" v-model.trim.number="SerialPort.BaudRate" :disabled="isOnTest">
+                      <template slot="prepend">波特率：</template>
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="4">
+                  <el-button @click="PortSetClick" type="primary" :disabled="isOnTest">提交<i class="el-icon-check el-icon--right"></i></el-button>
+                </el-col>
+              </el-row>
+            </el-form>
+          </div>
+          <div class="wk-item-pie box2">
+            <el-form :model="Battery" :rules="rulesBattery" ref="Battery" >
+              <el-row :gutter="10">
+                <el-col :span="10">
+                  <el-form-item prop="BatteryLow">
+                    <el-input placeholder="输入最低电压" v-model.trim="Battery.BatteryLow" :disabled="isOnTest">
+                      <template slot="prepend">最低电压：</template>
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="10">
+                  <el-form-item prop="BatteryHigh">
+                    <el-input placeholder="输入最高电压" v-model.trim="Battery.BatteryHigh" :disabled="isOnTest">
+                      <template slot="prepend">最高电压：</template>
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="4">
+                  <el-button @click="BatterySetClick" type="primary" :disabled="isOnTest">提交<i class="el-icon-check el-icon--right"></i></el-button>
+                </el-col>                      
+              </el-row>
+            </el-form>
+          </div>
+          <div class="wk-item-pie box3">
+            <el-form :model="idSetting" :rules="rulesidSetting" ref="idSetting" >
+              <el-row :gutter="10">
+                <el-col :span="10">
+                  <el-form-item prop="originID">
+                    <el-input placeholder="输入原始ID" v-model.trim.number="idSetting.originID" :disabled="isOnTest">
+                      <template slot="prepend">原始ID：</template>
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="10">
+                  <el-form-item prop="newID">
+                    <el-input placeholder="输入新设ID" v-model.trim.number="idSetting.newID" :disabled="isOnTest">
+                      <template slot="prepend">新设ID：</template>
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="4">
+                  <el-button @click="IDSetClick" type="primary" :disabled="isOnTest">提交<i class="el-icon-check el-icon--right"></i></el-button>
+                </el-col>
+              </el-row>
+            </el-form>
+            <div class="wk-item-search-sensor">
+              <el-button @click="SerachSensorClick" type="success" 
+              >搜索传感器<i class="el-icon-check el-icon--right"></i></el-button>
+              <div class="wk-item-search-sensor-container">
+                <span class="searched-sensor-item" v-for="(sensorID) in searchedSensorIDs" :key="sensorID">{{ sensorID }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="wk-item">
+        <h4 class="wk-item-title">测试模板配置</h4>
+        <el-divider></el-divider>
+        <el-form :model="testTemplate" :rules="rulestestTemplate" ref="testTemplate" >
+          <div class="wk-item-pie">
             <el-row :gutter="10">
-              <el-col :span="12">
-                <el-card class="wk-item" shadow="always">
-                  <h4 class="wk-item-title">参数配置</h4>
-                  <el-divider></el-divider>
-                  <div class="wk-item-container">
-                    <div class="wk-item-pie box1">
-                      <el-form :model="SerialPort" :rules="rulesSerialPort" ref="SerialPort" >
-                        <el-row :gutter="10">
-                          <el-col :span="10">
-                            <el-form-item prop="SerialPortName">
-                              <el-input placeholder="输入串口号" v-model.trim="SerialPort.SerialPortName" :disabled="isOnTest">
-                                <template slot="prepend">串口号：</template>
-                              </el-input>
-                            </el-form-item>
-                          </el-col>
-                          <el-col :span="10">
-                            <el-form-item prop="BaudRate">
-                              <el-input placeholder="输入波特率" v-model.trim.number="SerialPort.BaudRate" :disabled="isOnTest">
-                                <template slot="prepend">波特率：</template>
-                              </el-input>
-                            </el-form-item>
-                          </el-col>
-                          <el-col :span="4">
-                            <el-button @click="PortSetClick" type="primary" :disabled="isOnTest">提交<i class="el-icon-check el-icon--right"></i></el-button>
-                          </el-col>
-                        </el-row>
-                      </el-form>
-                    </div>
-                    <div class="wk-item-pie box2">
-                      <el-form :model="Battery" :rules="rulesBattery" ref="Battery" >
-                        <el-row :gutter="10">
-                          <el-col :span="10">
-                            <el-form-item prop="BatteryLow">
-                              <el-input placeholder="输入最低电压" v-model.trim="Battery.BatteryLow" :disabled="isOnTest">
-                                <template slot="prepend">最低电压：</template>
-                              </el-input>
-                            </el-form-item>
-                          </el-col>
-                          <el-col :span="10">
-                            <el-form-item prop="BatteryHigh">
-                              <el-input placeholder="输入最高电压" v-model.trim="Battery.BatteryHigh" :disabled="isOnTest">
-                                <template slot="prepend">最高电压：</template>
-                              </el-input>
-                            </el-form-item>
-                          </el-col>
-                          <el-col :span="4">
-                            <el-button @click="BatterySetClick" type="primary" :disabled="isOnTest">提交<i class="el-icon-check el-icon--right"></i></el-button>
-                          </el-col>                      
-                        </el-row>
-                      </el-form>
-                    </div>
-                    <div class="wk-item-pie box3">
-                      <el-form :model="idSetting" :rules="rulesidSetting" ref="idSetting" >
-                        <el-row :gutter="10">
-                          <el-col :span="10">
-                            <el-form-item prop="originID">
-                              <el-input placeholder="输入原始ID" v-model.trim.number="idSetting.originID" :disabled="isOnTest">
-                                <template slot="prepend">原始ID：</template>
-                              </el-input>
-                            </el-form-item>
-                          </el-col>
-                          <el-col :span="10">
-                            <el-form-item prop="newID">
-                              <el-input placeholder="输入新设ID" v-model.trim.number="idSetting.newID" :disabled="isOnTest">
-                                <template slot="prepend">新设ID：</template>
-                              </el-input>
-                            </el-form-item>
-                          </el-col>
-                          <el-col :span="4">
-                            <el-button @click="IDSetClick" type="primary" :disabled="isOnTest">提交<i class="el-icon-check el-icon--right"></i></el-button>
-                          </el-col>
-                        </el-row>
-                      </el-form>
-                      <div class="wk-item-search-sensor">
-                        <el-button @click="SerachSensorClick" type="success" 
-                        >搜索传感器<i class="el-icon-check el-icon--right"></i></el-button>
-                        <div class="wk-item-search-sensor-container">
-                          <span class="searched-sensor-item" v-for="(sensorID) in searchedSensorIDs" :key="sensorID">{{ sensorID }}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </el-card>
+              <el-col :span="11">
+                <el-form-item prop="cycle">
+                  <el-input class="cycle-input" placeholder="请输入工作周期s" v-model.trim="testTemplate.cycle" :disabled="isOnTest">
+                    <template slot="prepend">工作周期(s/秒)：</template>
+                  </el-input>
+                </el-form-item>
               </el-col>
-              <el-col :span="12">
-                <el-card class="wk-item" shadow="always">
-                  <h4 class="wk-item-title">测试模板配置</h4>
-                  <el-divider></el-divider>
-                  <el-form :model="testTemplate" :rules="rulestestTemplate" ref="testTemplate" >
-                    <div class="wk-item-pie">
-                      <el-row :gutter="10">
-                        <el-col :span="11">
-                          <el-form-item prop="cycle">
-                            <el-input class="cycle-input" placeholder="请输入工作周期s" v-model.trim="testTemplate.cycle" :disabled="isOnTest">
-                              <template slot="prepend">工作周期(s/秒)：</template>
-                            </el-input>
-                          </el-form-item>
-                        </el-col>
-                        <el-col :span="11">
-                          <el-form-item prop="centerID">
-                            <el-input class="testEq-item-conf-input" placeholder="输入中心点ID" v-model.trim="testTemplate.centerID" :disabled="isOnTest">
-                              <template slot="prepend">中心点ID：</template>
-                            </el-input>
-                          </el-form-item>                      
-                        </el-col>
-                      </el-row>
-                    </div>
-                    <div class="wk-item-pie">
-                      <el-row :gutter="10">
-                        <el-col :span="11">
-                          <el-form-item prop="temp">
-                            <el-input class="testEq-item-conf-input" placeholder="输入温度示值" v-model.trim="testTemplate.temp" :disabled="isOnTest">
-                              <template slot="prepend">温度示值(℃)：</template>
-                            </el-input>
-                          </el-form-item>
-                        </el-col>
-                        <el-col :span="11">
-                          <el-form-item prop="IDS">
-                            <el-input class="testEq-item-conf-input" placeholder="输入传感器ID：1,2" v-model.trim="testTemplate.IDS" :disabled="isOnTest">
-                              <template slot="prepend">传感器ID：</template>
-                            </el-input>
-                          </el-form-item>                      
-                        </el-col>
-                      </el-row>
-                    </div>
-                    <div class="wk-item-pie">
-                      <el-row :gutter="10">
-                        <el-col :span="11">
-                          <el-form-item prop="humi">
-                            <el-input class="testEq-item-conf-input" placeholder="输入湿度示值" v-model.trim="testTemplate.humi" :disabled="isOnTest">
-                              <template slot="prepend">湿度示值(%RH)：</template>
-                            </el-input>
-                          </el-form-item>                
-                        </el-col>
-                        <el-col :span="11">
-                          <div style="padding-top: 10px;padding-left:10px;border: 1px solid #dfdfdf;border-radius: 5px;height: 40px; background-color: #F5F7FA;">
-                            <el-form-item prop="isSendding">
-                              <el-switch
-                                style="display: block"
-                                v-model="testTemplate.isSendding"
-                                active-color="#13ce66"
-                                inactive-color="#ff4949"
-                                active-text="周期获取数据"
-                                inactive-text="仅监测数据"
-                                :disabled="isOnTest">
-                              </el-switch>
-                            </el-form-item>
-                          </div>
-                        </el-col>                  
-                      </el-row>
-                      <div class="wk-template-btns">
-                        <el-button @click="TestTemplateSaveClick" type="primary" :disabled="isOnTest">保存测试模板<i class="el-icon-check el-icon--right"></i></el-button>
-                      </div>
-                    </div>
-                  </el-form>
-                </el-card>
+              <el-col :span="11">
+                <el-form-item prop="centerID">
+                  <el-input class="testEq-item-conf-input" placeholder="输入中心点ID" v-model.trim="testTemplate.centerID" :disabled="isOnTest">
+                    <template slot="prepend">中心点ID：</template>
+                  </el-input>
+                </el-form-item>                      
               </el-col>
             </el-row>
           </div>
-        </el-col>
-      </el-row>
+          <div class="wk-item-pie">
+            <el-row :gutter="10">
+              <el-col :span="11">
+                <el-form-item prop="temp">
+                  <el-input class="testEq-item-conf-input" placeholder="输入温度示值" v-model.trim="testTemplate.temp" :disabled="isOnTest">
+                    <template slot="prepend">温度示值(℃)：</template>
+                  </el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="11">
+                <el-form-item prop="IDS">
+                  <el-input class="testEq-item-conf-input" placeholder="输入传感器ID：1,2" v-model.trim="testTemplate.IDS" :disabled="isOnTest">
+                    <template slot="prepend">传感器ID：</template>
+                  </el-input>
+                </el-form-item>                      
+              </el-col>
+            </el-row>
+          </div>
+          <div class="wk-item-pie">
+            <el-row :gutter="10">
+              <el-col :span="11">
+                <el-form-item prop="humi">
+                  <el-input class="testEq-item-conf-input" placeholder="输入湿度示值" v-model.trim="testTemplate.humi" :disabled="isOnTest">
+                    <template slot="prepend">湿度示值(%RH)：</template>
+                  </el-input>
+                </el-form-item>                
+              </el-col>
+              <el-col :span="11">
+                <div style="padding-top: 10px;padding-left:10px;border: 1px solid #dfdfdf;border-radius: 5px;height: 40px; background-color: #F5F7FA;">
+                  <el-form-item prop="isSendding">
+                    <el-switch
+                      style="display: block"
+                      v-model="testTemplate.isSendding"
+                      active-color="#13ce66"
+                      inactive-color="#ff4949"
+                      active-text="周期获取数据"
+                      inactive-text="仅监测数据"
+                      :disabled="isOnTest">
+                    </el-switch>
+                  </el-form-item>
+                </div>
+              </el-col>                  
+            </el-row>
+            <div class="wk-template-btns">
+              <el-button @click="TestTemplateSaveClick" type="primary" :disabled="isOnTest">保存测试模板<i class="el-icon-check el-icon--right"></i></el-button>
+            </div>
+          </div>
+        </el-form>
+      </div>      
     </div>
   </div>
 </template>
@@ -494,51 +482,44 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .workspace{
-  padding: 10px 10px 0 10px;
 }
 
-.wk-container{
-  margin-top: 10px;
-  min-height: 75vh;  
+.workspace .main-page-container {
+  display: flex;
+  flex-direction: row;
 }
 
-.wk-item{
-  min-height: 72vh;
+.workspace .main-page-container > div:first-child{
+  padding-right: 1rem;
+}
+
+.workspace .main-page-container > div:last-child{
+  padding-left: 1rem;
 }
 
 .wk-item-title{
-  color: #303133;
-  font-size: 15px;
+  font-size: 1.5rem;
   font-weight: lighter;
+  color: #303133;
 }
 
 .wk-item-search-sensor{
-  padding-top: 20px;
+  padding-top: 2rem;
 }
+
 .wk-item-search-sensor-container{
-  padding: 15px 5px 5px 5px;
+  padding: 1.5rem .5rem .5rem .5rem;
 }
-.wk-item-search-sensor .searched-sensor-item{
-  display: inline-block;
-  margin: 0 5px;
-  width: 30px;
-  height: 30px;
-  line-height: 30px;
-  text-align: center;
-  color: #464646;
-  font-weight: 700;
-  background-color: #67C23A;
-  border: 1px solid #67C23A;
-  border-radius: 15px;
-}
+
 .wk-item-pie{
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
+
 .wk-item-pie.box1{
-  padding-top: 10px;
+  padding-top: 1rem;
 }
 
 .wk-item-pie.wk-template1{
@@ -546,6 +527,6 @@ export default {
 }
 
 .wk-template-btns{
-  padding-top: 10px;
+  padding-top: 1rem;
 }
 </style>

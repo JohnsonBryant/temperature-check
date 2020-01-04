@@ -54,8 +54,6 @@
 </template>
 
 <script>
-// import 'echarts/lib/chart/line'
-
 export default {
   name: 'TestItem',
   components: {
@@ -79,28 +77,28 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 
 .dash-test-item{
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
 .dash-test-item > h4{
   text-align: center;
-  padding-bottom: 10px;
-  font-size: 14px;
+  padding-bottom: 1rem;
+  font-size: 1.4rem;
   color: #707377;
 }
 
 .dash-test-item .test-item-chart{
-  height: 480px;
-  padding-top: 5px;
-  padding-left: 5px;
+  height: 48rem;
+  padding-top: .5rem;
+  padding-left: .5rem;
 }
 
 .dash-test-item .test-item-data{
-  height: 480px;
+  height: 48rem;
   overflow: auto;
 }
 

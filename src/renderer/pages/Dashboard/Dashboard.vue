@@ -1,14 +1,13 @@
 <template>
-<div class="dashboard">
-  <el-card shadow="always">
-    实时监测
-  </el-card>
-  <el-card shadow="always" class="wk-container" >
+<div class="dashboard main-page">
+  <div class="main-page-title top-bar">
+    <span class="top-bar-item">实时监测</span>
+  </div>
+  <div class="main-page-container" >
     <div v-if="showMessageState">
-      <!-- 未处在测试状态，且不是从设备管理页路由并传递参数到本页时显示 -->
-      <div style="margin-left: 10px;">
-        <h4 style="padding: 5px 0px;color: crimson;">当前系统未处在测试状态，如需要进行测试，请切换到设备管理页，选择测试设备，启动测试！</h4>
-        <h5 style="padding: 5px 0px;color: #333;">以下为测试示例，实际测试效果可参考如下图表！</h5>
+      <div class="warn-text">
+        <h4>当前系统未处在测试状态，如需要进行测试，请切换到设备管理页，选择测试设备，启动测试！</h4>
+        <h5>以下为测试示例，实际测试效果可参考如下图表！</h5>
       </div>
       <test-item 
         :equipment="demo.equipment"
@@ -28,7 +27,7 @@
         :humis="item.humis"
       />
     </div>
-  </el-card>
+  </div>
 </div>
 </template>
 
@@ -183,20 +182,19 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .dashboard{
-  padding:10px 10px 0px 10px;
+}
+
+.dashboard .main-page-container{
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .saveData {
   position: fixed;
-  top: 12px;
-  right: 40px;
+  top: 1.2rem;
+  right: 4rem;
   z-index: 1005;
-}
-
-.wk-container{
-  margin-top: 10px;
-  min-height: 75vh;  
 }
 </style>

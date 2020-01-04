@@ -1,52 +1,43 @@
 <template>
-  <div class="test-config">
+  <div class="test-config main-page">
     <!-- 测试管理页头，工作周期输入框、控制按钮 -->
-    <el-row style="margin-bottom:10px;">
-      <el-col :span="24">
-        <el-card shadow="always">
-            <el-row :gutter="10">
-              <el-col :span="2"><span style="height:40px;line-height:40px;">测试管理页</span></el-col>
-              <el-col :span="6">
-                <el-input 
-                  class="cycle-input" placeholder="请输入工作周期s" v-model="localeCycle"
-                  :disabled="isOnTest">
-                  <template slot="prepend">工作周期：</template>
-                </el-input>
-              </el-col>
-              <el-col :span="7">
-                <el-switch 
-                  class="cycle-switch"
-                  v-model="localeIsSendding"
-                  active-color="#13ce66"
-                  inactive-color="#ff4949"
-                  active-text="周期获取数据"
-                  inactive-text="仅监测数据"
-                  :disabled="isOnTest"
-                ></el-switch>
-              </el-col>
-              <el-col :span="3">
-                <el-button
-                  @click="setAllEquipment"
-                  class="test-header-btn" type="success" round
-                  :disabled="isOnTest"
-                >一键配置</el-button>
-              </el-col>
-              <el-col :span="3">
-                <el-button
-                 @click="startTest" 
-                  class="test-header-btn" type="success" round
-                  :disabled="isOnTest"
-                >启动测试</el-button>
-              </el-col>
-            </el-row>
-        </el-card>
-      </el-col>
-    </el-row>
+    <div class="main-page-title top-bar">
+      <span class="top-bar-item">测试管理页</span>
+      <div class="top-bar-item">
+        <el-input 
+          class="cycle-input" placeholder="请输入工作周期s" v-model="localeCycle"
+          :disabled="isOnTest">
+          <template slot="prepend">工作周期：</template>
+        </el-input>
+      </div>
+      <div class="top-bar-item">
+        <el-switch
+          v-model="localeIsSendding"
+          active-color="#13ce66"
+          inactive-color="#ff4949"
+          active-text="周期获取数据"
+          inactive-text="仅监测数据"
+          :disabled="isOnTest"
+        ></el-switch>
+      </div>
+      <div class="top-bar-item">
+        <el-button
+          @click="setAllEquipment"
+          type="success" round
+          :disabled="isOnTest"
+        >一键配置</el-button>
+        <el-button
+          @click="startTest" 
+          type="success" round
+          :disabled="isOnTest"
+        >启动测试</el-button>
+      </div>
+    </div>
     <!-- 测试仪器配置区块，展示所有测试仪器配置信息 -->
-    <el-card shadow="always" class="wk-container">
-      <div v-if="getCurrentState">
+    <div class="main-page-container">
+      <div v-if="getCurrentState" class="warn-text">
         <!-- 未处在测试状态，且不是从设备管理页路由并传递参数到本页时显示 -->
-        <h4 style="padding:10px 0 10px 10px; color: crimson;;">当前系统未处在测试状态，如需要进行测试，请切换到设备管理页，选择测试设备，启动测试！</h4>
+        <h4>当前系统未处在测试状态，如需要进行测试，请切换到设备管理页，选择测试设备，启动测试！</h4>
       </div>
       <test-config-item 
         v-for="(item,index) in testDeviceInfo"
@@ -54,7 +45,7 @@
         :device="item.device"
         :config="item.config"
       />
-    </el-card>
+    </div>
   </div>
 </template>
 
@@ -289,19 +280,17 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .test-config{
-  padding: 10px 10px 0 10px;
+}
+
+.test-config .top-bar {
+  justify-content: space-between;
 }
 
 .cycle-switch{
   display:inline-block;
-  padding-top: 10px;
-  padding-left: 20px;
-}
-
-.wk-container{
-  margin-top: 10px;
-  min-height: 75vh;  
+  padding-top: 1rem;
+  padding-left: 2rem;
 }
 </style>

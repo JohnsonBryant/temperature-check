@@ -1,106 +1,102 @@
 <template>
-  <div class="landing-page">
-    <el-row style="margin-bottom:10px;">
-      <el-col :span="24">
-        <el-card shadow="always" style="position:relative;">
-          <div class="top-bar">
-            <div class="top-bar-item top-bar-title">仪器管理页</div>
-            <div class="top-bar-item top-bar-controls">
-              <!-- 新增测试仪器按钮 -->
-              <div class="top-bar-control-item">
-                <el-button @click="routerToAdd" size="medium">新增仪器</el-button>
-              </div>
-              <div class="top-bar-control-item">
-                <el-badge class="selectEqBtn" :value="selectedEquipments.length">
-                  <el-button @click="drawerSelectEq = true" size="medium">已选择仪器</el-button>
-                </el-badge>
-              </div>
-              <div class="top-bar-control-item">
-                <!-- 搜索委托单位（测试仪器）搜索框 -->
-                <el-input 
-                  @input="getEquipmentByCompany"
-                  v-model="searchText"
-                  placeholder="请输入委托单位"
-                  class="searchEqBox"
-                ></el-input>
-              </div>
-            </div>
-          </div>
-        </el-card>
-        <el-card shadow="always" class="wk-container" >
-          <!-- 已添加测试仪器信息展示表格，表格分页，表格可根据委托单位进行自定义检索表内已有信息 -->
-          <el-table
-            :data="equipments"
-            border resizable
-            >
-            <el-table-column
-              prop="company"
-              label="委托单位"
-              min-width="160"
-            ></el-table-column>
-            <el-table-column
-              prop="deviceName"
-              label="仪器名称"
-              min-width="150"
-            ></el-table-column>
-            <el-table-column
-              prop="deviceType"
-              label="仪器型号"
-              min-width="90"
-            ></el-table-column>
-            <el-table-column
-              prop="deviceID"
-              label="仪器编号"
-              min-width="90"
-              sortable
-            ></el-table-column>
-            <el-table-column
-              prop="em"
-              label="仪器厂家"
-              min-width="160"
-            ></el-table-column>
-            <el-table-column
-              prop="insertDate"
-              label="日期"
-              min-width="130"
-              column-key="date"
-              sortable
-            ></el-table-column>
-            <el-table-column label="操作" min-width="200">
-              <template slot-scope="scope">
-                <el-button
-                  @click="handleAddToTest(scope.$index, scope.row)"
-                  :disabled="isOnTest"
-                  size="mini"
-                >选择</el-button>
-                <el-button
-                  @click="handleDuplicate(scope.$index, scope.row)"
-                  :disabled="isOnTest"
-                  size="mini"
-                >复制</el-button>
-                <el-button
-                  @click="handleDelete(scope.$index, scope.row)"
-                  :disabled="isOnTest"
-                  size="mini"
-                  type="danger"
-                >删除</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-
-          <el-pagination
-            class="pagination"
-            background
-            layout="prev, pager, next"
-            :current-page.sync="page.currentPageNum"
-            :page-size="page.size"
-            :total="page.total"
-            @current-change="equipmentsCurrentChange">
-          </el-pagination>
-        </el-card>
-      </el-col>
-    </el-row>
-
+  <div class="landing-page main-page">
+    <div class="main-page-title top-bar">
+      <div class="top-bar-item">仪器管理页</div>
+      <div class="top-bar-item top-bar-controls">
+        <!-- 新增测试仪器按钮 -->
+        <div class="top-bar-control-item">
+          <el-button @click="routerToAdd" size="medium">新增仪器</el-button>
+        </div>
+        <div class="top-bar-control-item">
+          <el-badge :value="selectedEquipments.length">
+            <el-button @click="drawerSelectEq = true" size="medium">已选择仪器</el-button>
+          </el-badge>
+        </div>
+        <div class="top-bar-control-item">
+          <!-- 搜索委托单位（测试仪器）搜索框 -->
+          <el-input 
+            @input="getEquipmentByCompany"
+            v-model="searchText"
+            placeholder="请输入委托单位"
+            class="searchEqBox"
+          ></el-input>
+        </div>
+      </div>
+    </div>
+    <div class="main-page-container" >
+      <!-- 已添加测试仪器信息展示表格，表格分页，表格可根据委托单位进行自定义检索表内已有信息 -->
+      <div>
+        <el-table
+          :data="equipments"
+          border resizable stripe
+          >
+          <el-table-column
+            prop="company"
+            label="委托单位"
+            min-width="160"
+          ></el-table-column>
+          <el-table-column
+            prop="deviceName"
+            label="仪器名称"
+            min-width="150"
+          ></el-table-column>
+          <el-table-column
+            prop="deviceType"
+            label="仪器型号"
+            min-width="90"
+          ></el-table-column>
+          <el-table-column
+            prop="deviceID"
+            label="仪器编号"
+            min-width="90"
+            sortable
+          ></el-table-column>
+          <el-table-column
+            prop="em"
+            label="仪器厂家"
+            min-width="160"
+          ></el-table-column>
+          <el-table-column
+            prop="insertDate"
+            label="日期"
+            min-width="130"
+            column-key="date"
+            sortable
+          ></el-table-column>
+          <el-table-column label="操作" min-width="200">
+            <template slot-scope="scope">
+              <el-button
+                @click="handleAddToTest(scope.$index, scope.row)"
+                :disabled="isOnTest"
+                size="mini"
+              >选择</el-button>
+              <el-button
+                @click="handleDuplicate(scope.$index, scope.row)"
+                :disabled="isOnTest"
+                size="mini"
+              >复制</el-button>
+              <el-button
+                @click="handleDelete(scope.$index, scope.row)"
+                :disabled="isOnTest"
+                size="mini"
+                type="danger"
+              >删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+      <div>
+        <el-pagination
+          class="pagination"
+          background
+          layout="prev, pager, next"
+          :current-page.sync="page.currentPageNum"
+          :page-size="page.size"
+          :total="page.total"
+          @current-change="equipmentsCurrentChange">
+        </el-pagination>
+      </div>
+    </div>
     <!-- 已选择测试仪器展示区域 -->
     <el-drawer
       :visible.sync="drawerSelectEq"
@@ -187,7 +183,7 @@ export default {
       page: {
         total: 0,
         currentPageNum: 1,
-        size: 8
+        size: 7
       },
       equipments: [] // 后端获取的测试仪器数据， 用于用户操作， 选择、复制、删除
     }
@@ -310,59 +306,44 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .landing-page{
-  padding: 10px 10px 0 10px;
+}
+
+.landing-page .main-page-container{
+  padding-left: 0;
+  padding-right: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.landing-page .main-page-container > div:first-child{
+  flex-grow: 1;
+}
+
+.landing-page .main-page-container > div:last-child{
+  min-height: 8rem;
 }
 
 .landing-page .searchEqBox{
-  width: 450px;
-}
-
-.landing-page .top-bar{
-  display: flex;
-  flex-direction: row;
-}
-
-.landing-page .top-bar-item, .landing-page .top-bar-control-item{
-  align-self: center;
-}
-
-.landing-page .top-bar-title{
-  flex-grow: 0;
-}
-
-.landing-page .top-bar-controls{
-  flex-grow: 1;
-  display: flex;
-  flex-direction: row-reverse;
-}
-
-.landing-page .top-bar-control-item{
-  padding-left: 2rem;
+  width: 45rem;
 }
 
 .selectEp-footer{
-  padding: 5px 0;
+  padding: 0.5rem 0;
   text-align: center;
 }
 
 .selectEp-footer-btn.left{
-  margin-right: 20px;
+  margin-right: 2rem;
 }
+
 .selectEp-footer-btn.right{
-  margin-left: 20px;
+  margin-left: 2rem;
 }
 
 .selectEp-container{
-  height: 400px;
-  overflow-y: auto;
-}
-
-.wk-container{
-  margin-top: 10px;
-  min-height: 75vh;
-  max-height: 75vh;
+  height: 40rem;
   overflow-y: auto;
 }
 

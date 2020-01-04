@@ -1,78 +1,81 @@
 <template>
-  <div class="add-equipment">
+  <div class="add-equipment main-page">
     <el-row style="margin-bottom:10px;">
       <el-col :span="24">
-        <el-card shadow="always">新增仪器</el-card>
-          <div class="addform-container">
-            <el-form :model="info" :rules="rulesCompany" ref="info">
-              <!-- 新增测试仪器头区块，同一委托单位下可选择批量添加或单个添加 -->
-              <div class="add-equip-header">
-                <el-form-item prop="company">
-                  <el-input class="company-input" placeholder="请输入委托单位名称" v-model="info.company" :disabled="isOnTest">
-                    <template slot="prepend">委托单位：</template>
-                  </el-input>
-                </el-form-item>
-                <div class="submit-btns">
-                  <el-button class="submit-btn" type="success" icon="el-icon-back" round
-                    @click="goBackToLandingPage"
-                  >返回</el-button>
-                  <el-button class="submit-btn" type="success" icon="el-icon-check" round
-                    @click="submitAddEquipment"
-                    :disabled="isOnTest"
-                  >提交</el-button>
-                </div>
-              </div>
-              <el-divider content-position="center">仪器信息</el-divider>
-              <!-- 新增仪器主体区块 -->
-              <div class="add-equip-body">
-                <el-row :gutter="15">
-                  <!-- 单个测试仪器信息输入模块 -->
-                  <el-col 
-                    :span="8"
-                    v-for="(equipment, index) in info.equipmentInfo"
-                    :key="index">
-                    <el-form :model="equipment" :rules="rulesEquipmentInfo" ref="'equipment'+index">
-                      <el-card class="box-card box-item">
-                        <el-form-item prop="em">
-                          <el-input class="device-input" placeholder="请输入仪器厂家" v-model="equipment.em" :disabled="isOnTest">
-                            <template slot="prepend">仪器厂家：</template>
-                          </el-input>
-                        </el-form-item>
-                        <el-form-item prop="deviceName">
-                          <el-input class="device-input" placeholder="请输入仪器型号" v-model="equipment.deviceName" :disabled="isOnTest">
-                            <template slot="prepend">仪器名称：</template>
-                          </el-input>
-                        </el-form-item>
-                        <el-form-item prop="deviceType">
-                          <el-input class="device-input" placeholder="请输入仪器型号" v-model="equipment.deviceType" :disabled="isOnTest">
-                            <template slot="prepend">仪器型号：</template>
-                          </el-input>
-                        </el-form-item>
-                        <el-form-item prop="deviceID">
-                          <el-input class="device-input" placeholder="请输入仪器编号" v-model="equipment.deviceID" :disabled="isOnTest">
-                            <template slot="prepend">仪器编号：</template>
-                          </el-input>
-                        </el-form-item>
-                      </el-card>
-                    </el-form>
-                  </el-col>
-                  <!-- 新增单个测试仪器信息控制按钮模块 -->
-                  <el-col :span="8">
-                    <el-card class="box-card box-item box-add-btn">
-                      <el-button class="btn btn-add" type="success" icon="el-icon-plus" circle
-                        @click="addEqInputItem"
-                        :disabled="isOnTest"
-                      ></el-button>
-                      <el-button class="btn btn-delete" type="danger" icon="el-icon-minus" circle
-                        @click="deleteEqInputItem"
-                        :disabled="isOnTest"                      
-                      ></el-button>
-                    </el-card>
-                  </el-col>
-                </el-row>
-              </div>
-            </el-form>
+        <div class="main-page-title top-bar">
+          <span class="top-bar-item">新增仪器</span>
+          <div class="top-bar-item top-bar-controls">
+            <el-button class="top-bar-control-item" type="primary" icon="el-icon-check" round
+              @click="submitAddEquipment"
+              :disabled="isOnTest"
+            >提交</el-button>
+            <el-button class="top-bar-control-item" type="primary" icon="el-icon-back" round
+              @click="goBackToLandingPage"
+            >返回</el-button>
           </div>
+        </div>
+
+        <div class="main-page-container">
+          <el-form :model="info" :rules="rulesCompany" ref="info">
+            <!-- 新增测试仪器头区块，同一委托单位下可选择批量添加或单个添加 -->
+            <div class="add-equip-header">
+              <el-form-item prop="company">
+                <el-input class="company-input" placeholder="请输入委托单位名称" v-model="info.company" :disabled="isOnTest">
+                  <template slot="prepend">委托单位：</template>
+                </el-input>
+              </el-form-item>
+            </div>
+            <el-divider content-position="center">仪器信息</el-divider>
+            <!-- 新增仪器主体区块 -->
+            <div class="add-equip-body">
+              <el-row :gutter="15">
+                <!-- 单个测试仪器信息输入模块 -->
+                <el-col 
+                  :span="8"
+                  v-for="(equipment, index) in info.equipmentInfo"
+                  :key="index">
+                  <el-form :model="equipment" :rules="rulesEquipmentInfo" ref="'equipment'+index">
+                    <el-card class="box-card box-item">
+                      <el-form-item prop="em">
+                        <el-input class="device-input" placeholder="请输入仪器厂家" v-model="equipment.em" :disabled="isOnTest">
+                          <template slot="prepend">仪器厂家：</template>
+                        </el-input>
+                      </el-form-item>
+                      <el-form-item prop="deviceName">
+                        <el-input class="device-input" placeholder="请输入仪器型号" v-model="equipment.deviceName" :disabled="isOnTest">
+                          <template slot="prepend">仪器名称：</template>
+                        </el-input>
+                      </el-form-item>
+                      <el-form-item prop="deviceType">
+                        <el-input class="device-input" placeholder="请输入仪器型号" v-model="equipment.deviceType" :disabled="isOnTest">
+                          <template slot="prepend">仪器型号：</template>
+                        </el-input>
+                      </el-form-item>
+                      <el-form-item prop="deviceID">
+                        <el-input class="device-input" placeholder="请输入仪器编号" v-model="equipment.deviceID" :disabled="isOnTest">
+                          <template slot="prepend">仪器编号：</template>
+                        </el-input>
+                      </el-form-item>
+                    </el-card>
+                  </el-form>
+                </el-col>
+                <!-- 新增单个测试仪器信息控制按钮模块 -->
+                <el-col :span="8">
+                  <el-card class="box-card box-item box-add-btn">
+                    <el-button class="btn btn-add" type="success" icon="el-icon-plus" circle
+                      @click="addEqInputItem"
+                      :disabled="isOnTest"
+                    ></el-button>
+                    <el-button class="btn btn-delete" type="danger" icon="el-icon-minus" circle
+                      @click="deleteEqInputItem"
+                      :disabled="isOnTest"                      
+                    ></el-button>
+                  </el-card>
+                </el-col>
+              </el-row>
+            </div>
+          </el-form>
+        </div>
       </el-col>
     </el-row>
   </div>
@@ -212,56 +215,38 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .add-equipment{
-  padding: 10px 10px 0 10px;
-}
-
-.addform-container{
-  margin-top: 10px;
-  background-color: rgb(255,255,255);
-  min-height: 75vh;
 }
 
 .add-equip-header {
   position: relative;
-  padding: 15px 0px 0px 86px;
+  padding: 1.5rem 0 0 0;
 }
 
 .add-equip-header .company-input{
   width: 43%;
 }
 
-.add-equip-header .submit-btns{
-  position: absolute;
-  top: 8px;
-  right: 86px;
-}
-
-.add-equip-header .submit-btns .submit-btn{
-  margin-left: 25px;
-}
-
 .add-equip-body {
-  padding: 0 10px 0px 10px;
 }
 
 .box-item{
   position: relative;
-  padding-top: 30px;
-  height: 360px;
-  margin-bottom: 15px;
+  padding-top: 3rem;
+  height: 36rem;
+  margin-bottom: 1.5rem;
 }
 
 .device-input {
-  margin-bottom: 15px;
+  margin-bottom: 1.5rem;
 }
 
 .box-add-btn .btn{
   position: absolute;
-  width: 80px;
-  height: 80px;
-  font-size: 42px;
+  width: 8rem;
+  height: 8rem;
+  font-size: 4rem;
 }
 
 .box-add-btn .btn.btn-add {

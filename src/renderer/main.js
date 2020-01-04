@@ -15,26 +15,31 @@ import { initConf } from './utils/conf.js'
 import Packet from './utils/packetParser.js'
 import myutil from './utils/myutil.js'
 
-initConf()
+// 执行完程序配置文件初始化检查后， 进行Vue根实例的初始化挂载，程序初始化。
+initConf.then((result) => {
+  console.log(result)
+  if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 
-if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
+  Vue.use(ElementUI)
+  Vue.config.productionTip = false
+  Vue.http = Vue.prototype.$http = axios
 
-Vue.use(ElementUI)
-Vue.config.productionTip = false
-Vue.http = Vue.prototype.$http = axios
+  Vue.component('v-chart', ECharts)
 
-Vue.component('v-chart', ECharts)
+  Vue.prototype.$sqliteDB = sqliteDB
+  Vue.prototype.$storage = storage
+  Vue.prototype.$port = { serialport: {} }
+  Vue.prototype.$Packet = Packet
+  Vue.prototype.$myutil = myutil
 
-Vue.prototype.$sqliteDB = sqliteDB
-Vue.prototype.$storage = storage
-Vue.prototype.$port = { serialport: {} }
-Vue.prototype.$Packet = Packet
-Vue.prototype.$myutil = myutil
-
-/* eslint-disable no-new */
-new Vue({
-  components: { App },
-  router,
-  store,
-  template: '<App/>'
-}).$mount('#app')
+  /* eslint-disable no-new */
+  new Vue({
+    components: { App },
+    router,
+    store,
+    template: '<App/>'
+  }).$mount('#app')
+})
+  .catch((error) => {
+    console.log(error)
+  })

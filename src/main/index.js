@@ -1,6 +1,10 @@
 'use strict'
 
-import { app, BrowserWindow, dialog } from 'electron'
+import {
+  app,
+  dialog,
+  BrowserWindow
+} from 'electron'
 import MenuBuilder from './menu.js'
 /**
  * Set `__static` path to static files in production
@@ -10,7 +14,6 @@ if (process.env.NODE_ENV !== 'development') {
   global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
 }
 
-let loadingScreen
 let mainWindow
 const winURL = process.env.NODE_ENV === 'development'
   ? `http://localhost:9080`
@@ -31,6 +34,7 @@ function createWindow () {
   })
 
   mainWindow.loadURL(winURL)
+  mainWindow.setMenuBarVisibility(false) // 隐藏顶部菜单栏
 
   // @TODO: Use 'ready-to-show' event
   mainWindow.webContents.on('did-finish-load', () => {
@@ -44,7 +48,7 @@ function createWindow () {
     if (process.env.START_MINIMIZED) {
       mainWindow.minimize()
     } else {
-      // mainWindow.maximize()
+      // mainWindow.maximize() // 启动时最大化窗口，匹配PAD屏幕
       mainWindow.show()
       mainWindow.focus()
     }
@@ -71,7 +75,11 @@ function createWindow () {
   menuBuilder.buildMenu()
 }
 
-const createLoadingScreen = () => {
+let loadingScreen
+const loadingScreenUrl = process.env.NODE_ENV === 'development'
+  ? `http://localhost:9080/static/loading.tml`
+  : `file://${__static}/loading.html`
+function createLoadingScreen () {
   loadingScreen = new BrowserWindow(
     Object.assign({
       width: 600,
@@ -82,7 +90,7 @@ const createLoadingScreen = () => {
   )
   loadingScreen.setResizable(false)
   loadingScreen.loadURL(
-    `file://${__dirname}/static/loading.html`
+    loadingScreenUrl
   )
   loadingScreen.on('closed', () => {
     loadingScreen = null
@@ -95,9 +103,7 @@ const createLoadingScreen = () => {
 app.on('ready', () => {
   createLoadingScreen()
 
-  setTimeout(() => {
-    createWindow()
-  }, 1000)
+  createWindow()
 })
 
 app.on('window-all-closed', () => {

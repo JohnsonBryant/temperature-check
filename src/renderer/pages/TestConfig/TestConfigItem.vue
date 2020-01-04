@@ -35,17 +35,14 @@ export default {
   name: 'testConfigItem',
   props: ['device', 'config'],
   computed: {
-    // controlDisabled () {
-    //   return this.$store.state.isOnTest
-    // }
     ...mapState(['isOnTest'])
   }
 }
 </script>
 
-<style scoped>
+<style>
 .testEq-item{
-  margin-bottom: 10px;
+  margin-bottom: 1rem;
 }
 
 .testEq-item h4{
@@ -53,6 +50,6 @@ export default {
 }
 
 .testEq-item-conf{
-  margin-top: 25px;
+  margin-top: 2.5rem;
 }
 </style>
