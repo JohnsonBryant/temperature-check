@@ -4,12 +4,12 @@
  * Email: 610585613@qq.com.
  * Datetime: 2018/07/24.
  */
-import {remote} from 'electron'
+import { remote } from 'electron'
 import path from 'path'
 import fs from 'fs'
 const sqlite3 = require('sqlite3').verbose()
 
-let DB = {}
+const DB = {}
 
 DB.SqliteDB = function (file) {
   DB.db = new sqlite3.Database(file)
@@ -103,23 +103,23 @@ DB.SqliteDB.prototype.close = function () {
 // 初始化数据库
 function initDataTable () {
   // 创建测试设备表
-  let createTableEm = `create table if not exists equipment(
+  const createTableEm = `create table if not exists equipment(
     id INTEGER PRIMARY KEY, company TEXT NOT NULL, em TEXT NOT NULL, deviceName TEXT NOT NULL, deviceType TEXT NOT NULL, deviceID TEXT NOT NULL, insertDate TEXT NOT NULL,
     UNIQUE(company,em,deviceName,deviceType,deviceID)
   );`
 
   // 创建测试记录表
-  let testRecords = `create table if not exists testRecords(
+  const testRecords = `create table if not exists testRecords(
     id INTEGER PRIMARY KEY, company TEXT NOT NULL, em TEXT NOT NULL, deviceName TEXT NOT NULL, deviceType TEXT NOT NULL, deviceID TEXT NOT NULL, testDate TEXT NOT NULL, cycle INTEGER NOT NULL, temp REAL NOT NULL, humi REAL NOT NULL, centerID INTEGER NOT NULL, IDS TEXT
   );`
 
   // 创建传感器数据表，表关联： sensorData.test_id = testRecords.id
-  let sensorData = `create table if not exists sensorData(
+  const sensorData = `create table if not exists sensorData(
     id INTEGER PRIMARY KEY, sensorID INTERGER NOT NULL, temp REAL NOT NULL, humi REAL NOT NULL, stime TEXT NOT NULL, test_id INTEGER NOT NULL
   );`
 
   // 创建测试数据表（温度、湿度（均匀度、波动度、偏差）），表关联： testData.test_id = testRecords.id
-  let testData = `create table if not exists testData(
+  const testData = `create table if not exists testData(
     id INTEGER PRIMARY KEY NOT NULL, evennessTemp REAL NOT NULL, fluctuationTemp REAL NOT NULL, deviationTemp REAL NOT NULL,
     evennessHumi REAL NOT NULL, fluctuationHumi REAL NOT NULL, deviationHumi REAL NOT NULL, stime TEXT NOT NULL, test_id INTEGER NOT NULL
   );`
@@ -130,8 +130,8 @@ function initDataTable () {
   this.createTable(testData)
 }
 
-let dbPath = path.join(remote.app.getPath('userData'), '/data.db')
-let sqliteDB = new DB.SqliteDB(dbPath)
+const dbPath = path.join(remote.app.getPath('userData'), '/data.db')
+const sqliteDB = new DB.SqliteDB(dbPath)
 
 /// export SqliteDB.
 export default sqliteDB

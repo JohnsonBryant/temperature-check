@@ -15,6 +15,8 @@ import { initConf } from './utils/conf.js'
 import Packet from './utils/packetParser.js'
 import myutil from './utils/myutil.js'
 
+const { app, dialog } = require('electron').remote
+
 // 执行完程序配置文件初始化检查后， 进行Vue根实例的初始化挂载，程序初始化。
 initConf.then((result) => {
   console.log(result)
@@ -42,4 +44,10 @@ initConf.then((result) => {
 })
   .catch((error) => {
     console.log(error)
+    dialog.showMessageBox({
+      type: 'error',
+      title: '初始化错误',
+      message: '程序启动遇到错误，请关闭后重新启动！'
+    })
+    app.exit()
   })

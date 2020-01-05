@@ -9,12 +9,12 @@ export default {
   },
   updateTime: '2019-12-31 12:59:59',
   testData: [
-    {name: '1' + '-电量100%', tempData: 'xx.xx', humiData: 'xx.xx'},
-    {name: '2' + '-电量100%', tempData: 'xx.xx', humiData: 'xx.xx'},
-    {name: '3' + '-电量100%', tempData: 'xx.xx', humiData: 'xx.xx'},
-    {name: '均匀度：', tempData: 'xx.xx', humiData: 'xx.xx'},
-    {name: '波动度：', tempData: 'xx.xx', humiData: 'xx.xx'},
-    {name: '偏差：', tempData: 'xx.xx', humiData: 'xx.xx'}
+    { name: '1' + '-电量100%', tempData: 'xx.xx', humiData: 'xx.xx' },
+    { name: '2' + '-电量100%', tempData: 'xx.xx', humiData: 'xx.xx' },
+    { name: '3' + '-电量100%', tempData: 'xx.xx', humiData: 'xx.xx' },
+    { name: '均匀度：', tempData: 'xx.xx', humiData: 'xx.xx' },
+    { name: '波动度：', tempData: 'xx.xx', humiData: 'xx.xx' },
+    { name: '偏差：', tempData: 'xx.xx', humiData: 'xx.xx' }
   ],
   temps: {
     title: {

@@ -107,6 +107,7 @@ export default {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+  width: 100%;
   padding-top: .8rem;
 }
 

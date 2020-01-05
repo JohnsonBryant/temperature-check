@@ -27,9 +27,9 @@ const mutations = {
   },
   // 新增选择仪器
   addToSelectedEquipments: (state, equipment) => {
-    let equipmentsSelected = state.selectedEquipments
+    const equipmentsSelected = state.selectedEquipments
     // 检查当前已选择的仪器中是否存在ID与新选择仪器相同的
-    let duplicated = equipmentsSelected.some((ele, index, all) => {
+    const duplicated = equipmentsSelected.some((ele, index, all) => {
       return ele.id === equipment.id
     })
     if (equipmentsSelected.length === 0 || !duplicated) {
@@ -38,7 +38,7 @@ const mutations = {
   },
   // 从当前选择测试仪器中删减
   dropFromSelectedEquipments: (state, equipment) => {
-    let equipmentsSelected = state.selectedEquipments
+    const equipmentsSelected = state.selectedEquipments
     equipmentsSelected.splice(equipmentsSelected.indexOf(equipment), 1)
   },
   // 清空选择仪器

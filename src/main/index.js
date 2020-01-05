@@ -16,7 +16,7 @@ if (process.env.NODE_ENV !== 'development') {
 
 let mainWindow
 const winURL = process.env.NODE_ENV === 'development'
-  ? `http://localhost:9080`
+  ? 'http://localhost:9080'
   : `file://${__dirname}/index.html`
 
 function createWindow () {
@@ -24,10 +24,10 @@ function createWindow () {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
-    height: 780,
-    useContentSize: true,
+    height: 770,
     width: 1280,
     show: false,
+    useContentSize: true,
     webPreferences: {
       nodeIntegration: true
     }
@@ -48,23 +48,29 @@ function createWindow () {
     if (process.env.START_MINIMIZED) {
       mainWindow.minimize()
     } else {
-      // mainWindow.maximize() // 启动时最大化窗口，匹配PAD屏幕
+      mainWindow.maximize() // 启动时最大化窗口，匹配PAD屏幕
       mainWindow.show()
       mainWindow.focus()
     }
   })
 
   mainWindow.on('close', (event) => {
-    let response = dialog.showMessageBox({
+    const response = dialog.showMessageBox({
       type: 'info',
       title: '提示',
       buttons: ['取消', '确定'],
       cancelId: 0,
       message: '请确保测试数据已保存后，再退出系统！'
     })
-    if (response === 0) {
-      event.preventDefault()
-    }
+
+    event.preventDefault() // 阻止程序关闭
+
+    response.then((result) => {
+      // 根据用户操作，决定是否关闭程序
+      if (result.response !== 0) {
+        app.exit()
+      }
+    })
   })
 
   mainWindow.on('closed', () => {
@@ -77,7 +83,7 @@ function createWindow () {
 
 let loadingScreen
 const loadingScreenUrl = process.env.NODE_ENV === 'development'
-  ? `http://localhost:9080/static/loading.tml`
+  ? 'http://localhost:9080/static/loading.tml'
   : `file://${__static}/loading.html`
 function createLoadingScreen () {
   loadingScreen = new BrowserWindow(

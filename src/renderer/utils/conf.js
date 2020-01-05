@@ -1,24 +1,24 @@
 const storage = require('electron-json-storage')
 
-let config = {
-  'SerialPortName': 'COM9',
-  'BaudRate': 115200,
-  'BatteryLow': 3.3,
-  'BatteryHigh': 7.2
+const config = {
+  SerialPortName: 'COM9',
+  BaudRate: 115200,
+  BatteryLow: 3.3,
+  BatteryHigh: 7.2
 }
 
-let testTemplate = {
-  'cycle': 2,
-  'temp': 20,
-  'humi': 50,
-  'centerID': 1,
-  'IDS': '2,3',
-  'isSendding': true
+const testTemplate = {
+  cycle: 2,
+  temp: 20,
+  humi: 50,
+  centerID: 1,
+  IDS: '2,3',
+  isSendding: true
 }
 
-let appConfig = {
-  'title': '温湿度检测系统',
-  'asideTitle': 'XX温湿度检测系统'
+const appConfig = {
+  title: '温湿度检测系统',
+  asideTitle: 'XX温湿度检测系统'
 }
 
 export const initConf = new Promise((resolve, reject) => {
@@ -35,7 +35,7 @@ export const initConf = new Promise((resolve, reject) => {
     return new Promise((resolve, reject) => {
       storage.set('appConfig', appConfig, function (error) {
         if (error) throw error
-        console.log(`appConfig init done.`)
+        console.log('appConfig init done.')
         resolve(1)
       })
     })
@@ -59,7 +59,7 @@ export const initConf = new Promise((resolve, reject) => {
       storage.set('config', config, function (error) {
         if (error) throw error
         resolve(1)
-        console.log(`config init done.`)
+        console.log('config init done.')
       })
     })
   } else {
@@ -82,7 +82,7 @@ export const initConf = new Promise((resolve, reject) => {
       storage.set('testTemplate', testTemplate, function (error) {
         if (error) throw error
         resolve(1)
-        console.log(`testTemplate init done.`)
+        console.log('testTemplate init done.')
       })
     })
   } else {

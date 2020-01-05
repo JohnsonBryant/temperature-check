@@ -56,7 +56,7 @@ function Average (data) {
   if (!(data instanceof Array)) {
     throw new Error('invalid input, param can only be array...')
   }
-  let len = data.length
+  const len = data.length
   if (len === 0) {
     return NaN
   }
@@ -72,8 +72,8 @@ function Average (data) {
  * @return 数组长度为0时，返回 NaN
  */
 function Max (data) {
-  let arr = Array.prototype.slice.call(data)
-  let len = arr.length
+  const arr = Array.prototype.slice.call(data)
+  const len = arr.length
   if (len === 0) {
     return NaN
   }
@@ -88,8 +88,8 @@ function Max (data) {
  * @return 数组长度为0时，返回 NaN
  */
 function Min (data) {
-  let arr = Array.prototype.slice.call(data)
-  let len = arr.length
+  const arr = Array.prototype.slice.call(data)
+  const len = arr.length
   if (len === 0) {
     return NaN
   }

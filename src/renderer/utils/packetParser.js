@@ -7,7 +7,7 @@ const Parser = require('binary-parser').Parser
 
 export const DataPackParser = new Parser()
   .endianess('big')
-  .uint16('magic', {assert: 0xAA55})
+  .uint16('magic', { assert: 0xAA55 })
   .uint8('command')
   .uint8('packetLength')
   .uint8('deviceType')
@@ -23,7 +23,7 @@ export const DataPackParser = new Parser()
 
 export const DirectivePackParser = new Parser()
   .endianess('big')
-  .uint16('magic', {assert: 0xAA55})
+  .uint16('magic', { assert: 0xAA55 })
   .uint8('command')
   .uint8('packetLength')
   .uint8('deviceType')

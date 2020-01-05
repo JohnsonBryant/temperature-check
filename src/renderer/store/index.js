@@ -31,9 +31,9 @@ const mutations = {
   },
   // 新增选择仪器
   addToSelectedEquipments: (state, equipment) => {
-    let equipmentsSelected = state.selectedEquipments
+    const equipmentsSelected = state.selectedEquipments
     // 检查当前已选择的仪器中是否存在ID与新选择仪器相同的
-    let duplicated = equipmentsSelected.some((ele, index, all) => {
+    const duplicated = equipmentsSelected.some((ele, index, all) => {
       return ele.id === equipment.id
     })
     if (equipmentsSelected.length === 0 || !duplicated) {
@@ -42,7 +42,7 @@ const mutations = {
   },
   // 从当前选择测试仪器中删减
   dropFromSelectedEquipments: (state, equipment) => {
-    let equipmentsSelected = state.selectedEquipments
+    const equipmentsSelected = state.selectedEquipments
     equipmentsSelected.splice(equipmentsSelected.indexOf(equipment), 1)
   },
   // 清空选择仪器
@@ -75,7 +75,7 @@ const mutations = {
   },
   // 接收到搜索传感器应答时， 将传感器ID增加到 searchedSensorIDs
   addToSearchedSensorIDs: (state, deviceID) => {
-    let searchedSensorIDs = state.searchedSensorIDs
+    const searchedSensorIDs = state.searchedSensorIDs
     if (!searchedSensorIDs.includes(deviceID)) {
       searchedSensorIDs.push(deviceID)
     }
@@ -97,56 +97,56 @@ const mutations = {
 }
 
 const actions = {
-  setIsOnTestTask ({commit}, isOnTest) {
+  setIsOnTestTask ({ commit }, isOnTest) {
     // do something async
     commit('setIsOnTest', isOnTest)
   },
-  setCycleTask ({commit}, cycle) {
+  setCycleTask ({ commit }, cycle) {
     commit('setCycle', cycle)
   },
-  setIsSenddingTask ({commit}, isSendding) {
+  setIsSenddingTask ({ commit }, isSendding) {
     commit('setIsSendding', isSendding)
   },
-  addToSelectedEquipmentsTask ({commit}, equipment) {
+  addToSelectedEquipmentsTask ({ commit }, equipment) {
     commit('addToSelectedEquipments', equipment)
   },
-  dropFromSelectedEquipmentsTask ({commit}, equipment) {
+  dropFromSelectedEquipmentsTask ({ commit }, equipment) {
     commit('dropFromSelectedEquipments', equipment)
   },
-  clearAllSelectedEquipmentsTask ({commit}) {
+  clearAllSelectedEquipmentsTask ({ commit }) {
     commit('clearAllSelectedEquipments')
   },
-  setSelectedEquipmentsTask ({commit}, equipments) {
+  setSelectedEquipmentsTask ({ commit }, equipments) {
     commit('setSelectedEquipments', equipments)
   },
-  setIDSTask ({commit}, IDS) {
+  setIDSTask ({ commit }, IDS) {
     commit('setIDS', IDS)
   },
-  setEquiptmentsTask ({commit}, equipments) {
+  setEquiptmentsTask ({ commit }, equipments) {
     commit('setEquiptments', equipments)
   },
-  resetEquipmentsTask ({commit}) {
+  resetEquipmentsTask ({ commit }) {
     commit('resetEquipments')
   },
-  setDuplicatedEquipmentTask ({commit}, equipment) {
+  setDuplicatedEquipmentTask ({ commit }, equipment) {
     commit('setDuplicatedEquipment', equipment)
   },
-  reSetDuplicatedEquipmentTask ({commit}) {
+  reSetDuplicatedEquipmentTask ({ commit }) {
     commit('reSetDuplicatedEquipment')
   },
-  addToSearchedSensorIDsTask ({commit}, deviceID) {
+  addToSearchedSensorIDsTask ({ commit }, deviceID) {
     commit('addToSearchedSensorIDs', deviceID)
   },
-  clearSearchedSensorIDsTask ({commit}) {
+  clearSearchedSensorIDsTask ({ commit }) {
     commit('clearSearchedSensorIDs')
   },
-  setTestTimeTask ({commit}, timeStr) {
+  setTestTimeTask ({ commit }, timeStr) {
     commit('setTestTime', timeStr)
   },
-  addToSensorDataNotInTestTask ({commit}, pack) {
+  addToSensorDataNotInTestTask ({ commit }, pack) {
     commit('addToSensorDataNotInTest', pack)
   },
-  clearSensorDataNotInTestTask ({commit}) {
+  clearSensorDataNotInTestTask ({ commit }) {
     commit('clearSensorDataNotInTest')
   }
 }

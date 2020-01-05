@@ -81,7 +81,7 @@ export default {
 
 .dash-test-item{
   padding-top: 1rem;
-  padding-bottom: 1rem;
+  /* padding-bottom: 1rem; */
 }
 
 .dash-test-item > h4{
@@ -92,13 +92,13 @@ export default {
 }
 
 .dash-test-item .test-item-chart{
-  height: 48rem;
-  padding-top: .5rem;
-  padding-left: .5rem;
+  height: 47rem;
+  /* padding-top: .5rem; */
+  /* padding-left: .5rem; */
 }
 
 .dash-test-item .test-item-data{
-  height: 48rem;
+  height: 47rem;
   overflow: auto;
 }
 
