@@ -48,7 +48,7 @@ function createWindow () {
     if (process.env.START_MINIMIZED) {
       mainWindow.minimize()
     } else {
-      mainWindow.maximize() // 启动时最大化窗口，匹配PAD屏幕
+      // mainWindow.maximize() // 启动时最大化窗口，匹配PAD屏幕
       mainWindow.show()
       mainWindow.focus()
     }

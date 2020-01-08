@@ -5,83 +5,114 @@
     </div>
     <div class="main-page-container">
       <div class="wk-item">
-        <h4 class="wk-item-title">参数配置</h4>
-        <el-divider></el-divider>
-        <div class="wk-item-container">
-          <div class="wk-item-pie box1">
-            <el-form :model="SerialPort" :rules="rulesSerialPort" ref="SerialPort" >
-              <el-row :gutter="10">
-                <el-col :span="10">
-                  <el-form-item prop="SerialPortName">
-                    <el-input placeholder="输入串口号" v-model.trim="SerialPort.SerialPortName" :disabled="isOnTest">
-                      <template slot="prepend">串口号：</template>
-                    </el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="10">
-                  <el-form-item prop="BaudRate">
-                    <el-input placeholder="输入波特率" v-model.trim.number="SerialPort.BaudRate" :disabled="isOnTest">
-                      <template slot="prepend">波特率：</template>
-                    </el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="4">
-                  <el-button @click="PortSetClick" type="primary" :disabled="isOnTest">提交<i class="el-icon-check el-icon--right"></i></el-button>
-                </el-col>
-              </el-row>
-            </el-form>
-          </div>
-          <div class="wk-item-pie box2">
-            <el-form :model="Battery" :rules="rulesBattery" ref="Battery" >
-              <el-row :gutter="10">
-                <el-col :span="10">
-                  <el-form-item prop="BatteryLow">
-                    <el-input placeholder="输入最低电压" v-model.trim="Battery.BatteryLow" :disabled="isOnTest">
-                      <template slot="prepend">最低电压：</template>
-                    </el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="10">
-                  <el-form-item prop="BatteryHigh">
-                    <el-input placeholder="输入最高电压" v-model.trim="Battery.BatteryHigh" :disabled="isOnTest">
-                      <template slot="prepend">最高电压：</template>
-                    </el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="4">
-                  <el-button @click="BatterySetClick" type="primary" :disabled="isOnTest">提交<i class="el-icon-check el-icon--right"></i></el-button>
-                </el-col>                      
-              </el-row>
-            </el-form>
-          </div>
-          <div class="wk-item-pie box3">
-            <el-form :model="idSetting" :rules="rulesidSetting" ref="idSetting" >
-              <el-row :gutter="10">
-                <el-col :span="10">
-                  <el-form-item prop="originID">
-                    <el-input placeholder="输入原始ID" v-model.trim.number="idSetting.originID" :disabled="isOnTest">
-                      <template slot="prepend">原始ID：</template>
-                    </el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="10">
-                  <el-form-item prop="newID">
-                    <el-input placeholder="输入新设ID" v-model.trim.number="idSetting.newID" :disabled="isOnTest">
-                      <template slot="prepend">新设ID：</template>
-                    </el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="4">
-                  <el-button @click="IDSetClick" type="primary" :disabled="isOnTest">提交<i class="el-icon-check el-icon--right"></i></el-button>
-                </el-col>
-              </el-row>
-            </el-form>
-            <div class="wk-item-search-sensor">
-              <el-button @click="SerachSensorClick" type="success" 
-              >搜索传感器<i class="el-icon-check el-icon--right"></i></el-button>
-              <div class="wk-item-search-sensor-container">
-                <span class="searched-sensor-item" v-for="(sensorID) in searchedSensorIDs" :key="sensorID">{{ sensorID }}</span>
+        <div>
+          <h4 class="wk-item-title">参数配置</h4>
+          <el-divider></el-divider>
+          <div class="wk-item-container">
+            <div class="wk-item-pie box1">
+              <el-form :model="SerialPort" :rules="rulesSerialPort" ref="SerialPort" >
+                <el-row :gutter="10">
+                  <el-col :span="10">
+                    <el-form-item prop="SerialPortName">
+                      <el-input placeholder="输入串口号" v-model.trim="SerialPort.SerialPortName" :disabled="isOnTest">
+                        <template slot="prepend">串口号：</template>
+                      </el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="10">
+                    <el-form-item prop="BaudRate">
+                      <el-input placeholder="输入波特率" v-model.trim.number="SerialPort.BaudRate" :disabled="isOnTest">
+                        <template slot="prepend">波特率：</template>
+                      </el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-button @click="PortSetClick" type="primary" :disabled="isOnTest">提交<i class="el-icon-check el-icon--right"></i></el-button>
+                  </el-col>
+                </el-row>
+              </el-form>
+            </div>
+            <div class="wk-item-pie box2">
+              <el-form :model="Battery" :rules="rulesBattery" ref="Battery" >
+                <el-row :gutter="10">
+                  <el-col :span="10">
+                    <el-form-item prop="BatteryLow">
+                      <el-input placeholder="输入最低电压" v-model.trim="Battery.BatteryLow" :disabled="isOnTest">
+                        <template slot="prepend">最低电压：</template>
+                      </el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="10">
+                    <el-form-item prop="BatteryHigh">
+                      <el-input placeholder="输入最高电压" v-model.trim="Battery.BatteryHigh" :disabled="isOnTest">
+                        <template slot="prepend">最高电压：</template>
+                      </el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-button @click="BatterySetClick" type="primary" :disabled="isOnTest">提交<i class="el-icon-check el-icon--right"></i></el-button>
+                  </el-col>                      
+                </el-row>
+              </el-form>
+            </div>
+            <div class="wk-item-pie box3">
+              <el-form :model="idSetting" :rules="rulesidSetting" ref="idSetting" >
+                <el-row :gutter="10">
+                  <el-col :span="10">
+                    <el-form-item prop="originID">
+                      <el-input placeholder="输入原始ID" v-model.trim.number="idSetting.originID" :disabled="isOnTest">
+                        <template slot="prepend">原始ID：</template>
+                      </el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="10">
+                    <el-form-item prop="newID">
+                      <el-input placeholder="输入新设ID" v-model.trim.number="idSetting.newID" :disabled="isOnTest">
+                        <template slot="prepend">新设ID：</template>
+                      </el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-button @click="IDSetClick" type="primary" :disabled="isOnTest">提交<i class="el-icon-check el-icon--right"></i></el-button>
+                  </el-col>
+                </el-row>
+              </el-form>
+              <div class="wk-item-search-sensor">
+                <el-button @click="SerachSensorClick" type="success" 
+                >搜索传感器<i class="el-icon-check el-icon--right"></i></el-button>
+                <div class="wk-item-search-sensor-container">
+                  <span class="searched-sensor-item" v-for="(sensorID) in searchedSensorIDs" :key="sensorID">{{ sensorID }}</span>
+                </div>
               </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h4 class="wk-item-title">传感器标定</h4>
+          <el-divider></el-divider>
+          <div class="wk-item-container">
+            <div class="wk-item-pie box1">
+              <el-form :model="sensorCalibration" :rules="rulesSensorCalibration" ref="sensorCalibration" >
+                <el-row :gutter="10">
+                  <el-col :span="10">
+                    <el-form-item prop="id">
+                      <el-input placeholder="ID：" v-model.trim="sensorCalibration.id" :disabled="isOnTest">
+                        <template slot="prepend">ID：</template>
+                      </el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="10">
+                    <el-form-item prop="resistance">
+                      <el-input placeholder="电阻值：" v-model.trim="sensorCalibration.resistance" :disabled="isOnTest">
+                        <template slot="prepend">电阻值：</template>
+                      </el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-button @click="SubmitSensorCalibration" type="primary" :disabled="isOnTest">提交<i class="el-icon-check el-icon--right"></i></el-button>
+                  </el-col>
+                </el-row>
+              </el-form>
             </div>
           </div>
         </div>
@@ -156,7 +187,7 @@
             </div>
           </div>
         </el-form>
-      </div>      
+      </div>
     </div>
   </div>
 </template>
@@ -209,6 +240,14 @@ let rules = {
     ],
     isSendding: [
     ]
+  },
+  rulesSensorCalibration: {
+    id: [
+      { required: true, message: '请输入传感器ID', trigger: 'change' }
+    ],
+    resistance: [
+      { required: true, message: '请输入电阻值', trigger: 'change' }
+    ]
   }
 }
 
@@ -236,10 +275,15 @@ export default {
         IDS: '',
         isSendding: true
       },
+      sensorCalibration: {
+        id: '',
+        resistance: ''
+      },
       rulesSerialPort: rules.SerialPort,
       rulesBattery: rules.Battery,
       rulesidSetting: rules.idSetting,
-      rulestestTemplate: rules.testTemplate
+      rulestestTemplate: rules.testTemplate,
+      rulesSensorCalibration: rules.rulesSensorCalibration
     }
   },
   beforeMount () {
@@ -465,6 +509,39 @@ export default {
         }
       })
     },
+    SubmitSensorCalibration () {
+      this.$refs['sensorCalibration'].validate((valid) => {
+        if (valid) {
+          // id 必须为正整数
+          let param = this.sensorCalibration
+          param.id = parseInt(param.id)
+          param.resistance = parseFloat(param.resistance)
+          if (!this.$myutil.isPositiveInteger(param.id)) {
+            this.addMessage('传感器ID输入有误，必须为正整数，请检查后重新提交！', 'warning')
+            return
+          }
+          // 电阻值必须为正浮点数
+          if (!this.$myutil.isPositiveNumber(param.resistance)) {
+            this.addMessage('电阻值输入有误，不可输入负数，请检查后重新提交！', 'warning')
+            return
+          }
+          // 解析打包数据(构建为约定的数据格式)
+          let buffer = Buffer.alloc(4)
+          buffer.writeFloatBE(param.resistance)
+          let resistanceHex = buffer.toString('hex')
+          let bufstr = 'AA55' + 'A2' + '06' + '0A' + param.id.toString(16).padStart(2, '0') + resistanceHex + '0000'
+          let buf = Buffer.from(bufstr, 'hex')
+          // 调用串口发送数据到主节点
+          this.$port.serialport.write(buf, (err) => {
+            if (!err) {
+              this.addMessage('标定传感器指令发送成功！', 'success')
+            } else {
+              this.addMessage('串口写入错误，发送停止测试指令失败，请重新操作！！！', 'warning')
+            }
+          })
+        }
+      })
+    },
     setData (originData, newData) {
       Object.keys(newData).forEach((key) => {
         if (originData.hasOwnProperty(key)) {
@@ -499,34 +576,46 @@ export default {
   padding-left: 1rem;
 }
 
-.wk-item-title{
+.workspace .wk-item-title{
   font-size: 1.5rem;
   font-weight: lighter;
   color: #303133;
 }
 
-.wk-item-search-sensor{
+.workspace .wk-item-search-sensor{
   padding-top: 2rem;
 }
 
-.wk-item-search-sensor-container{
+.workspace .wk-item-search-sensor-container{
   padding: 1.5rem .5rem .5rem .5rem;
 }
 
-.wk-item-pie{
+.workspace .searched-sensor-item {
+  display: inline-block;
+  width: 3rem;
+  height: 3rem;
+  line-height: 3rem;
+  border-radius: 1.5rem;
+  text-align: center;
+  margin-right: .5rem;
+  color: #fff;
+  background-color: steelblue;
+}
+
+.workspace .wk-item-pie{
   padding-top: 1rem;
   padding-bottom: 1rem;
 }
 
-.wk-item-pie.box1{
+.workspace .wk-item-pie.box1{
   padding-top: 1rem;
 }
 
-.wk-item-pie.wk-template1{
+.workspace .wk-item-pie.wk-template1{
   padding-top: 0;
 }
 
-.wk-template-btns{
+.workspace .wk-template-btns{
   padding-top: 1rem;
 }
 </style>

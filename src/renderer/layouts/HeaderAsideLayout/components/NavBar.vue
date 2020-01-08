@@ -87,17 +87,22 @@ export default {
           name: 'Spreadsheets'
         }]
       })
-      if (o === undefined) {
-        this.addMessage(`未选择导出文件的存储位置，取消导出文件！`, 'warning')
-        return
-      }
+      o.then((result) => {
+        if (result.canceled) {
+          return
+        }
+        if (result.filePaths[0] === undefined) {
+          this.addMessage(`未选择导出文件的存储位置，取消导出文件！`, 'warning')
+          return
+        }
 
-      let equipments = JSON.parse(JSON.stringify(this.equipments))
-      // forloop all equipments, flat equipment.data, save data to excel
-      equipments.forEach((equipment, index, equipments) => {
-        this.SaveJsonToExcel(o[0], equipment)
+        let equipments = JSON.parse(JSON.stringify(this.equipments))
+        // forloop all equipments, flat equipment.data, save data to excel
+        equipments.forEach((equipment, index, equipments) => {
+          this.SaveJsonToExcel(result.filePaths[0], equipment)
+        })
+        this.addMessage(`数据文件导出到 ${result.filePaths[0]} 成功！`, 'success')
       })
-      this.addMessage(`数据文件导出到 ${o[0]} 成功！`, 'success')
     },
     SaveJsonToExcel (dir = './', equipmentData = {}, exportTime = '') {
       let excelName = path.join(dir, `/${this.getPeviceName(equipmentData.device)}_${exportTime}.xlsx`)

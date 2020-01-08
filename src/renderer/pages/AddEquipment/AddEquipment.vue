@@ -138,7 +138,14 @@ export default {
       }
     },
     addEqInputItem () {
-      this.info.equipmentInfo.push({em: '', deviceName: '', deviceType: '', deviceID: ''})
+      let device = {em: '', deviceName: '', deviceType: '', deviceID: ''}
+      if (this.duplicatedEquipment.hasOwnProperty('company')) {
+        device.deviceName = this.duplicatedEquipment.deviceName
+        device.em = this.duplicatedEquipment.em
+        device.deviceType = this.duplicatedEquipment.deviceType
+        device.deviceID = this.duplicatedEquipment.deviceID
+      }
+      this.info.equipmentInfo.push(device)
     },
     deleteEqInputItem () {
       this.info.equipmentInfo.pop({em: '', deviceName: '', deviceType: '', deviceID: ''})

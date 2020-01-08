@@ -65,6 +65,7 @@ const template = {
   },
   toolbox: {
     feature: {
+      // dataZoom: {},
       saveAsImage: {}
     }
   },

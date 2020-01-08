@@ -41,6 +41,7 @@ export default {
     },
     toolbox: {
       feature: {
+        // dataZoom: {},
         saveAsImage: {}
       }
     },
@@ -101,6 +102,7 @@ export default {
     },
     toolbox: {
       feature: {
+        // dataZoom: {},
         saveAsImage: {}
       }
     },
