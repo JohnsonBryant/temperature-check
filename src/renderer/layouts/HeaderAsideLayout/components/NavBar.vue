@@ -114,8 +114,6 @@ export default {
       let humiConfig = equipmentData.config.humi
       let sensorDataTemp = [] /* pack data to array of array */
       let sensorDataHumi = []
-      // let columnHeadersTemp = ['温度示值', '中心点(ID1)温度', 'ID2温度', 'ID3温度', '温度均匀度', '温度波动度', '温度偏差']
-      // let columnHeadersHumi = ['湿度示值', '中心点(ID1)湿度', 'ID2湿度', 'ID3湿度', '湿度均匀度', '湿度波动度', '湿度偏差']
       let columnHeadersTemp = ['温度示值', '温度均匀度', '温度波动度', '温度偏差', `中心点(ID${centerID})温度`]
       let columnHeadersHumi = ['湿度示值', '湿度均匀度', '湿度波动度', '湿度偏差', `中心点(ID${centerID})湿度`]
       IDS.forEach((id, index, ids) => {
@@ -138,6 +136,9 @@ export default {
       let wb = XLSX.utils.book_new() /* generate new workbook object */
       let wsTemp = XLSX.utils.aoa_to_sheet(sensorDataTemp) /* transfer array of array to worksheet */
       let wsHumi = XLSX.utils.aoa_to_sheet(sensorDataHumi)
+      let colsWidth = new Array(columnHeadersTemp.length).fill({ width: 18 })
+      wsTemp['!cols'] = colsWidth
+      wsHumi['!cols'] = colsWidth
       XLSX.utils.book_append_sheet(wb, wsTemp, '温度检测数据') /* Add the worksheet to the workbook */
       XLSX.utils.book_append_sheet(wb, wsHumi, '湿度检测数据')
       XLSX.writeFile(wb, excelName) /* generate file and force a download */

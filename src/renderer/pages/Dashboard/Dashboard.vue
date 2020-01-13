@@ -40,56 +40,58 @@ import 'echarts/lib/chart/line'
 
 import demo from './template.js'
 
-const template = {
-  title: {
-    text: '', // 根据数据生成 ， 曲线数据类型 温度、湿度
-    textStyle: {
-      fontSize: 16
-    }
-  },
-  tooltip: {
-    trigger: 'axis'
-  },
-  legend: {
-    left: 35,
-    textStyle: {
-      fontSize: 14
+const template = () => {
+  return {
+    title: {
+      text: '', // 根据数据生成 ， 曲线数据类型 温度、湿度
+      textStyle: {
+        fontSize: 16
+      }
     },
-    data: [] // 根据数据生成， 对应曲线图标题数组
-  },
-  grid: {
-    left: '3%',
-    right: '4%',
-    bottom: '3%',
-    containLabel: true
-  },
-  toolbox: {
-    feature: {
-      // dataZoom: {},
-      saveAsImage: {}
-    }
-  },
-  xAxis: {
-    type: 'category',
-    boundaryGap: false,
-    data: [] // 根据数据生成， 数据时间数组， 对应曲线图的 X 轴
-  },
-  yAxis: {
-    type: 'value',
-    max: function (value) {
-      return value.max + (value.max - value.min) * 0.1
+    tooltip: {
+      trigger: 'axis'
     },
-    min: function (value) {
-      return value.min - (value.max - value.min) * 0.1
-    }
-  },
-  series: [
-    {
-      name: 'ID1', // 根据数据生成， 传感器ID
-      type: 'line',
-      data: [] // 传感器数据
-    }
-  ]
+    legend: {
+      left: 35,
+      textStyle: {
+        fontSize: 14
+      },
+      data: [] // 根据数据生成， 对应曲线图标题数组
+    },
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      containLabel: true
+    },
+    toolbox: {
+      feature: {
+        // dataZoom: {},
+        saveAsImage: {}
+      }
+    },
+    xAxis: {
+      type: 'category',
+      boundaryGap: false,
+      data: [] // 根据数据生成， 数据时间数组， 对应曲线图的 X 轴
+    },
+    yAxis: {
+      type: 'value',
+      max: function (value) {
+        return parseFloat((value.max + (value.max - value.min) * 0.1).toFixed(2)) + 1
+      },
+      min: function (value) {
+        return parseFloat((value.min - (value.max - value.min) * 0.1).toFixed(2)) - 1
+      }
+    },
+    series: [
+      {
+        name: 'ID1', // 根据数据生成， 传感器ID
+        type: 'line',
+        data: [] // 传感器数据
+      }
+    ]
+  }
 }
 
 export default {
@@ -161,7 +163,7 @@ export default {
   methods: {
     // ...mapActions(['']),
     prepareGraphData (title, key, sensorData) {
-      let data = JSON.parse(JSON.stringify(template))
+      let data = template()
       data.title.text = title
       data.legend.data = sensorData.IDS.map((id) => {
         return `ID${id}`

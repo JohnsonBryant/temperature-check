@@ -109,8 +109,8 @@ export default {
         let DataPack = this.$Packet.DataPackParser.parse(packbuf)
         if (IDS.includes(DataPack.deviceID)) {
           // 传感器ID在配置中， 对应测试中的某个仪器
-          let temp = (DataPack.temp / 100.0).toFixed(2)
-          let humi = (DataPack.humi / 100.0).toFixed(2)
+          let temp = parseFloat((DataPack.temp / 100.0).toFixed(2))
+          let humi = parseFloat((DataPack.humi / 100.0).toFixed(2))
           let batt = (DataPack.batt / 1000.0)
           if (batt >= AppConf.BatteryHigh) {
             batt = 100
@@ -119,7 +119,7 @@ export default {
           } else {
             batt = (batt - AppConf.BatteryLow) / (AppConf.BatteryHigh - AppConf.BatteryLow) * 100
           }
-          batt = batt.toFixed(0)
+          batt = parseFloat(batt.toFixed(0))
           // 缓存在配置中的传感器的温湿度数据
           this.program.cache[DataPack.deviceID.toString()] = { temp, humi, batt }
           console.log(`${this.$myutil.nowtime()} 收到传感器ID:${DataPack.deviceID} 数据`)

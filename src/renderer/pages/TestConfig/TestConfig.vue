@@ -181,10 +181,11 @@ export default {
       }
       // 测试仪器下挂载的其他传感器ID的转换及检查
       selectedEquipments.forEach((ele) => {
-        let s = ele.config.IDS.replace(/,|，/g, ',')
-        let ids = s.split(',').map(id => parseInt(id))
+        let s, ids
+        s = ele.config.IDS.trim() === '' ? '' : ele.config.IDS.replace(/,|，/g, ',')
+        ids = s === '' ? [] : s.split(',').map(id => parseInt(id))
         ele.config.centerID = parseInt(ele.config.centerID)
-        IDS.push(...ids, ele.config.centerID)
+        IDS.push(...ids)
         ele.config.IDS = ids
       })
       if (IDS.some((item) => !this.$myutil.isInteger(item) || (item > 255 || item < 0))) {
