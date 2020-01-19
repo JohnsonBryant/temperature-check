@@ -17,7 +17,8 @@
         :humis="demo.humis"
       />
     </div>
-    <div v-for="(item,index) in DeviceTestDatas" :key="index">
+
+    <!-- <div v-for="(item,index) in DeviceTestDatas" :key="index">
       <test-item 
         :equipment="item.equipment"
         :updateTime="item.updateTime"
@@ -26,7 +27,15 @@
         :temps="item.temps"
         :humis="item.humis"
       />
+    </div> -->
+    <div v-for="(item,index) in DeviceTestDataTable" :key="index">
+      <test-item-table 
+        :equipment="item.equipment"
+        :tempTestDataTable="item.tempTestDataTable"
+        :humiTestDataTable="item.humiTestDataTable"
+        />
     </div>
+    
   </div>
 </div>
 </template>
@@ -36,6 +45,7 @@ import {mapState
   // , mapActions
 } from 'vuex'
 import TestItem from './TestItem'
+import TestItemTable from './TestItemTable'
 import 'echarts/lib/chart/line'
 
 import demo from './template.js'
@@ -96,7 +106,8 @@ const template = () => {
 
 export default {
   components: {
-    'test-item': TestItem
+    'test-item': TestItem,
+    'test-item-table': TestItemTable
   },
   data () {
     return {
@@ -107,7 +118,6 @@ export default {
     ...mapState(['isOnTest', 'equipments']),
     DeviceTestDatas () {
       const equipments = this.equipments
-      // const equipments = JSON.parse(JSON.stringify(this.equipments))
       let deviceTestDatas = []
       equipments.forEach((ele, index, equipments) => {
         let deviceTestData = {}
@@ -155,6 +165,40 @@ export default {
         deviceTestDatas.push(deviceTestData)
       })
       return deviceTestDatas
+    },
+    DeviceTestDataTable () {
+      const equipments = this.equipments
+      let deviceTestDataTable = []
+      equipments.forEach((ele, index, equipments) => {
+        let deviceTestData = {'tempTestDataTable': [], 'humiTestDataTable': []}
+        deviceTestData.equipment = ele.device
+        let packCount = ele.data[ele.config.centerID]['temp'].length
+        for (let i = 0; i < packCount; i++) {
+          let rowTemp = {}
+          let rowHumi = {}
+          ele.data['IDS'].forEach((id) => {
+            let key = `ID${id}`
+            if (id === ele.config.centerID) {
+              key = `centerID${id}`
+            }
+            rowTemp[key] = ele.data[id]['temp'][i]
+            rowHumi[key] = ele.data[id]['humi'][i]
+          })
+          rowTemp['count'] = i + 1
+          rowTemp.evennessTemp = ele.data['evennessTemp'][i]
+          rowTemp.fluctuationTemp = ele.data['fluctuationTemp'][i]
+          rowTemp.deviationTemp = ele.data['deviationTemp'][i]
+          rowHumi['count'] = i + 1
+          rowHumi.evennessHumi = ele.data['evennessHumi'][i]
+          rowHumi.fluctuationHumi = ele.data['fluctuationHumi'][i]
+          rowHumi.deviationHumi = ele.data['deviationHumi'][i]
+          deviceTestData.tempTestDataTable.push(rowTemp)
+          deviceTestData.humiTestDataTable.push(rowHumi)
+        }
+        deviceTestDataTable.push(deviceTestData)
+      })
+
+      return deviceTestDataTable
     },
     showMessageState () {
       return (this.equipments.length === 0) && !this.isOnTest

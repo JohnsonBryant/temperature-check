@@ -16,6 +16,16 @@ import Packet from './utils/packetParser.js'
 import myutil from './utils/myutil.js'
 
 const { app, dialog } = require('electron').remote
+const { ipcRenderer } = require('electron')
+
+ipcRenderer.on('applictionExit', (event, args) => {
+  let buf = Buffer.from('AA55' + 'CC' + '06' + '0B' + '00000000' + '000000', 'hex')
+  Vue.prototype.$port.serialport.write(buf, (err) => {
+    if (!err) {
+      console.log(`停止测试。`)
+    }
+  })
+})
 
 // 执行完程序配置文件初始化检查后， 进行Vue根实例的初始化挂载，程序初始化。
 initConf.then((result) => {

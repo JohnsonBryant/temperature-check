@@ -125,7 +125,7 @@ export default {
           console.log(`${this.$myutil.nowtime()} 收到传感器ID:${DataPack.deviceID} 数据`)
         } else {
           // 传感器ID不在配置中， 推送未在配置中的传感器数据包到前端
-          let dataNotInTest = `ID：${DataPack.deviceID}，温度：${DataPack.temp}，湿度：${DataPack.humi}`
+          let dataNotInTest = `ID：${DataPack.deviceID}，温度：${parseFloat((DataPack.temp / 100.0).toFixed(2))}，湿度：${parseFloat((DataPack.humi / 100.0).toFixed(2))}`
           this.addMessage(`收到未在配置中传感器数据 ${dataNotInTest}`)
         }
       } catch (e) {

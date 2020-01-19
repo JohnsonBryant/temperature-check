@@ -3,6 +3,7 @@
 import {
   app,
   dialog,
+  // ipcMain,
   BrowserWindow
 } from 'electron'
 import MenuBuilder from './menu.js'
@@ -68,7 +69,11 @@ function createWindow () {
     response.then((result) => {
       // 根据用户操作，决定是否关闭程序
       if (result.response !== 0) {
-        app.exit()
+        // 推送程序关闭消息到前端，并推迟200毫秒后，关闭程序
+        mainWindow.webContents.send('applictionExit', 'stopTest')
+        setTimeout(() => {
+          app.exit()
+        }, 200)
       }
     })
   })
