@@ -96,20 +96,20 @@
                 <el-row :gutter="10">
                   <el-col :span="10">
                     <el-form-item prop="id">
-                      <el-input placeholder="ID：" v-model.trim="sensorCalibration.id" :disabled="isOnTest">
+                      <el-input placeholder="ID：" v-model.trim="sensorCalibration.id">
                         <template slot="prepend">ID：</template>
                       </el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :span="10">
                     <el-form-item prop="resistance">
-                      <el-input placeholder="电阻值：" v-model.trim="sensorCalibration.resistance" :disabled="isOnTest">
+                      <el-input placeholder="电阻值：" v-model.trim="sensorCalibration.resistance">
                         <template slot="prepend">电阻值：</template>
                       </el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :span="4">
-                    <el-button @click="SubmitSensorCalibration" type="primary" :disabled="isOnTest">提交<i class="el-icon-check el-icon--right"></i></el-button>
+                    <el-button @click="SubmitSensorCalibration" type="primary">提交<i class="el-icon-check el-icon--right"></i></el-button>
                   </el-col>
                 </el-row>
               </el-form>

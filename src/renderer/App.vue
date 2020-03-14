@@ -144,6 +144,16 @@ export default {
           this.addToSearchedSensorIDsTask(pack.deviceID)
           this.addMessage(`搜索到传感器，ID：${pack.deviceID}`)
         },
+        'A2': () => {
+          // 修改单温度传感器电阻值应答
+          let message = ``
+          if (pack.reserv[0] === 0x00) {
+            message = `传感器电阻值修改失败，传感器ID：${pack.deviceID}`
+          } else if (pack.reserv[0] === 0x01) {
+            message = `传感器电阻值修改成功，传感器ID：${pack.deviceID}`
+          }
+          this.addMessage(message)
+        },
         'CE': () => {
           this.addMessage(`收到启动应答`)
         },
