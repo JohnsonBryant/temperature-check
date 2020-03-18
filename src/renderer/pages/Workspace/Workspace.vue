@@ -527,7 +527,7 @@ export default {
           }
           // 解析打包数据(构建为约定的数据格式)
           let buffer = Buffer.alloc(4)
-          buffer.writeFloatBE(param.resistance)
+          buffer.writeFloatLE(param.resistance)
           let resistanceHex = buffer.toString('hex')
           let bufstr = 'AA55' + 'A2' + '06' + '0A' + param.id.toString(16).padStart(2, '0') + resistanceHex + '0000'
           let buf = Buffer.from(bufstr, 'hex')
