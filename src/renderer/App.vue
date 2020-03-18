@@ -109,8 +109,10 @@ export default {
         let DataPack = this.$Packet.DataPackParser.parse(packbuf)
         if (IDS.includes(DataPack.deviceID)) {
           // 传感器ID在配置中， 对应测试中的某个仪器
-          let temp = parseFloat((DataPack.temp / 100.0).toFixed(2))
-          let humi = parseFloat((DataPack.humi / 100.0).toFixed(2))
+          // let temp = parseFloat((DataPack.temp / 100.0).toFixed(2))
+          // let humi = parseFloat((DataPack.humi / 100.0).toFixed(2))
+          let temp = parseFloat(DataPack.temp.toFixed(2))
+          let humi = parseFloat(DataPack.humi.toFixed(2))
           let batt = (DataPack.batt / 1000.0)
           if (batt >= AppConf.BatteryHigh) {
             batt = 100
@@ -125,7 +127,7 @@ export default {
           console.log(`${this.$myutil.nowtime()} 收到传感器ID:${DataPack.deviceID} 数据`)
         } else {
           // 传感器ID不在配置中， 推送未在配置中的传感器数据包到前端
-          let dataNotInTest = `ID：${DataPack.deviceID}，温度：${parseFloat((DataPack.temp / 100.0).toFixed(2))}，湿度：${parseFloat((DataPack.humi / 100.0).toFixed(2))}`
+          let dataNotInTest = `ID：${DataPack.deviceID}，温度：${parseFloat(DataPack.temp.toFixed(2))}，湿度：${parseFloat(DataPack.humi.toFixed(2))}`
           this.addMessage(`收到未在配置中传感器数据 ${dataNotInTest}`)
         }
       } catch (e) {
@@ -142,7 +144,12 @@ export default {
         'A1': () => {
           // 搜索传感器应答数据，推送数据对象到前端，可获取到单个在线的传感器ID号
           this.addToSearchedSensorIDsTask(pack.deviceID)
-          this.addMessage(`搜索到传感器，ID：${pack.deviceID}`)
+          if (pack.deviceType === 0x0A) {
+            let buf = Buffer.from(pack.reserv)
+            this.addMessage(`搜索到单温度传感器，ID：${pack.deviceID}，采样电阻值：${buf.readFloatLE(0)}`)
+          } else if (pack.deviceType === 0x0B) {
+            this.addMessage(`搜索到温湿度传感器，ID：${pack.deviceID}`)
+          }
         },
         'A2': () => {
           // 修改单温度传感器电阻值应答
