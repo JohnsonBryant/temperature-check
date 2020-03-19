@@ -20,7 +20,8 @@
 
     <div v-for="(item,index) in DeviceTestDatas" :key="index">
       <el-tabs type="border-card">
-        <el-tab-pane label="数据走势">
+        <el-tab-pane>
+          <span slot="label"><i class="el-icon-s-data"></i> 数据走势</span>
           <test-item 
             :equipment="item.equipment"
             :updateTime="item.updateTime"
@@ -30,7 +31,8 @@
             :humis="item.humis"
           />
         </el-tab-pane>
-        <el-tab-pane label="数据表格">
+        <el-tab-pane>
+          <span slot="label"><i class="el-icon-s-grid"></i> 数据表格</span>
           <test-item-table 
             :equipment="DeviceTestDataTable[index].equipment"
             :tempTestDataTable="DeviceTestDataTable[index].tempTestDataTable"
@@ -247,4 +249,30 @@ export default {
   right: 4rem;
   z-index: 1005;
 }
+
+.dash-test-item{
+  padding-top: 1rem;
+}
+
+.dash-test-item > h4{
+  text-align: center;
+  padding-bottom: 1rem;
+  font-size: 1.4rem;
+  color: #707377;
+}
+
+.dash-test-item .test-item-chart{
+  height: 47rem;
+}
+
+.dash-test-item .test-item-data{
+  height: 47rem;
+  overflow: auto;
+}
+
+.dash-test-item .test-item-col{
+  text-align: center;
+}
+
+
 </style>

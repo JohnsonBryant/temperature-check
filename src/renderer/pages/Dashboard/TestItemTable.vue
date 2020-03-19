@@ -1,7 +1,7 @@
 <template>
   <div class="dash-test-item">
     <h4 v-html="equipmentTitle"></h4>
-    <el-tabs type="border-card">
+    <el-tabs type="border-card" class="test-item-data">
       <el-tab-pane label="湿度数据">
         <el-table
           :data="humiTestDataTable"
@@ -115,26 +115,5 @@ export default {
 </script>
 
 <style>
-
-.dash-test-item{
-  padding-top: 1rem;
-  /* padding-bottom: 1rem; */
-}
-
-.dash-test-item > h4{
-  text-align: center;
-  padding-bottom: 1rem;
-  font-size: 1.4rem;
-  color: #707377;
-}
-
-.dash-test-item .test-item-data{
-  height: 47rem;
-  overflow: auto;
-}
-
-.dash-test-item .test-item-col{
-  text-align: center;
-}
 
 </style>

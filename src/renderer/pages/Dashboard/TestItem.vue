@@ -79,31 +79,4 @@ export default {
 
 <style>
 
-.dash-test-item{
-  padding-top: 1rem;
-  /* padding-bottom: 1rem; */
-}
-
-.dash-test-item > h4{
-  text-align: center;
-  padding-bottom: 1rem;
-  font-size: 1.4rem;
-  color: #707377;
-}
-
-.dash-test-item .test-item-chart{
-  height: 47rem;
-  /* padding-top: .5rem; */
-  /* padding-left: .5rem; */
-}
-
-.dash-test-item .test-item-data{
-  height: 47rem;
-  overflow: auto;
-}
-
-.dash-test-item .test-item-col{
-  text-align: center;
-}
-
 </style>
