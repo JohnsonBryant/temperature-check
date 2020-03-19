@@ -55,6 +55,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "better-sqlite3": "^6.0.1",
     "binary-parser": "^1.5.0",
     "echarts": "^4.5.0",
     "echarts-gl": "^1.1.1",
@@ -62,7 +63,6 @@
     "element-ui": "^2.13.0",
     "moment": "^2.24.0",
     "serialport": "^8.0.5",
-    "sqlite3": "^4.1.1",
     "vue": "^2.5.16",
     "vue-echarts": "^4.1.0",
     "vue-electron": "^1.0.6",

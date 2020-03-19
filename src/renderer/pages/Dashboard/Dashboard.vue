@@ -18,24 +18,27 @@
       />
     </div>
 
-    <!-- <div v-for="(item,index) in DeviceTestDatas" :key="index">
-      <test-item 
-        :equipment="item.equipment"
-        :updateTime="item.updateTime"
-        :packNumber="item.packNumber"
-        :test-data="item.testData"
-        :temps="item.temps"
-        :humis="item.humis"
-      />
-    </div> -->
-    <div v-for="(item,index) in DeviceTestDataTable" :key="index">
-      <test-item-table 
-        :equipment="item.equipment"
-        :tempTestDataTable="item.tempTestDataTable"
-        :humiTestDataTable="item.humiTestDataTable"
-        />
+    <div v-for="(item,index) in DeviceTestDatas" :key="index">
+      <el-tabs type="border-card">
+        <el-tab-pane label="数据走势">
+          <test-item 
+            :equipment="item.equipment"
+            :updateTime="item.updateTime"
+            :packNumber="item.packNumber"
+            :test-data="item.testData"
+            :temps="item.temps"
+            :humis="item.humis"
+          />
+        </el-tab-pane>
+        <el-tab-pane label="数据表格">
+          <test-item-table 
+            :equipment="DeviceTestDataTable[index].equipment"
+            :tempTestDataTable="DeviceTestDataTable[index].tempTestDataTable"
+            :humiTestDataTable="DeviceTestDataTable[index].humiTestDataTable"
+            />
+        </el-tab-pane>
+      </el-tabs>
     </div>
-    
   </div>
 </div>
 </template>
@@ -177,9 +180,9 @@ export default {
           let rowTemp = {}
           let rowHumi = {}
           ele.data['IDS'].forEach((id) => {
-            let key = `ID${id}`
+            let key = `${id}`
             if (id === ele.config.centerID) {
-              key = `centerID${id}`
+              key = `centerID`
             }
             rowTemp[key] = ele.data[id]['temp'][i]
             rowHumi[key] = ele.data[id]['humi'][i]
