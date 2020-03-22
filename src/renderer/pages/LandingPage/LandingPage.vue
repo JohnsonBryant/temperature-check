@@ -57,6 +57,11 @@
             min-width="160"
           ></el-table-column>
           <el-table-column
+            prop="detectProperty"
+            label="测量类型"
+            min-width="100"
+          ></el-table-column>
+          <el-table-column
             prop="insertDate"
             label="日期"
             min-width="130"
@@ -139,6 +144,11 @@
             min-width="160">
           </el-table-column>
           <el-table-column
+            prop="detectProperty"
+            label="测量类型"
+            min-width="100"
+          ></el-table-column>          
+          <el-table-column
             prop="insertDate"
             label="日期"
             min-width="130"
@@ -219,9 +229,9 @@ export default {
           that.page.total = rows[0].total
           let sql = ''
           if (that.searchText === '') {
-            sql = `select id, company, em, deviceName, deviceType, deviceID, insertDate from equipment order by insertDate desc limit ${that.page.size} offset ${that.page.size * (that.page.currentPageNum - 1)};`
+            sql = `select id, company, em, deviceName, deviceType, deviceID, detectProperty, insertDate from equipment order by insertDate desc limit ${that.page.size} offset ${that.page.size * (that.page.currentPageNum - 1)};`
           } else {
-            sql = `select id, company, em, deviceName, deviceType, deviceID, insertDate from equipment where company like "%${that.searchText}%" order by insertDate desc limit ${that.page.size} offset ${that.page.size * (that.page.currentPageNum - 1)};`
+            sql = `select id, company, em, deviceName, deviceType, deviceID, detectProperty, insertDate from equipment where company like "%${that.searchText}%" order by insertDate desc limit ${that.page.size} offset ${that.page.size * (that.page.currentPageNum - 1)};`
           }
           that.$sqliteDB.queryData(sql, (rows) => {
             that.equipments.splice(0, that.equipments.length, ...rows)

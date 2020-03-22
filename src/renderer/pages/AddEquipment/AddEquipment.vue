@@ -34,34 +34,42 @@
                   :span="8"
                   v-for="(equipment, index) in info.equipmentInfo"
                   :key="index">
-                  <el-form :model="equipment" :rules="rulesEquipmentInfo" ref="'equipment'+index">
-                    <el-card class="box-card box-item">
-                      <el-form-item prop="em">
+                  <el-form 
+                    :model="equipment" :rules="rulesEquipmentInfo" ref="'equipment'+index"
+                    label-position="right" label-width="100px">
+                    <el-card class="box-item">
+                      <el-form-item prop="em" label="仪器厂家：">
                         <el-input class="device-input" placeholder="请输入仪器厂家" v-model="equipment.em" :disabled="isOnTest">
-                          <template slot="prepend">仪器厂家：</template>
                         </el-input>
                       </el-form-item>
-                      <el-form-item prop="deviceName">
-                        <el-input class="device-input" placeholder="请输入仪器型号" v-model="equipment.deviceName" :disabled="isOnTest">
-                          <template slot="prepend">仪器名称：</template>
+                      <el-form-item prop="deviceName" label="仪器名称：">
+                        <el-input class="device-input" placeholder="请输入仪器名称" v-model="equipment.deviceName" :disabled="isOnTest">
                         </el-input>
                       </el-form-item>
-                      <el-form-item prop="deviceType">
+                      <el-form-item prop="deviceType" label="仪器型号：">
                         <el-input class="device-input" placeholder="请输入仪器型号" v-model="equipment.deviceType" :disabled="isOnTest">
-                          <template slot="prepend">仪器型号：</template>
                         </el-input>
                       </el-form-item>
-                      <el-form-item prop="deviceID">
+                      <el-form-item prop="deviceID" label="仪器编号：">
                         <el-input class="device-input" placeholder="请输入仪器编号" v-model="equipment.deviceID" :disabled="isOnTest">
-                          <template slot="prepend">仪器编号：</template>
                         </el-input>
+                      </el-form-item>
+                      <el-form-item label="测量类型：">
+                        <el-select v-model="equipment.detectProperty" placeholder="请选择测量类型">
+                          <el-option
+                            v-for="item in detectPropertys"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                          </el-option>
+                        </el-select>  
                       </el-form-item>
                     </el-card>
                   </el-form>
                 </el-col>
                 <!-- 新增单个测试仪器信息控制按钮模块 -->
                 <el-col :span="8">
-                  <el-card class="box-card box-item box-add-btn">
+                  <el-card class="box-item box-add-btn">
                     <el-button class="btn btn-add" type="success" icon="el-icon-plus" circle
                       @click="addEqInputItem"
                       :disabled="isOnTest"
@@ -103,6 +111,13 @@ let rulesEquipmentInfo = {
     {required: true, message: '请输入仪器ID', trigger: ['blur', 'change']}
   ]
 }
+let detectPropertys = [{
+  value: '温湿度',
+  label: '温湿度'
+}, {
+  value: '温度',
+  label: '温度'
+}]
 
 export default {
   name: 'add-equipment',
@@ -111,11 +126,12 @@ export default {
       info: {
         company: '',
         equipmentInfo: [
-          {em: '', deviceName: '', deviceType: '', deviceID: ''}
+          {em: '', deviceName: '', deviceType: '', deviceID: '', detectProperty: '温湿度'}
         ]
       },
       rulesEquipmentInfo: rulesEquipmentInfo,
-      rulesCompany: rulesCompany
+      rulesCompany: rulesCompany,
+      detectPropertys: detectPropertys
     }
   },
   beforeMount () {
@@ -138,12 +154,13 @@ export default {
       }
     },
     addEqInputItem () {
-      let device = {em: '', deviceName: '', deviceType: '', deviceID: ''}
+      let device = {em: '', deviceName: '', deviceType: '', deviceID: '', detectProperty: '温湿度'}
       if (this.duplicatedEquipment.hasOwnProperty('company')) {
         device.deviceName = this.duplicatedEquipment.deviceName
         device.em = this.duplicatedEquipment.em
         device.deviceType = this.duplicatedEquipment.deviceType
         device.deviceID = this.duplicatedEquipment.deviceID
+        device.detectProperty = this.duplicatedEquipment.detectProperty
       }
       this.info.equipmentInfo.push(device)
     },
@@ -182,8 +199,8 @@ export default {
                 return
               }
               // 仪器数据写入
-              let equipment = [[eq.company, eq.em, eq.deviceName, eq.deviceType, eq.deviceID, eq.insertDate]]
-              let sqlInsert = 'insert into equipment(company, em, deviceName, deviceType, deviceID, insertDate) values (?, ?, ?, ?, ?, ?)'
+              let equipment = [[eq.company, eq.em, eq.deviceName, eq.deviceType, eq.deviceID, eq.detectProperty, eq.insertDate]]
+              let sqlInsert = 'insert into equipment(company, em, deviceName, deviceType, deviceID, detectProperty, insertDate) values (?, ?, ?, ?, ?, ?, ?)'
               this.$sqliteDB.insertData(sqlInsert, equipment, (err) => {
                 if (err) {
                   this.addMessage('新增仪器失败！', 'warning')
@@ -246,7 +263,7 @@ export default {
 }
 
 .device-input {
-  margin-bottom: 1.5rem;
+  margin-bottom: 0rem;
 }
 
 .box-add-btn .btn{

@@ -74,7 +74,7 @@ DB.SqliteDB.prototype.close = function () {
 function initDataTable () {
   // 创建测试设备表
   const createTableEm = `create table if not exists equipment(
-    id INTEGER PRIMARY KEY, company TEXT NOT NULL, em TEXT NOT NULL, deviceName TEXT NOT NULL, deviceType TEXT NOT NULL, deviceID TEXT NOT NULL, insertDate TEXT NOT NULL,
+    id INTEGER PRIMARY KEY, company TEXT NOT NULL, em TEXT NOT NULL, deviceName TEXT NOT NULL, deviceType TEXT NOT NULL, deviceID TEXT NOT NULL, insertDate TEXT NOT NULL, detectProperty TEXT NOT NULL,
     UNIQUE(company,em,deviceName,deviceType,deviceID)
   );`
 

@@ -185,51 +185,58 @@ export default {
       commands[command]()
     },
     updateEquipmentData () {
+      // 非测试状态，未启动测试、或采集完成后停止测试
+      if (!this.isOnTest) {
+        return
+      }
       console.log(`${this.$myutil.nowtime()} update data`)
       let time = this.$myutil.nowtime()
       let data = this.program.cache
       let equipments = JSON.parse(JSON.stringify(this.equipments))
+      // 测试仪器数据更新
       equipments.forEach((equipment, index, equipments) => {
         let IDS = equipment.data.IDS
         if (IDS.every(id => data.hasOwnProperty(id))) { // 仪器挂载的传感器全部收到数据
-          // 更新仪器下挂载的传感器的数据
-          IDS.forEach((id) => {
-            equipment.data[id]['temp'].push(data[id].temp)
-            equipment.data[id]['humi'].push(data[id].humi)
-            equipment.data[id]['batt'].push(data[id].batt)
-          })
-          // 计算更新仪器的 温度 / 湿度 的均匀度、波动度、偏差
-          let tempConfig = equipment.config.temp
-          let humiConfig = equipment.config.humi
-          let centerID = equipment.config.centerID
-          let centerSensor = equipment.data[centerID]
-          let evennessTemp
-          let fluctuationTemp
-          let deviationTemp
-          let evennessHumi
-          let fluctuationHumi
-          let deviationHumi
-          let arrtemp = []
-          let arrhumi = []
-          for (let i = 0; i < centerSensor['temp'].length; i++) {
-            let roundtemp = IDS.map(id => equipment.data[id]['temp'][i])
-            let roundhumi = IDS.map(id => equipment.data[id]['humi'][i])
-            arrtemp.push(this.$myutil.Max(roundtemp) - this.$myutil.Min(roundtemp))
-            arrhumi.push(this.$myutil.Max(roundhumi) - this.$myutil.Min(roundhumi))
+          if (equipment.data['time'].length < equipment.config.count) {
+            // 更新仪器下挂载的传感器的数据
+            IDS.forEach((id) => {
+              equipment.data[id]['temp'].push(data[id].temp)
+              equipment.data[id]['humi'].push(data[id].humi)
+              equipment.data[id]['batt'].push(data[id].batt)
+            })
+            // 计算更新仪器的 温度 / 湿度 的均匀度、波动度、偏差
+            let tempConfig = equipment.config.temp
+            let humiConfig = equipment.config.humi
+            let centerID = equipment.config.centerID
+            let centerSensor = equipment.data[centerID]
+            let evennessTemp
+            let fluctuationTemp
+            let deviationTemp
+            let evennessHumi
+            let fluctuationHumi
+            let deviationHumi
+            let arrtemp = []
+            let arrhumi = []
+            for (let i = 0; i < centerSensor['temp'].length; i++) {
+              let roundtemp = IDS.map(id => equipment.data[id]['temp'][i])
+              let roundhumi = IDS.map(id => equipment.data[id]['humi'][i])
+              arrtemp.push(this.$myutil.Max(roundtemp) - this.$myutil.Min(roundtemp))
+              arrhumi.push(this.$myutil.Max(roundhumi) - this.$myutil.Min(roundhumi))
+            }
+            evennessTemp = this.$myutil.Average(arrtemp)
+            fluctuationTemp = centerSensor['temp'].length === 1 ? 0 : (this.$myutil.Max(centerSensor['temp']) - this.$myutil.Min(centerSensor['temp'])) / 2
+            deviationTemp = tempConfig - this.$myutil.Average(centerSensor['temp'])
+            evennessHumi = this.$myutil.Average(arrhumi)
+            fluctuationHumi = centerSensor['humi'].length === 1 ? 0 : (this.$myutil.Max(centerSensor['humi']) - this.$myutil.Min(centerSensor['humi'])) / 2
+            deviationHumi = humiConfig - this.$myutil.Average(centerSensor['humi'])
+            equipment.data['evennessTemp'].push(evennessTemp.toFixed(2))
+            equipment.data['fluctuationTemp'].push(fluctuationTemp.toFixed(2))
+            equipment.data['deviationTemp'].push(deviationTemp.toFixed(2))
+            equipment.data['evennessHumi'].push(evennessHumi.toFixed(2))
+            equipment.data['fluctuationHumi'].push(fluctuationHumi.toFixed(2))
+            equipment.data['deviationHumi'].push(deviationHumi.toFixed(2))
+            equipment.data['time'].push(time)
           }
-          evennessTemp = this.$myutil.Average(arrtemp)
-          fluctuationTemp = centerSensor['temp'].length === 1 ? 0 : (this.$myutil.Max(centerSensor['temp']) - this.$myutil.Min(centerSensor['temp'])) / 2
-          deviationTemp = tempConfig - this.$myutil.Average(centerSensor['temp'])
-          evennessHumi = this.$myutil.Average(arrhumi)
-          fluctuationHumi = centerSensor['humi'].length === 1 ? 0 : (this.$myutil.Max(centerSensor['humi']) - this.$myutil.Min(centerSensor['humi'])) / 2
-          deviationHumi = humiConfig - this.$myutil.Average(centerSensor['humi'])
-          equipment.data['evennessTemp'].push(evennessTemp.toFixed(2))
-          equipment.data['fluctuationTemp'].push(fluctuationTemp.toFixed(2))
-          equipment.data['deviationTemp'].push(deviationTemp.toFixed(2))
-          equipment.data['evennessHumi'].push(evennessHumi.toFixed(2))
-          equipment.data['fluctuationHumi'].push(fluctuationHumi.toFixed(2))
-          equipment.data['deviationHumi'].push(deviationHumi.toFixed(2))
-          equipment.data['time'].push(time)
         } else {
           // 仪器挂载的传感器未全部收到数据
           console.log(`仪器对应的传感器数据本次未全部收到`)
@@ -241,6 +248,20 @@ export default {
         this.$storage.set(this.TestTime, equipments, (error) => {
           if (error) {
             console.log(`存储测试数据的JSON文件发生错误，${error.message}`)
+          }
+        })
+      }
+      // 检查是否所有测试仪器数据均已采集完成，全部采集完成，则停止采集
+      let isallAcqed = equipments.every((eq) => { return eq.config.count <= eq.data.time.length })
+      if (isallAcqed && this.isOnTest) {
+        let buf = Buffer.from('AA55' + 'CC' + '06' + '0B' + '00000000' + '000000', 'hex')
+        this.$port.serialport.write(buf, (err) => {
+          if (!err) {
+            // reset store, variable
+            this.setIsOnTestTask(false)
+            this.addMessage('数据全部采集完成，停止采集！', 'success')
+          } else {
+            this.addMessage('数据采集完成停止，采集失败，请手动点击停止采集按钮！', 'warning')
           }
         })
       }

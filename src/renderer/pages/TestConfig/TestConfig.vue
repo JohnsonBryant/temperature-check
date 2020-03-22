@@ -39,12 +39,22 @@
         <!-- 未处在测试状态，且不是从设备管理页路由并传递参数到本页时显示 -->
         <h4>当前系统未处在测试状态，如需要进行测试，请切换到设备管理页，选择测试设备，启动测试！</h4>
       </div>
-      <test-config-item 
-        v-for="(item,index) in testDeviceInfo"
-        :key="index"
-        :device="item.device"
-        :config="item.config"
-      />
+      <template v-for="(item,index) in testDeviceInfo">
+        <template v-if="item.device.detectProperty === '温湿度'">
+          <test-config-item-th
+            :key="index"
+            :device="item.device"
+            :config="item.config"
+          />
+        </template>
+        <template v-else-if="item.device.detectProperty === '温度'">
+          <test-config-item-temp
+            :key="index"
+            :device="item.device"
+            :config="item.config"
+          />
+        </template>
+      </template>
     </div>
   </div>
 </template>
@@ -53,12 +63,14 @@
 import {mapState, mapActions} from 'vuex'
 import Vue from 'vue'
 import moment from 'moment'
-import TestConfigItem from './TestConfigItem'
+import TestConfigItemTH from './TestConfigItemTH'
+import TestConfigItemTemp from './TestConfigItemTemp'
 
 export default {
   name: 'test-config',
   components: {
-    'test-config-item': TestConfigItem
+    'test-config-item-th': TestConfigItemTH,
+    'test-config-item-temp': TestConfigItemTemp
   },
   data () {
     return {
@@ -70,7 +82,8 @@ export default {
         humi: '',
         centerID: '',
         IDS: '',
-        isSendding: true
+        isSendding: true,
+        count: 15
       },
       testDeviceInfo: []
     }
@@ -124,14 +137,28 @@ export default {
         // 检查当前是否为选择了测试仪器，并点击了进入测试按钮， 是，则使用已选择仪器数组作为数据源进行初始化
         let equipments = JSON.parse(JSON.stringify(this.selectedEquipments))
         let testDeviceInfo = equipments.map(ele => {
-          return Object.assign({device: ele}, {
-            config: {
-              temp: '',
-              humi: '',
-              IDS: '',
-              centerID: ''
+          let config = {}
+          if (ele.detectProperty === '温湿度') {
+            config = {
+              config: {
+                temp: '',
+                humi: '',
+                IDS: '',
+                centerID: '',
+                count: ''
+              }
             }
-          })
+          } else if (ele.detectProperty === '温度') {
+            config = {
+              config: {
+                temp: '',
+                IDS: '',
+                centerID: '',
+                count: ''
+              }
+            }
+          }
+          return Object.assign({device: ele}, config)
         })
         this.testDeviceInfo.splice(0, this.testDeviceInfo.length, ...testDeviceInfo)
       }
@@ -142,10 +169,19 @@ export default {
       this.localeCycle = testTemplate.cycle
       this.localeIsSendding = testTemplate.isSendding
       this.testDeviceInfo.forEach((testDevice, index) => {
-        testDevice.config.temp = testTemplate.temp
-        testDevice.config.humi = testTemplate.humi
-        testDevice.config.centerID = testTemplate.centerID
-        testDevice.config.IDS = testTemplate.IDS
+        if (testDevice.device.detectProperty === '温湿度') {
+          testDevice.config.temp = testTemplate.temp
+          testDevice.config.humi = testTemplate.humi
+          testDevice.config.centerID = testTemplate.centerID
+          testDevice.config.IDS = testTemplate.IDS
+          testDevice.config.count = testTemplate.count
+        } else if (testDevice.device.detectProperty === '温度') {
+          testDevice.config.temp = testTemplate.temp
+          // testDevice.config.humi = testTemplate.humi
+          testDevice.config.centerID = testTemplate.centerID
+          testDevice.config.IDS = testTemplate.IDS
+          testDevice.config.count = testTemplate.count
+        }
       })
     },
     startTest () {
@@ -207,7 +243,15 @@ export default {
         return
       }
       // 检查到测试仪器配置温湿度示值存在非数值。测试仪器配置的温湿度示值有效性检查，必须为数值
-      if (selectedEquipments.some((item) => !this.$myutil.isValidNumber(parseFloat(item.config.temp)) || !this.$myutil.isValidNumber(parseFloat(item.config.humi)))) {
+
+      let basevalueCheck = selectedEquipments.some((item) => {
+        if (item.device.detectProperty === '温湿度') {
+          return !this.$myutil.isValidNumber(parseFloat(item.config.temp)) || !this.$myutil.isValidNumber(parseFloat(item.config.humi))
+        } else if (item.device.detectProperty === '温度') {
+          return !this.$myutil.isValidNumber(parseFloat(item.config.temp))
+        }
+      })
+      if (basevalueCheck) {
         this.addMessage('测试仪器的温湿度示值输入错误，温湿度示值必须为有效数值 ！', 'warning')
         return
       }

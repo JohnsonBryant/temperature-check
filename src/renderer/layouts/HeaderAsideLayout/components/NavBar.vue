@@ -63,7 +63,6 @@ export default {
         this.$port.serialport.write(buf, (err) => {
           if (!err) {
             // reset store, variable
-
             this.setIsOnTestTask(false)
             this.addMessage('停止测试成功！', 'success')
           } else {

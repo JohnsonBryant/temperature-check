@@ -9,13 +9,12 @@
           border resizable
           style="width: 100%"
           >
-          <div v-for="(item, key) in humiDataTableHeader(humiTestDataTable[0])" :key="key">
-            <el-table-column
-              :prop="item['prop']"
-              :label="item['key']"
-              >
-            </el-table-column>
-          </div>
+          <el-table-column
+            v-for="(item, key) in humiDataTableHeader(ids)" :key="key"
+            :prop="item['prop']"
+            :label="item['key']"
+            >
+          </el-table-column>
         </el-table>
       </el-tab-pane>
       <el-tab-pane label="温度数据">
@@ -25,13 +24,12 @@
           border resizable
           style="width: 100%"
           >
-          <div v-for="(item, key) in tempDataTableHeader(tempTestDataTable[0])" :key="key">
-            <el-table-column
-              :prop="item['prop']"
-              :label="item['key']"
-              >
-            </el-table-column>
-          </div>
+          <el-table-column
+            v-for="(item, key) in tempDataTableHeader(ids)" :key="key"
+            :prop="item['prop']"
+            :label="item['key']"
+            >
+          </el-table-column>
         </el-table>
       </el-tab-pane>
     </el-tabs>
@@ -43,7 +41,7 @@ export default {
   name: 'TestItemTable',
   components: {
   },
-  props: ['equipment', 'humiTestDataTable', 'tempTestDataTable'],
+  props: ['equipment', 'humiTestDataTable', 'tempTestDataTable', 'ids'],
   computed: {
     equipmentTitle () {
       return `
@@ -60,54 +58,48 @@ export default {
     }
   },
   methods: {
-    tempDataTableHeader (tempTestDataTable) {
+    tempDataTableHeader (ids) {
       let dataTableHeader = []
-      let header = ['序号', '温度均匀度', '温度波动度', '温度偏差', '温度中心点']
-      let headerKey = ['count', 'evennessTemp', 'fluctuationTemp', 'deviationTemp', 'centerID']
-
+      let header = ['次数', '仪器示值', '中心点(0)0']
+      let headerKey = ['count', 'basevalue', 'centerID']
       for (let i = 0; i < header.length; i++) {
         let item = {'key': header[i], 'prop': headerKey[i]}
         dataTableHeader.push(item)
       }
-
-      let keys = tempTestDataTable ? Object.keys(tempTestDataTable) : []
-      let ids = []
-      for (let i = 0; i < keys.length; i++) {
-        if (!headerKey.includes(keys[i])) {
-          ids.push(keys[i])
-        }
-      }
       ids.sort()
       for (let i = 0; i < ids.length; i++) {
-        let item = {'key': `${ids[i]}`, 'prop': ids[i]}
+        let item = {'key': `测点编号${ids[i]}`, 'prop': `${ids[i]}`}
         dataTableHeader.push(item)
       }
+
+      dataTableHeader.push(...[
+        {'key': '最大值', 'prop': 'max'},
+        {'key': '最小值', 'prop': 'min'},
+        {'key': '差值', 'prop': 'deviation'}
+      ])
 
       return dataTableHeader
     },
-    humiDataTableHeader (humiTestDataTable) {
+    humiDataTableHeader (ids) {
       let dataTableHeader = []
-      let header = ['序号', '湿度均匀度', '湿度波动度', '湿度偏差', '湿度中心点']
-      let headerKey = ['count', 'evennessHumi', 'fluctuationHumi', 'deviationHumi', 'centerID']
-
+      let header = ['次数', '仪器示值', '中心点(0)0']
+      let headerKey = ['count', 'basevalue', 'centerID']
       for (let i = 0; i < header.length; i++) {
         let item = {'key': header[i], 'prop': headerKey[i]}
         dataTableHeader.push(item)
       }
 
-      let keys = humiTestDataTable ? Object.keys(humiTestDataTable) : []
-      let ids = []
-      for (let i = 0; i < keys.length; i++) {
-        if (!headerKey.includes(keys[i])) {
-          ids.push(keys[i])
-        }
-      }
       ids.sort()
       for (let i = 0; i < ids.length; i++) {
-        let item = {'key': `${ids[i]}`, 'prop': ids[i]}
+        let item = {'key': `测点编号${ids[i]}`, 'prop': `${ids[i]}`}
         dataTableHeader.push(item)
       }
 
+      dataTableHeader.push(...[
+        {'key': '最大值', 'prop': 'max'},
+        {'key': '最小值', 'prop': 'min'},
+        {'key': '差值', 'prop': 'deviation'}
+      ])
       return dataTableHeader
     }
   }
