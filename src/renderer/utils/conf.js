@@ -1,7 +1,7 @@
 const storage = require('electron-json-storage')
 
 const config = {
-  SerialPortName: 'COM9',
+  SerialPortName: 'COM10',
   BaudRate: 115200,
   BatteryLow: 3.3,
   BatteryHigh: 7.2
@@ -11,8 +11,7 @@ const testTemplate = {
   cycle: 2,
   temp: 20,
   humi: 50,
-  centerID: 1,
-  IDS: '2,3',
+  IDS: '1,2,3',
   isSendding: true
 }
 

@@ -80,7 +80,6 @@ export default {
         cycle: '',
         temp: '',
         humi: '',
-        centerID: '',
         IDS: '',
         isSendding: true,
         count: 15
@@ -144,7 +143,6 @@ export default {
                 temp: '',
                 humi: '',
                 IDS: '',
-                centerID: '',
                 count: ''
               }
             }
@@ -153,7 +151,6 @@ export default {
               config: {
                 temp: '',
                 IDS: '',
-                centerID: '',
                 count: ''
               }
             }
@@ -172,13 +169,10 @@ export default {
         if (testDevice.device.detectProperty === '温湿度') {
           testDevice.config.temp = testTemplate.temp
           testDevice.config.humi = testTemplate.humi
-          testDevice.config.centerID = testTemplate.centerID
           testDevice.config.IDS = testTemplate.IDS
           testDevice.config.count = testTemplate.count
         } else if (testDevice.device.detectProperty === '温度') {
           testDevice.config.temp = testTemplate.temp
-          // testDevice.config.humi = testTemplate.humi
-          testDevice.config.centerID = testTemplate.centerID
           testDevice.config.IDS = testTemplate.IDS
           testDevice.config.count = testTemplate.count
         }
@@ -197,7 +191,6 @@ export default {
         return item.device.company + item.device.em + item.device.deviceName + item.device.deviceType + item.device.deviceID
       })
       let IDS = []
-      let allID = []
       // 检查是否具备启动测试条件
       // 周期参数错误
       if (!this.$myutil.isPositiveInteger(cycle)) {
@@ -220,30 +213,19 @@ export default {
         let s, ids
         s = ele.config.IDS.trim() === '' ? '' : ele.config.IDS.replace(/,|，/g, ',')
         ids = s === '' ? [] : s.split(',').map(id => parseInt(id))
-        ele.config.centerID = parseInt(ele.config.centerID)
-        IDS.push(...ids)
         ele.config.IDS = ids
+        IDS.push(...ids)
       })
       if (IDS.some((item) => !this.$myutil.isInteger(item) || (item > 255 || item < 0))) {
-        this.addMessage('传感器挂载的其他ID输入有错误，请检查后重试 ！', 'warning')
-        return
-      }
-      // 测试仪器下挂载的传感器ID检查
-      selectedEquipments.forEach((item) => {
-        allID.push(item.config.centerID, ...item.config.IDS)
-      })
-      // 检查到无效的ID，所有传感器ID均必须为数值，且在0-255范围内
-      if (allID.some((item) => !this.$myutil.isInteger(item) || (item > 255 || item < 0))) {
-        this.addMessage('传感器ID错误，ID只接受0-255之间的数值 ！', 'warning')
+        this.addMessage('仪器挂载的传感器ID输入有错误，请检查后重试 ！', 'warning')
         return
       }
       // 检查到重复传感器ID
-      if (allID.some((item, index, arr) => arr.indexOf(item) !== arr.lastIndexOf(item))) {
+      if (IDS.some((item, index, arr) => arr.indexOf(item) !== arr.lastIndexOf(item))) {
         this.addMessage('传感器ID错误，测试仪器下挂载的传感器ID存在重复，请检查后重试 ！', 'warning')
         return
       }
       // 检查到测试仪器配置温湿度示值存在非数值。测试仪器配置的温湿度示值有效性检查，必须为数值
-
       let basevalueCheck = selectedEquipments.some((item) => {
         if (item.device.detectProperty === '温湿度') {
           return !this.$myutil.isValidNumber(parseFloat(item.config.temp)) || !this.$myutil.isValidNumber(parseFloat(item.config.humi))
@@ -259,7 +241,7 @@ export default {
       // 拓展 selectedEquipments, 添加用于存储传感器数据、检测数据及对应数据时间的键值对
       selectedEquipments.forEach((equipment) => {
         let data = {}
-        let ids = equipment.config.IDS.concat(equipment.config.centerID)
+        let ids = equipment.config.IDS
         data['IDS'] = ids.sort((a, b) => a - b)
         data['IDS'].forEach((ID, index, IDS) => {
           data[ID] = {
@@ -271,17 +253,21 @@ export default {
         Object.assign(data, {
           'evennessTemp': [],
           'fluctuationTemp': [],
-          'deviationTemp': [],
+          'deviationTempSup': [],
+          'deviationTempSub': [],
           'evennessHumi': [],
           'fluctuationHumi': [],
-          'deviationHumi': [],
+          'deviationHumiSup': [],
+          'deviationHumiSub': [],
+          'averageTemp': [],
+          'averageHumi': [],
           'time': []
         })
         Object.assign(equipment, { data })
       })
       this.setCycleTask(cycle)
       this.setIsSenddingTask(isSendding)
-      this.setIDSTask(allID)
+      this.setIDSTask(IDS)
       this.setEquiptmentsTask(selectedEquipments) // 初始化设置 store.state 中的测试仪器信息数组
       // 给后台启动测试信号，所有测试设备信息传送到后端程序
       if (this.localeIsSendding) {

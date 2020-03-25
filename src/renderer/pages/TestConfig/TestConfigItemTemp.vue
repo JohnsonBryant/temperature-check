@@ -13,11 +13,6 @@
           <template slot="prepend">温度示值：</template>
         </el-input>
       </el-col>
-      <el-col :span="4">
-        <el-input class="testEq-item-conf-input" placeholder="中心点ID" v-model="config.centerID" :disabled="isOnTest">
-          <template slot="prepend">中心点ID：</template>
-        </el-input>
-      </el-col>
       <el-col :span="8">
         <el-input class="testEq-item-conf-input" placeholder="传感器ID：1,2" v-model="config.IDS" :disabled="isOnTest">
           <template slot="prepend">传感器ID：</template>

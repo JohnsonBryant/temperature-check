@@ -45,24 +45,13 @@ export default {
   methods: {
     tempDataTableHeader (ids) {
       let dataTableHeader = []
-      let header = ['次数', '仪器示值', '中心点(0)0']
-      let headerKey = ['count', 'basevalue', 'centerID']
-      for (let i = 0; i < header.length; i++) {
-        let item = {'key': header[i], 'prop': headerKey[i]}
-        dataTableHeader.push(item)
-      }
+      dataTableHeader.push({'key': '次数', 'prop': 'count'})
       ids.sort()
       for (let i = 0; i < ids.length; i++) {
         let item = {'key': `测点编号${ids[i]}`, 'prop': `${ids[i]}`}
         dataTableHeader.push(item)
       }
-
-      dataTableHeader.push(...[
-        {'key': '最大值', 'prop': 'max'},
-        {'key': '最小值', 'prop': 'min'},
-        {'key': '差值', 'prop': 'deviation'}
-      ])
-
+      dataTableHeader.push({'key': '单次均匀度', 'prop': 'averageTemp'})
       return dataTableHeader
     }
   }

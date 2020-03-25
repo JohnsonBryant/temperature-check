@@ -130,13 +130,6 @@
                   </el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="11">
-                <el-form-item prop="centerID">
-                  <el-input class="testEq-item-conf-input" placeholder="输入中心点ID" v-model.trim="testTemplate.centerID" :disabled="isOnTest">
-                    <template slot="prepend">中心点ID：</template>
-                  </el-input>
-                </el-form-item>                      
-              </el-col>
             </el-row>
           </div>
           <div class="wk-item-pie">
@@ -232,9 +225,6 @@ let rules = {
     humi: [
       { required: true, message: '请输入湿度示值', trigger: 'change' }
     ],
-    centerID: [
-      { required: true, message: '请输入中心点ID', trigger: 'change' }
-    ],
     IDS: [
       { required: true, message: '请输入其他ID', trigger: 'change' }
     ],
@@ -271,7 +261,6 @@ export default {
         cycle: '',
         temp: '',
         humi: '',
-        centerID: '',
         IDS: '',
         isSendding: true
       },
@@ -452,7 +441,6 @@ export default {
           let cycle = parseInt(testTemplate.cycle, 10)
           let temp = parseFloat(testTemplate.temp)
           let humi = parseFloat(testTemplate.humi)
-          let centerID = parseInt(testTemplate.centerID, 10)
           let IDS = testTemplate.IDS
           IDS = testTemplate.IDS.split(',').map(id => parseInt(id))
           if (!this.$myutil.isPositiveInteger(cycle) || cycle < 1 || cycle > 65535) {
@@ -469,17 +457,12 @@ export default {
             this.addMessage('湿度示值应输入有效数值，不可输入非数字字符，请重新输入！', 'warning')
             return
           }
-          // 中心点ID检查
-          if (!this.$myutil.isPositiveInteger(centerID) || centerID <= 0 || centerID > 255) {
-            this.addMessage('中心点ID应输入 0 - 255 范围内的有效数值，请重新输入！', 'warning')
-            return
-          }
-          // 其他ID与中心点ID检查， IDS输入要求为数值数组
+          // IDD检查， IDS输入要求为数值数组
           if (!(IDS instanceof Array) || IDS.length < 1) {
             this.addMessage('其他传感器ID输入内容有误，请重新输入！', 'warning')
             return
           }
-          let idsCheck = IDS.concat(centerID).some((elem, index, arr) => {
+          let idsCheck = IDS.some((elem, index, arr) => {
             return !this.$myutil.isPositiveInteger(elem) || elem <= 0 || elem > 255 || (arr.indexOf(elem) !== arr.lastIndexOf(elem))
           })
           if (idsCheck) {
@@ -495,7 +478,6 @@ export default {
             data.cycle = cycle
             data.temp = temp
             data.humi = humi
-            data.centerID = centerID
             data.IDS = IDS.join(',')
             data.isSendding = testTemplate.isSendding
             this.$storage.set('testTemplate', data, (err) => {

@@ -195,7 +195,7 @@ export default {
       let equipments = JSON.parse(JSON.stringify(this.equipments))
       // 测试仪器数据更新
       equipments.forEach((equipment, index, equipments) => {
-        let IDS = equipment.data.IDS
+        let IDS = [...equipment.data.IDS]
         if (IDS.every(id => data.hasOwnProperty(id))) { // 仪器挂载的传感器全部收到数据
           if (equipment.data['time'].length < equipment.config.count) {
             // 更新仪器下挂载的传感器的数据
@@ -204,37 +204,37 @@ export default {
               equipment.data[id]['humi'].push(data[id].humi)
               equipment.data[id]['batt'].push(data[id].batt)
             })
-            // 计算更新仪器的 温度 / 湿度 的均匀度、波动度、偏差
+            // 更新计算仪器的 温度 / 湿度 的均匀度、波动度、上偏差、下偏差
+            let allDataTemp = []
+            let allDataHumi = []
             let tempConfig = equipment.config.temp
             let humiConfig = equipment.config.humi
-            let centerID = equipment.config.centerID
-            let centerSensor = equipment.data[centerID]
-            let evennessTemp
-            let fluctuationTemp
-            let deviationTemp
-            let evennessHumi
-            let fluctuationHumi
-            let deviationHumi
-            let arrtemp = []
-            let arrhumi = []
-            for (let i = 0; i < centerSensor['temp'].length; i++) {
-              let roundtemp = IDS.map(id => equipment.data[id]['temp'][i])
-              let roundhumi = IDS.map(id => equipment.data[id]['humi'][i])
-              arrtemp.push(this.$myutil.Max(roundtemp) - this.$myutil.Min(roundtemp))
-              arrhumi.push(this.$myutil.Max(roundhumi) - this.$myutil.Min(roundhumi))
-            }
-            evennessTemp = this.$myutil.Average(arrtemp)
-            fluctuationTemp = centerSensor['temp'].length === 1 ? 0 : (this.$myutil.Max(centerSensor['temp']) - this.$myutil.Min(centerSensor['temp'])) / 2
-            deviationTemp = tempConfig - this.$myutil.Average(centerSensor['temp'])
-            evennessHumi = this.$myutil.Average(arrhumi)
-            fluctuationHumi = centerSensor['humi'].length === 1 ? 0 : (this.$myutil.Max(centerSensor['humi']) - this.$myutil.Min(centerSensor['humi'])) / 2
-            deviationHumi = humiConfig - this.$myutil.Average(centerSensor['humi'])
+            let evennessTemp, fluctuationTemp, deviationTempSup, deviationTempSub // 均匀度、波动度、上偏差、下偏差
+            let evennessHumi, fluctuationHumi, deviationHumiSup, deviationHumiSub
+            let roundtemp = IDS.map(id => equipment.data[id]['temp'][equipment.data[id]['temp'].length - 1])
+            let roundhumi = IDS.map(id => equipment.data[id]['humi'][equipment.data[id]['humi'].length - 1])
+            equipment.data['averageTemp'].push(this.$myutil.Max(roundtemp) - this.$myutil.Min(roundtemp))
+            equipment.data['averageHumi'].push(this.$myutil.Max(roundhumi) - this.$myutil.Min(roundhumi))
+            evennessTemp = this.$myutil.Average(equipment.data['averageTemp'])
+            evennessHumi = this.$myutil.Average(equipment.data['averageHumi'])
+            fluctuationTemp = this.$myutil.Max(equipment.data['averageTemp']) / 2.0
+            fluctuationHumi = this.$myutil.Max(equipment.data['averageHumi']) / 2.0
             equipment.data['evennessTemp'].push(evennessTemp.toFixed(2))
-            equipment.data['fluctuationTemp'].push(fluctuationTemp.toFixed(2))
-            equipment.data['deviationTemp'].push(deviationTemp.toFixed(2))
             equipment.data['evennessHumi'].push(evennessHumi.toFixed(2))
+            equipment.data['fluctuationTemp'].push(fluctuationTemp.toFixed(2))
             equipment.data['fluctuationHumi'].push(fluctuationHumi.toFixed(2))
-            equipment.data['deviationHumi'].push(deviationHumi.toFixed(2))
+            IDS.forEach((id) => {
+              allDataTemp.push(...equipment.data[id]['temp'])
+              allDataHumi.push(...equipment.data[id]['humi'])
+            })
+            deviationTempSup = this.$myutil.Max(allDataTemp) - tempConfig
+            deviationTempSub = this.$myutil.Min(allDataTemp) - tempConfig
+            deviationHumiSup = this.$myutil.Max(allDataHumi) - humiConfig
+            deviationHumiSub = this.$myutil.Min(allDataHumi) - humiConfig
+            equipment.data['deviationTempSup'].push(deviationTempSup.toFixed(2))
+            equipment.data['deviationTempSub'].push(deviationTempSub.toFixed(2))
+            equipment.data['deviationHumiSup'].push(deviationHumiSup.toFixed(2))
+            equipment.data['deviationHumiSub'].push(deviationHumiSub.toFixed(2))
             equipment.data['time'].push(time)
           }
         } else {
