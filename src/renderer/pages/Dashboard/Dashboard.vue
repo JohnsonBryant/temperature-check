@@ -49,6 +49,7 @@
               :equipment="DeviceTestDataTable[index].equipment"
               :tempTestDataTable="DeviceTestDataTable[index].tempTestDataTable"
               :humiTestDataTable="DeviceTestDataTable[index].humiTestDataTable"
+              :testData="DeviceTestDataTable[index].testData"
               :ids="DeviceTestDataTable[index].ids"
               />
           </template>
@@ -56,6 +57,7 @@
             <test-item-table-temp
               :equipment="DeviceTestDataTable[index].equipment"
               :tempTestDataTable="DeviceTestDataTable[index].tempTestDataTable"
+              :testData="DeviceTestDataTable[index].testData"
               :ids="DeviceTestDataTable[index].ids"
               />
           </template>    
@@ -246,10 +248,14 @@ export default {
       const equipments = this.equipments
       let deviceTestDataTable = []
       equipments.forEach((ele, index, equipments) => {
-        let packCount = ele.data['evennessTemp'].length
+        let IDS = ele.config.IDS
+        let packCount = ele.data['time'].length
         if (ele.device.detectProperty === '温湿度') {
-          let deviceTestData = {'tempTestDataTable': [], 'humiTestDataTable': []}
+          let deviceTestData = {'tempTestDataTable': [], 'humiTestDataTable': [], 'testData': [], 'ids': []}
+          // 绑定测点ID
+          deviceTestData.ids = ele.config['IDS'].slice()
           deviceTestData.equipment = ele.device
+          deviceTestData.testData = this.testDataTH()
           // 构建数据表格中规则的行列数据
           let tempdeviations = []
           let humideviations = []
@@ -273,12 +279,36 @@ export default {
             deviceTestData.tempTestDataTable.push(rowTemp)
             deviceTestData.humiTestDataTable.push(rowHumi)
           }
-          deviceTestData.ids = ele.data['IDS'].slice()
+          // 添加最打值最小值行
+          let addonsTemp = [{'count': '最大值', 'averageTemp': this.max(ele.data['averageTemp'])}, {'count': '最小值', 'averageTemp': this.min(ele.data['averageTemp'])}]
+          let addonsHumi = [{'count': '最大值', 'averageHumi': this.max(ele.data['averageHumi'])}, {'count': '最小值', 'averageHumi': this.min(ele.data['averageHumi'])}]
+          IDS.forEach((id, index, ids) => {
+            addonsTemp[0][id] = this.max(ele.data[id]['temp'])
+            addonsTemp[1][id] = this.min(ele.data[id]['temp'])
+            addonsHumi[0][id] = this.max(ele.data[id]['humi'])
+            addonsHumi[1][id] = this.min(ele.data[id]['humi'])
+          })
+          deviceTestData.tempTestDataTable.push(...addonsTemp)
+          deviceTestData.humiTestDataTable.push(...addonsHumi)
+          // 绑定最终计算数据表格
+          deviceTestData.testData[0].temp = ele.config.temp
+          deviceTestData.testData[1].temp = ele.data['deviationTempSup'][packCount - 1]
+          deviceTestData.testData[3].temp = ele.data['deviationTempSub'][packCount - 1]
+          deviceTestData.testData[5].temp = ele.data['evennessTemp'][packCount - 1]
+          deviceTestData.testData[6].temp = ele.data['fluctuationTemp'][packCount - 1]
+          deviceTestData.testData[0].humi = ele.config.humi
+          deviceTestData.testData[1].humi = ele.data['deviationHumiSup'][packCount - 1]
+          deviceTestData.testData[3].humi = ele.data['deviationHumiSub'][packCount - 1]
+          deviceTestData.testData[5].humi = ele.data['evennessHumi'][packCount - 1]
+          deviceTestData.testData[6].humi = ele.data['fluctuationHumi'][packCount - 1]
           // comment
           deviceTestDataTable.push(deviceTestData)
         } else if (ele.device.detectProperty === '温度') {
-          let deviceTestData = {'tempTestDataTable': []}
+          let deviceTestData = {'tempTestDataTable': [], 'testData': [], 'ids': []}
+          // 绑定测点ID
+          deviceTestData.ids = ele.data['IDS'].slice()
           deviceTestData.equipment = ele.device
+          deviceTestData.testData = this.testDataTemp()
           // 构建数据表格中规则的行列数据
           let tempdeviations = []
           for (let i = 0; i < packCount; i++) {
@@ -294,7 +324,19 @@ export default {
             // 单行数据添加到数据序列
             deviceTestData.tempTestDataTable.push(rowTemp)
           }
-          deviceTestData.ids = ele.data['IDS'].slice()
+          // 添加最打值最小值行
+          let addons = [{'count': '最大值', 'averageTemp': this.max(ele.data['averageTemp'])}, {'count': '最小值', 'averageTemp': this.min(ele.data['averageTemp'])}]
+          IDS.forEach((id, index, ids) => {
+            addons[0][id] = this.max(ele.data[id]['temp'])
+            addons[1][id] = this.min(ele.data[id]['temp'])
+          })
+          deviceTestData.tempTestDataTable.push(...addons)
+          // 绑定最终计算数据表格
+          deviceTestData.testData[0].temp = ele.config.temp
+          deviceTestData.testData[1].temp = ele.data['deviationTempSup'][packCount - 1]
+          deviceTestData.testData[3].temp = ele.data['deviationTempSub'][packCount - 1]
+          deviceTestData.testData[5].temp = ele.data['evennessTemp'][packCount - 1]
+          deviceTestData.testData[6].temp = ele.data['fluctuationTemp'][packCount - 1]
           // comment
           deviceTestDataTable.push(deviceTestData)
         }
@@ -306,6 +348,40 @@ export default {
     }
   },
   methods: {
+    testDataTemp () {
+      return [
+        { 'param': '设定值', 'temp': '' },
+        { 'param': '上偏差', 'temp': '' },
+        { 'param': '上偏差校准不确定度', 'temp': 'U=0.2℃  （k=2）' },
+        { 'param': '下偏差', 'temp': '' },
+        { 'param': '下偏差校准不确定度', 'temp': 'U=0.2℃  （k=2）' },
+        { 'param': '均匀度', 'temp': '' },
+        { 'param': '波动度', 'temp': '' }
+      ]
+    },
+    testDataTH () {
+      return [
+        { 'param': '设定值', 'temp': '', 'humi': '' },
+        { 'param': '上偏差', 'temp': '', 'humi': '' },
+        { 'param': '上偏差校准不确定度', 'temp': 'U=0.2℃  （k=2）', 'humi': 'U=1.3%RH （k=2）' },
+        { 'param': '下偏差', 'temp': '', 'humi': '' },
+        { 'param': '下偏差校准不确定度', 'temp': 'U=0.2℃  （k=2）', 'humi': 'U=1.3%RH （k=2）' },
+        { 'param': '均匀度', 'temp': '', 'humi': '' },
+        { 'param': '波动度', 'temp': '', 'humi': '' }
+      ]
+    },
+    max (data) {
+      if (data.length === 0) {
+        return ''
+      }
+      return Math.max.apply(null, data)
+    },
+    min (data) {
+      if (data.length === 0) {
+        return ''
+      }
+      return Math.min.apply(null, data)
+    },
     // ...mapActions(['']),
     prepareGraphData (title, key, sensorData) {
       let data = template()

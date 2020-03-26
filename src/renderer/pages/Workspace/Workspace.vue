@@ -10,19 +10,18 @@
           <el-divider></el-divider>
           <div class="wk-item-container">
             <div class="wk-item-pie box1">
-              <el-form :model="SerialPort" :rules="rulesSerialPort" ref="SerialPort" >
+              <el-form :model="SerialPort" :rules="rulesSerialPort" ref="SerialPort" 
+                label-position="left" label-width="100px">
                 <el-row :gutter="10">
                   <el-col :span="10">
-                    <el-form-item prop="SerialPortName">
+                    <el-form-item prop="SerialPortName" label="串口号：">
                       <el-input placeholder="输入串口号" v-model.trim="SerialPort.SerialPortName" :disabled="isOnTest">
-                        <template slot="prepend">串口号：</template>
                       </el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :span="10">
-                    <el-form-item prop="BaudRate">
+                    <el-form-item prop="BaudRate" label="波特率：">
                       <el-input placeholder="输入波特率" v-model.trim.number="SerialPort.BaudRate" :disabled="isOnTest">
-                        <template slot="prepend">波特率：</template>
                       </el-input>
                     </el-form-item>
                   </el-col>
@@ -33,19 +32,18 @@
               </el-form>
             </div>
             <div class="wk-item-pie box2">
-              <el-form :model="Battery" :rules="rulesBattery" ref="Battery" >
+              <el-form :model="Battery" :rules="rulesBattery" ref="Battery"
+                label-position="left" label-width="100px">
                 <el-row :gutter="10">
                   <el-col :span="10">
-                    <el-form-item prop="BatteryLow">
+                    <el-form-item prop="BatteryLow" label="最低电压：">
                       <el-input placeholder="输入最低电压" v-model.trim="Battery.BatteryLow" :disabled="isOnTest">
-                        <template slot="prepend">最低电压：</template>
                       </el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :span="10">
-                    <el-form-item prop="BatteryHigh">
+                    <el-form-item prop="BatteryHigh" label="最高电压：">
                       <el-input placeholder="输入最高电压" v-model.trim="Battery.BatteryHigh" :disabled="isOnTest">
-                        <template slot="prepend">最高电压：</template>
                       </el-input>
                     </el-form-item>
                   </el-col>
@@ -56,19 +54,18 @@
               </el-form>
             </div>
             <div class="wk-item-pie box3">
-              <el-form :model="idSetting" :rules="rulesidSetting" ref="idSetting" >
+              <el-form :model="idSetting" :rules="rulesidSetting" ref="idSetting"
+                label-position="left" label-width="100px">
                 <el-row :gutter="10">
                   <el-col :span="10">
-                    <el-form-item prop="originID">
+                    <el-form-item prop="originID" label="原始ID：">
                       <el-input placeholder="输入原始ID" v-model.trim.number="idSetting.originID" :disabled="isOnTest">
-                        <template slot="prepend">原始ID：</template>
                       </el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :span="10">
-                    <el-form-item prop="newID">
+                    <el-form-item prop="newID" label="新设ID：">
                       <el-input placeholder="输入新设ID" v-model.trim.number="idSetting.newID" :disabled="isOnTest">
-                        <template slot="prepend">新设ID：</template>
                       </el-input>
                     </el-form-item>
                   </el-col>
@@ -92,19 +89,18 @@
           <el-divider></el-divider>
           <div class="wk-item-container">
             <div class="wk-item-pie box1">
-              <el-form :model="sensorCalibration" :rules="rulesSensorCalibration" ref="sensorCalibration" >
+              <el-form :model="sensorCalibration" :rules="rulesSensorCalibration" ref="sensorCalibration"
+                label-position="left" label-width="100px">
                 <el-row :gutter="10">
                   <el-col :span="10">
-                    <el-form-item prop="id">
+                    <el-form-item prop="id" label="ID：">
                       <el-input placeholder="ID：" v-model.trim="sensorCalibration.id">
-                        <template slot="prepend">ID：</template>
                       </el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :span="10">
-                    <el-form-item prop="resistance">
+                    <el-form-item prop="resistance" label="电阻值：">
                       <el-input placeholder="电阻值：" v-model.trim="sensorCalibration.resistance">
-                        <template slot="prepend">电阻值：</template>
                       </el-input>
                     </el-form-item>
                   </el-col>
@@ -120,13 +116,13 @@
       <div class="wk-item">
         <h4 class="wk-item-title">测试模板配置</h4>
         <el-divider></el-divider>
-        <el-form :model="testTemplate" :rules="rulestestTemplate" ref="testTemplate" >
+        <el-form :model="testTemplate" :rules="rulestestTemplate" ref="testTemplate"
+          label-position="left" label-width="150px">
           <div class="wk-item-pie">
             <el-row :gutter="10">
               <el-col :span="11">
-                <el-form-item prop="cycle">
+                <el-form-item prop="cycle" label="工作周期(s/秒)：">
                   <el-input class="cycle-input" placeholder="请输入工作周期s" v-model.trim="testTemplate.cycle" :disabled="isOnTest">
-                    <template slot="prepend">工作周期(s/秒)：</template>
                   </el-input>
                 </el-form-item>
               </el-col>
@@ -135,16 +131,15 @@
           <div class="wk-item-pie">
             <el-row :gutter="10">
               <el-col :span="11">
-                <el-form-item prop="temp">
+                <el-form-item prop="temp" label="温度示值(℃)：">
                   <el-input class="testEq-item-conf-input" placeholder="输入温度示值" v-model.trim="testTemplate.temp" :disabled="isOnTest">
-                    <template slot="prepend">温度示值(℃)：</template>
                   </el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="11">
-                <el-form-item prop="IDS">
+                <el-form-item prop="IDS" label="传感器ID：">
                   <el-input class="testEq-item-conf-input" placeholder="输入传感器ID：1,2" v-model.trim="testTemplate.IDS" :disabled="isOnTest">
-                    <template slot="prepend">传感器ID：</template>
+                    <template slot="prepend"></template>
                   </el-input>
                 </el-form-item>                      
               </el-col>
@@ -153,16 +148,14 @@
           <div class="wk-item-pie">
             <el-row :gutter="10">
               <el-col :span="11">
-                <el-form-item prop="humi">
+                <el-form-item prop="humi" label="湿度示值(%RH)：">
                   <el-input class="testEq-item-conf-input" placeholder="输入湿度示值" v-model.trim="testTemplate.humi" :disabled="isOnTest">
-                    <template slot="prepend">湿度示值(%RH)：</template>
                   </el-input>
-                </el-form-item>                
+                </el-form-item>
               </el-col>
               <el-col :span="11">
                 <div style="padding-top: 10px;padding-left:10px;border: 1px solid #dfdfdf;border-radius: 5px;height: 40px; background-color: #F5F7FA;">
-                  <el-form-item prop="isSendding">
-                    <el-switch
+                  <el-switch
                       style="display: block"
                       v-model="testTemplate.isSendding"
                       active-color="#13ce66"
@@ -171,7 +164,6 @@
                       inactive-text="仅监测数据"
                       :disabled="isOnTest">
                     </el-switch>
-                  </el-form-item>
                 </div>
               </el-col>                  
             </el-row>

@@ -2,28 +2,24 @@
 <el-card class="testEq-item" shadow="always">
   <h4>{{device.company}}  --  {{device.em}}  --  {{device.deviceName}}  --  {{device.deviceType}}  --  {{device.deviceID}}  --  {{device.detectProperty}}测量</h4>
   <div class="testEq-item-conf">
-    <el-row :gutter="10">
-      <el-col :span="4">
+    <el-form :inline="true">
+      <el-form-item prop="em" label="采集次数：">
         <el-input class="testEq-item-conf-input" placeholder="采集次数" v-model="config.count" :disabled="isOnTest">
-          <template slot="prepend">采集次数：</template>
         </el-input>
-      </el-col>
-      <el-col :span="4">
+      </el-form-item>
+      <el-form-item prop="em" label="温度示值：">
         <el-input class="testEq-item-conf-input" placeholder="温度示值" v-model="config.temp" :disabled="isOnTest">
-          <template slot="prepend">温度示值：</template>
         </el-input>
-      </el-col>
-      <el-col :span="4">
+      </el-form-item>
+      <el-form-item prop="em" label="湿度示值：">
         <el-input class="testEq-item-conf-input" placeholder="湿度示值" v-model="config.humi" :disabled="isOnTest">
-          <template slot="prepend">湿度示值：</template>
         </el-input>
-      </el-col>
-      <el-col :span="8">
+      </el-form-item>
+      <el-form-item prop="em" label="传感器ID：">
         <el-input class="testEq-item-conf-input" placeholder="传感器ID：1,2" v-model="config.IDS" :disabled="isOnTest">
-          <template slot="prepend">传感器ID：</template>
         </el-input>
-      </el-col>
-    </el-row>
+      </el-form-item>
+    </el-form>
   </div>
 </el-card>
 </template>

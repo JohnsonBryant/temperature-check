@@ -3,23 +3,28 @@
     <!-- 测试管理页头，工作周期输入框、控制按钮 -->
     <div class="main-page-title top-bar">
       <span class="top-bar-item">测试管理页</span>
-      <div class="top-bar-item">
-        <el-input 
-          class="cycle-input" placeholder="请输入工作周期s" v-model="localeCycle"
-          :disabled="isOnTest">
-          <template slot="prepend">工作周期：</template>
-        </el-input>
-      </div>
-      <div class="top-bar-item">
-        <el-switch
-          v-model="localeIsSendding"
-          active-color="#13ce66"
-          inactive-color="#ff4949"
-          active-text="周期获取数据"
-          inactive-text="仅监测数据"
-          :disabled="isOnTest"
-        ></el-switch>
-      </div>
+      <el-form :inline="true">
+        <!-- <div class="top-bar-item"> -->
+          <el-form-item label="工作周期s：">
+            <el-input
+              class="cycle-input" placeholder="请输入工作周期s" v-model="localeCycle"
+              :disabled="isOnTest">
+            </el-input>
+          </el-form-item>
+        <!-- </div> -->
+        <!-- <div class="top-bar-item"> -->
+          <el-form-item>
+            <el-switch
+              v-model="localeIsSendding"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              active-text="周期获取数据"
+              inactive-text="仅监测数据"
+              :disabled="isOnTest"
+            ></el-switch>
+          </el-form-item>
+        <!-- </div> -->
+      </el-form>
       <div class="top-bar-item">
         <el-button
           @click="setAllEquipment"
@@ -312,7 +317,16 @@ export default {
 </script>
 
 <style>
-.test-config{
+.test-config .top-bar{
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.test-config .el-form--inline {
+  padding-top: 8px;
+}
+.test-config .el-form-item {
+  margin-bottom: 0;
 }
 
 .test-config .top-bar {

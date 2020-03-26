@@ -1,38 +1,69 @@
 <template>
   <div class="dash-test-item">
     <h4 v-html="equipmentTitle"></h4>
-    <el-tabs type="border-card" class="test-item-data">
-      <el-tab-pane label="温度数据">
-        <el-table
-          :data="tempTestDataTable"
-          :stripe="true"
-          border resizable
-          style="width: 100%"
-          >
-          <el-table-column
-            v-for="(item, key) in tempDataTableHeader(ids)" :key="key"
-            :prop="item['prop']"
-            :label="item['key']"
-            >
-          </el-table-column>
-        </el-table>
-      </el-tab-pane>
-      <el-tab-pane label="湿度数据">
-        <el-table
-          :data="humiTestDataTable"
-          :stripe="true"
-          border resizable
-          style="width: 100%"
-          >
-          <el-table-column
-            v-for="(item, key) in humiDataTableHeader(ids)" :key="key"
-            :prop="item['prop']"
-            :label="item['key']"
-            >
-          </el-table-column>
-        </el-table>
-      </el-tab-pane>
-    </el-tabs>
+    <el-row :gutter="6">
+      <el-col :span="16">
+        <el-tabs type="border-card" class="test-item-data">
+          <el-tab-pane label="温度数据">
+            <el-table
+              :data="tempTestDataTable"
+              :stripe="true"
+              border resizable
+              style="width: 100%"
+              >
+              <el-table-column
+                v-for="(item, key) in tempDataTableHeader(ids)" :key="key"
+                :prop="item['prop']"
+                :label="item['key']"
+                >
+              </el-table-column>
+            </el-table>
+          </el-tab-pane>
+          <el-tab-pane label="湿度数据">
+            <el-table
+              :data="humiTestDataTable"
+              :stripe="true"
+              border resizable
+              style="width: 100%"
+              >
+              <el-table-column
+                v-for="(item, key) in humiDataTableHeader(ids)" :key="key"
+                :prop="item['prop']"
+                :label="item['key']"
+                >
+              </el-table-column>
+            </el-table>
+          </el-tab-pane>
+        </el-tabs>
+      </el-col>
+      <el-col :span="8">
+        <el-card class="test-item-chart" shadow="always">
+          <el-table
+            :data="testData"
+            :stripe="true"
+            border resizable>
+            <el-table-column
+              prop="param"
+              label="校准参数"
+              min-width="130"
+              >
+            </el-table-column>
+            <el-table-column
+              prop="temp"
+              label="温度 / ℃"
+              min-width="130"
+              >
+            </el-table-column>
+            <el-table-column
+              prop="humi"
+              label="湿度 / %RH"
+              min-width="130"
+              >
+            </el-table-column>
+          </el-table>
+        </el-card>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -41,7 +72,7 @@ export default {
   name: 'TestItemTable',
   components: {
   },
-  props: ['equipment', 'humiTestDataTable', 'tempTestDataTable', 'ids'],
+  props: ['equipment', 'humiTestDataTable', 'tempTestDataTable', 'testData', 'ids'],
   computed: {
     equipmentTitle () {
       return `

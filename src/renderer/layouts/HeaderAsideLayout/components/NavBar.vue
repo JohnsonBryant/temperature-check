@@ -171,6 +171,7 @@ export default {
   display: flex;
   align-self: center;
   width: 100%;
+  outline: none;
 }
 
 .navbar .main-control-nav {
