@@ -1,27 +1,25 @@
 <template>
-  <el-menu class="navbar" mode="horizontal">
-    <div class="main-control">
-      <div class="main-control-nav">
-        <div class="main-control-nav-state">
-          <span class="main-control-nav-state-item breath"
-            :style="{animationName: isOnTest ? 'green-breath' : 'red-breath'}"></span>
-          <span class="main-control-nav-state-item">{{stateImageAlt}}</span>
-        </div>
-      </div>
+  <div class="navbar" mode="horizontal">
+    <div class="nav-state">
+      <span class="item breath"
+        :style="{animationName: isOnTest ? 'green-breath' : 'red-breath'}"></span>
+      <span class="item">{{ stateImageAlt }}</span>
+    </div>
+    <div class="right">
       <el-button
-        class="main-control-btn" 
+        class="btn"
         type="primary" round
         :disabled="!isOnTest"
         @click="StopTest"
         >停止测试</el-button>
       <el-button
-        class="main-control-btn" 
+        class="btn" 
         type="primary" round
         @click="ExportData"
         >下载数据<i class="el-icon-download el-icon--right"></i>
       </el-button>
     </div>
-  </el-menu>
+  </div>
 </template>
 
 <script>
@@ -154,77 +152,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.navbar {
-  display: flex;
-  flex-direction: row-reverse;
-  min-height: 6rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  border: 1px solid #EBEEF5;
-  border-radius: 4px;
-  box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
-}
-
-.navbar .main-control{
-  display: flex;
-  align-self: center;
-  width: 100%;
-  outline: none;
-}
-
-.navbar .main-control-nav {
-  flex-grow: 1;
-  display: flex;
-  justify-content: flex-start;
-}
-
-.navbar .main-control-nav-state{
-  display: flex;
-}
-
-.navbar .main-control-nav-state-item{
-  align-self:center;
-  margin-right: 1rem;
-}
-
-.navbar .main-control .main-control-btn{
-  align-self: center;
-  margin-left: 3rem;
-}
-
-.breath {
-  width: 4rem;
-  height: 4rem;
-  line-height: 4rem;
-  text-align: center;
-  display: inline-block;
-  border-radius: 100%;
-  color: #fff;
-  animation: red-breath 3s ease-in-out infinite alternate;
-}
-
-@keyframes red-breath {
-  0% {
-    border: 2rem solid rgba(255, 0, 0, 0.3);
-    box-shadow: 0 0 0 rgba(255, 0, 0, 0), 0 0 0 rgba(255, 0, 0, 0) inset;
-  }
-  100% {
-    border: 2rem solid rgba(255, 0, 0, 1);
-    box-shadow: 0 0 1rem rgba(255, 0, 0, 1), 0 0 .5rem rgba(255, 0, 0, 0.6) inset;
-  }
-}
-
-@keyframes green-breath {
-  0% {
-    border: 2rem solid rgba(0, 255, 0, 0.3);
-    box-shadow: 0 0 0 rgba(0, 255, 0, 0), 0 0 0 rgba(0, 255, 0, 0) inset;
-  }
-  100% {
-    border: 2rem solid rgba(0, 255, 0, 1);
-    box-shadow: 0 0 1rem rgba(0, 255, 0, 1), 0 0 .5rem rgba(0, 255, 0, 0.6) inset;
-  }
-}
-</style>
-

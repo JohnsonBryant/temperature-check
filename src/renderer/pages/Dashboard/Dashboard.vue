@@ -4,7 +4,7 @@
     <span class="top-bar-item">实时监测</span>
   </div>
   <div class="main-page-container" >
-    <div v-if="showMessageState">
+    <template v-if="showMessageState">
       <div class="warn-text">
         <h4>当前系统未处在测试状态，如需要进行测试，请切换到设备管理页，选择测试设备，启动测试！</h4>
         <h5>以下为测试示例，实际测试效果可参考如下图表！</h5>
@@ -16,14 +16,18 @@
         :temps="demo.temps"
         :humis="demo.humis"
       />
-    </div>
+    </template>
 
-    <div v-for="(item,index) in DeviceTestDatas" :key="index">
-      <el-tabs type="border-card">
-        <el-tab-pane>
-          <span slot="label"><i class="el-icon-s-data"></i> 数据走势</span>
+    <template v-for="(item,index) in DeviceTestDatas" >
+      <el-row :gutter="6" :key="index">
+        <el-col :span="16">
+          <el-button-group>
+            <el-button @click="dataShowIndex = 1" :type="dataShowIndex === 1 ? 'primary': ''" icon="el-icon-s-data">数据走势</el-button>
+            <el-button @click="dataShowIndex = 2" :type="dataShowIndex === 2 ? 'primary': ''" icon="el-icon-s-grid">数据表格</el-button>
+          </el-button-group>
           <template v-if="item.equipment.detectProperty === '温湿度'">
             <test-item-th 
+              v-show="dataShowIndex === 1"
               :equipment="item.equipment"
               :updateTime="item.updateTime"
               :packNumber="item.packNumber"
@@ -33,37 +37,38 @@
             />
           </template>
           <template v-else-if="item.equipment.detectProperty === '温度'">
-            <test-item-temp 
+            <test-item-temp
+              v-show="dataShowIndex === 1"
               :equipment="item.equipment"
               :updateTime="item.updateTime"
               :packNumber="item.packNumber"
               :test-data="item.testData"
               :temps="item.temps"
             />
-          </template>          
-        </el-tab-pane>
-        <el-tab-pane>
-          <span slot="label"><i class="el-icon-s-grid"></i> 数据表格</span>
+          </template>
           <template v-if="item.equipment.detectProperty === '温湿度'">
-            <test-item-table-th 
+            <test-item-table-th v-show="dataShowIndex === 2"
               :equipment="DeviceTestDataTable[index].equipment"
               :tempTestDataTable="DeviceTestDataTable[index].tempTestDataTable"
               :humiTestDataTable="DeviceTestDataTable[index].humiTestDataTable"
-              :testData="DeviceTestDataTable[index].testData"
               :ids="DeviceTestDataTable[index].ids"
               />
           </template>
           <template v-else-if="item.equipment.detectProperty === '温度'">
-            <test-item-table-temp
+            <test-item-table-temp v-show="dataShowIndex === 2"
               :equipment="DeviceTestDataTable[index].equipment"
               :tempTestDataTable="DeviceTestDataTable[index].tempTestDataTable"
-              :testData="DeviceTestDataTable[index].testData"
               :ids="DeviceTestDataTable[index].ids"
               />
-          </template>    
-        </el-tab-pane>
-      </el-tabs>
-    </div>
+          </template>
+        </el-col>
+        <el-col :span="8">
+          <test-data
+            :detectProperty="item.equipment.detectProperty"
+            :testData="DeviceTestDataTable[index].testData" />
+        </el-col>
+      </el-row>
+    </template>
   </div>
 </div>
 </template>
@@ -76,6 +81,7 @@ import TestItemTH from './TestItemTH'
 import TestItemTemp from './TestItemTemp'
 import TestItemTableTH from './TestItemTableTH'
 import TestItemTableTemp from './TestItemTableTemp'
+import TestData from './TestData'
 import 'echarts/lib/chart/line'
 
 import demo from './template.js'
@@ -139,11 +145,13 @@ export default {
     'test-item-th': TestItemTH,
     'test-item-temp': TestItemTemp,
     'test-item-table-th': TestItemTableTH,
-    'test-item-table-temp': TestItemTableTemp
+    'test-item-table-temp': TestItemTableTemp,
+    'test-data': TestData
   },
   data () {
     return {
-      demo: demo
+      demo: demo,
+      dataShowIndex: 1
     }
   },
   computed: {
@@ -405,45 +413,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.dashboard{
-}
-
-.dashboard .main-page-container{
-  padding-left: 0;
-  padding-right: 0;
-}
-
-.saveData {
-  position: fixed;
-  top: 1.2rem;
-  right: 4rem;
-  z-index: 1005;
-}
-
-.dash-test-item{
-  padding-top: 1rem;
-}
-
-.dash-test-item > h4{
-  text-align: center;
-  padding-bottom: 1rem;
-  font-size: 1.4rem;
-  color: #707377;
-}
-
-.dash-test-item .test-item-chart{
-  height: 47rem;
-}
-
-.dash-test-item .test-item-data{
-  height: 47rem;
-  overflow: auto;
-}
-
-.dash-test-item .test-item-col{
-  text-align: center;
-}
-
-</style>

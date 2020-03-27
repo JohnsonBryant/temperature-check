@@ -35,21 +35,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.testEq-item{
-  margin-bottom: 1rem;
-}
-
-.testEq-item h4{
-  color: #707377;
-}
-
-.testEq-item-conf{
-  margin-top: 2.5rem;
-}
-
-.testEq-item-conf-input .el-input-group__prepend {
-  padding: 0 0 0 5px;
-}
-</style>

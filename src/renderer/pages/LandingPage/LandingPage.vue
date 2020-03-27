@@ -54,7 +54,7 @@
           <el-table-column
             prop="em"
             label="仪器厂家"
-            min-width="160"
+            min-width="150"
           ></el-table-column>
           <el-table-column
             prop="detectProperty"
@@ -64,7 +64,7 @@
           <el-table-column
             prop="insertDate"
             label="日期"
-            min-width="130"
+            min-width="140"
             column-key="date"
             sortable
           ></el-table-column>
@@ -317,48 +317,5 @@ export default {
 </script>
 
 <style>
-.landing-page{
-}
 
-.landing-page .main-page-container{
-  padding-left: 0;
-  padding-right: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-.landing-page .main-page-container > div:first-child{
-  flex-grow: 1;
-}
-
-.landing-page .main-page-container > div:last-child{
-  min-height: 8rem;
-}
-
-.landing-page .searchEqBox{
-  width: 45rem;
-}
-
-.selectEp-footer{
-  padding: 0.5rem 0;
-  text-align: center;
-}
-
-.selectEp-footer-btn.left{
-  margin-right: 2rem;
-}
-
-.selectEp-footer-btn.right{
-  margin-left: 2rem;
-}
-
-.selectEp-container{
-  height: 40rem;
-  overflow-y: auto;
-}
-
-.landing-page .pagination{
-  text-align: center;
-  margin-top: 0.5rem;
-}
 </style>

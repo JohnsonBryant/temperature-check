@@ -1,69 +1,38 @@
 <template>
   <div class="dash-test-item">
     <h4 v-html="equipmentTitle"></h4>
-    <el-row :gutter="6">
-      <el-col :span="16">
-        <el-tabs type="border-card" class="test-item-data">
-          <el-tab-pane label="温度数据">
-            <el-table
-              :data="tempTestDataTable"
-              :stripe="true"
-              border resizable
-              style="width: 100%"
-              >
-              <el-table-column
-                v-for="(item, key) in tempDataTableHeader(ids)" :key="key"
-                :prop="item['prop']"
-                :label="item['key']"
-                >
-              </el-table-column>
-            </el-table>
-          </el-tab-pane>
-          <el-tab-pane label="湿度数据">
-            <el-table
-              :data="humiTestDataTable"
-              :stripe="true"
-              border resizable
-              style="width: 100%"
-              >
-              <el-table-column
-                v-for="(item, key) in humiDataTableHeader(ids)" :key="key"
-                :prop="item['prop']"
-                :label="item['key']"
-                >
-              </el-table-column>
-            </el-table>
-          </el-tab-pane>
-        </el-tabs>
-      </el-col>
-      <el-col :span="8">
-        <el-card class="test-item-chart" shadow="always">
-          <el-table
-            :data="testData"
-            :stripe="true"
-            border resizable>
-            <el-table-column
-              prop="param"
-              label="校准参数"
-              min-width="130"
-              >
-            </el-table-column>
-            <el-table-column
-              prop="temp"
-              label="温度 / ℃"
-              min-width="130"
-              >
-            </el-table-column>
-            <el-table-column
-              prop="humi"
-              label="湿度 / %RH"
-              min-width="130"
-              >
-            </el-table-column>
-          </el-table>
-        </el-card>
-      </el-col>
-    </el-row>
+    <el-tabs type="border-card" class="test-item-data">
+      <el-tab-pane label="温度数据">
+        <el-table
+          :data="tempTestDataTable"
+          :stripe="true"
+          border resizable
+          style="width: 100%"
+          >
+          <el-table-column
+            v-for="(item, key) in tempDataTableHeader(ids)" :key="key"
+            :prop="item['prop']"
+            :label="item['key']"
+            >
+          </el-table-column>
+        </el-table>
+      </el-tab-pane>
+      <el-tab-pane label="湿度数据">
+        <el-table
+          :data="humiTestDataTable"
+          :stripe="true"
+          border resizable
+          style="width: 100%"
+          >
+          <el-table-column
+            v-for="(item, key) in humiDataTableHeader(ids)" :key="key"
+            :prop="item['prop']"
+            :label="item['key']"
+            >
+          </el-table-column>
+        </el-table>
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 
@@ -72,7 +41,7 @@ export default {
   name: 'TestItemTable',
   components: {
   },
-  props: ['equipment', 'humiTestDataTable', 'tempTestDataTable', 'testData', 'ids'],
+  props: ['equipment', 'humiTestDataTable', 'tempTestDataTable', 'ids'],
   computed: {
     equipmentTitle () {
       return `
@@ -94,7 +63,7 @@ export default {
       dataTableHeader.push({'key': '次数', 'prop': 'count'})
       ids.sort()
       for (let i = 0; i < ids.length; i++) {
-        let item = {'key': `测点编号${ids[i]}`, 'prop': `${ids[i]}`}
+        let item = {'key': `${ids[i]}`, 'prop': `${ids[i]}`}
         dataTableHeader.push(item)
       }
       dataTableHeader.push({'key': '单次均匀度', 'prop': 'averageTemp'})
@@ -105,7 +74,7 @@ export default {
       dataTableHeader.push({'key': '次数', 'prop': 'count'})
       ids.sort()
       for (let i = 0; i < ids.length; i++) {
-        let item = {'key': `测点编号${ids[i]}`, 'prop': `${ids[i]}`}
+        let item = {'key': `${ids[i]}`, 'prop': `${ids[i]}`}
         dataTableHeader.push(item)
       }
       dataTableHeader.push({'key': '单次均匀度', 'prop': 'averageHumi'})
@@ -114,7 +83,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-</style>
