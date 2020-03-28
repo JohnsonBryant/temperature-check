@@ -5,10 +5,10 @@
   </div>
   <div class="main-page-container" >
     <template v-if="showMessageState">
-      <div class="warn-text">
+      <!-- <div class="warn-text">
         <h4>当前系统未处在测试状态，如需要进行测试，请切换到设备管理页，选择测试设备，启动测试！</h4>
         <h5>以下为测试示例，实际测试效果可参考如下图表！</h5>
-      </div>
+      </div> -->
       <test-item-th 
         :equipment="demo.equipment"
         :updateTime="demo.updateTime"
@@ -19,55 +19,7 @@
     </template>
 
     <template v-for="(item,index) in DeviceTestDatas" >
-      <el-row :gutter="6" :key="index">
-        <el-col :span="16">
-          <el-button-group>
-            <el-button @click="dataShowIndex = 1" :type="dataShowIndex === 1 ? 'primary': ''" icon="el-icon-s-data">数据走势</el-button>
-            <el-button @click="dataShowIndex = 2" :type="dataShowIndex === 2 ? 'primary': ''" icon="el-icon-s-grid">数据表格</el-button>
-          </el-button-group>
-          <template v-if="item.equipment.detectProperty === '温湿度'">
-            <test-item-th 
-              v-show="dataShowIndex === 1"
-              :equipment="item.equipment"
-              :updateTime="item.updateTime"
-              :packNumber="item.packNumber"
-              :test-data="item.testData"
-              :temps="item.temps"
-              :humis="item.humis"
-            />
-          </template>
-          <template v-else-if="item.equipment.detectProperty === '温度'">
-            <test-item-temp
-              v-show="dataShowIndex === 1"
-              :equipment="item.equipment"
-              :updateTime="item.updateTime"
-              :packNumber="item.packNumber"
-              :test-data="item.testData"
-              :temps="item.temps"
-            />
-          </template>
-          <template v-if="item.equipment.detectProperty === '温湿度'">
-            <test-item-table-th v-show="dataShowIndex === 2"
-              :equipment="DeviceTestDataTable[index].equipment"
-              :tempTestDataTable="DeviceTestDataTable[index].tempTestDataTable"
-              :humiTestDataTable="DeviceTestDataTable[index].humiTestDataTable"
-              :ids="DeviceTestDataTable[index].ids"
-              />
-          </template>
-          <template v-else-if="item.equipment.detectProperty === '温度'">
-            <test-item-table-temp v-show="dataShowIndex === 2"
-              :equipment="DeviceTestDataTable[index].equipment"
-              :tempTestDataTable="DeviceTestDataTable[index].tempTestDataTable"
-              :ids="DeviceTestDataTable[index].ids"
-              />
-          </template>
-        </el-col>
-        <el-col :span="8">
-          <test-data
-            :detectProperty="item.equipment.detectProperty"
-            :testData="DeviceTestDataTable[index].testData" />
-        </el-col>
-      </el-row>
+      <container :DeviceTestData=item :deviceTestDataTable=DeviceTestDataTable[index] :key="index" />
     </template>
   </div>
 </div>
@@ -78,10 +30,7 @@ import {mapState
   // , mapActions
 } from 'vuex'
 import TestItemTH from './TestItemTH'
-import TestItemTemp from './TestItemTemp'
-import TestItemTableTH from './TestItemTableTH'
-import TestItemTableTemp from './TestItemTableTemp'
-import TestData from './TestData'
+import Container from './Container'
 import 'echarts/lib/chart/line'
 
 import demo from './template.js'
@@ -143,10 +92,7 @@ const template = () => {
 export default {
   components: {
     'test-item-th': TestItemTH,
-    'test-item-temp': TestItemTemp,
-    'test-item-table-th': TestItemTableTH,
-    'test-item-table-temp': TestItemTableTemp,
-    'test-data': TestData
+    'container': Container
   },
   data () {
     return {
@@ -162,6 +108,7 @@ export default {
       equipments.forEach((ele, index, equipments) => {
         let deviceTestData = {}
         deviceTestData.equipment = ele.device
+        deviceTestData.data = ele.data
         deviceTestData.testData = []
         if (ele.device.detectProperty === '温湿度') {
           ele.data['IDS'].forEach((id) => {

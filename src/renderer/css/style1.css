@@ -103,12 +103,9 @@ body {
     font-weight: 700; }
   .main-page .main-page-container {
     flex-grow: 1;
-    display: flex;
-    flex-direction: column;
     margin: .5rem 0;
     padding: 1rem 1rem 0;
-    overflow-y: auto;
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1); }
+    overflow-y: auto; }
 
 /* 主区域顶部功能栏 */
 .top-bar {
@@ -248,31 +245,74 @@ body {
   padding-top: 1rem; }
 
 /* 实时监测 */
-.dashboard .saveData {
-  position: fixed;
-  top: 1.2rem;
-  right: 4rem;
-  z-index: 1; }
-.dashboard .dash-test-item {
-  padding-top: 1rem;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column; }
-.dashboard .dash-test-item .el-row {
+.dashboard .main-page-container > .el-row {
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1); }
+.dashboard .main-page-container > .el-row, .dashboard .main-page-container > .el-row .el-col {
   height: 100%; }
-.dashboard .dash-test-item .el-col {
-  height: 100%; }
-.dashboard .dash-test-item > h4 {
-  text-align: center;
-  padding-bottom: 1rem;
-  font-size: 1.4rem;
-  color: #707377; }
-.dashboard .dash-test-item .test-item-chart {
-  height: 47rem; }
-.dashboard .dash-test-item .test-item-data {
-  height: 47rem;
+.dashboard .origin-data {
+  position: relative;
+  border: 1px solid #999; }
+.dashboard .tab-btns {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  background-color: #fff; }
+.dashboard .testData {
+  height: 100%;
   overflow: auto; }
-.dashboard .dash-test-item .test-item-col {
-  text-align: center; }
+  .dashboard .testData h4:after {
+    content: '';
+    display: table;
+    clear: both; }
+  .dashboard .testData h4 {
+    margin: .5rem 0;
+    padding: .5rem; }
+    .dashboard .testData h4 .left {
+      float: left; }
+    .dashboard .testData h4 .right {
+      float: right; }
+  .dashboard .testData .sensors {
+    margin: .5rem 0;
+    padding: .5rem; }
+    .dashboard .testData .sensors::after {
+      content: '';
+      display: table;
+      clear: both; }
+    .dashboard .testData .sensors .sensor {
+      width: 33.3333333333%;
+      float: left; }
+    .dashboard .testData .sensors .sensor-content {
+      margin-right: 5px;
+      margin-bottom: 5px;
+      padding: 5px;
+      border: 1px solid rgba(33, 33, 33, 0.4);
+      border-radius: 4px;
+      box-shadow: 0 0 1px rgba(33, 33, 33, 0.4); }
+.dashboard .dash-test-item {
+  position: relative;
+  padding: 11.5rem .5rem 0;
+  height: 100%;
+  overflow: auto; }
+  .dashboard .dash-test-item .head {
+    position: absolute;
+    top: 5rem;
+    right: 0;
+    left: 0;
+    z-index: 1; }
+  .dashboard .dash-test-item .el-row {
+    height: 100%; }
+  .dashboard .dash-test-item .el-col {
+    height: 100%; }
+  .dashboard .dash-test-item h4 {
+    text-align: center;
+    padding-bottom: 1rem;
+    font-size: 1.4rem;
+    color: #707377; }
+  .dashboard .dash-test-item .test-item-data {
+    overflow: auto; }
+  .dashboard .dash-test-item .test-item-col {
+    text-align: center; }
 
 /*# sourceMappingURL=style1.css.map */

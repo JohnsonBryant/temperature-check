@@ -133,12 +133,12 @@ $nav-bar-height : 5.5rem;
     }
     .main-page-container {
         flex-grow: 1;
-        display: flex;
-        flex-direction: column;
+        // display: flex;
+        // flex-direction: column;
         margin: .5rem 0;
         padding: 1rem 1rem 0;
         overflow-y: auto;
-        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+        // box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
     }
 }
 
@@ -334,39 +334,93 @@ $nav-bar-height : 5.5rem;
 
 /* 实时监测 */
 .dashboard {
-    .saveData {
-        position: fixed;
-        top: 1.2rem;
-        right: 4rem;
-        z-index: 1;
+    .main-page-container > .el-row{
+        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+    }
+    .main-page-container > .el-row, .main-page-container > .el-row .el-col{
+        height: 100%;
+    }
+    .origin-data {
+        position: relative;
+        border: 1px solid #999;
+    }
+    .tab-btns {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 10;
+        background-color: #fff;
+    }
+    .testData {
+        height: 100%;
+        overflow: auto;
+        h4:after {
+            @include clearfix;
+        }
+        h4 {
+            margin: .5rem 0;
+            padding: .5rem;
+            .left {
+                float: left;
+            }
+            .right {
+                float: right;
+            }
+        }
+        .sensors {
+            margin: .5rem 0;
+            padding: .5rem;
+            &::after {
+                @include clearfix();
+            }
+            .sensor {
+                width: 100/3*1%;
+                float: left;
+            }
+            .sensor-content {
+                margin-right: 5px;
+                margin-bottom: 5px; 
+                padding: 5px;
+                border: 1px solid rgba(33,33,33, .4);
+                border-radius: 4px;
+                box-shadow: 0 0 1px rgba(33,33,33, .4);
+            }
+        }
     }
     .dash-test-item {
-        // padding: 0 .5rem;
-        padding-top: 1rem;
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-    }
-    .dash-test-item .el-row{
+        position: relative;
+        padding: 11.5rem .5rem 0;
         height: 100%;
-    }
-    .dash-test-item .el-col{
-        height: 100%;
-    }
-    .dash-test-item > h4 {
-        text-align: center;
-        padding-bottom: 1rem;
-        font-size: 1.4rem;
-        color: #707377;
-    }
-    .dash-test-item .test-item-chart {
-        height: 47rem;
-    }
-    .dash-test-item .test-item-data {
-        height: 47rem;
         overflow: auto;
-    }
-    .dash-test-item .test-item-col {
-        text-align: center;
+        .head {
+            position: absolute;
+            top: 5rem;
+            right: 0;
+            left: 0;
+            z-index: 1;
+        }
+        .el-row{
+            height: 100%;
+        }
+        .el-col{
+            height: 100%;
+        }
+        h4 {
+            text-align: center;
+            padding-bottom: 1rem;
+            font-size: 1.4rem;
+            color: #707377;
+        }
+        .test-item-chart {
+            // height: 47rem;
+        }
+        .test-item-data {
+            // height: 47rem;
+            overflow: auto;
+        }
+        .test-item-col {
+            text-align: center;
+        }
     }
 }

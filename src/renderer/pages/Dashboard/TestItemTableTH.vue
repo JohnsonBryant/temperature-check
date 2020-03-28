@@ -1,38 +1,40 @@
 <template>
   <div class="dash-test-item">
-    <h4 v-html="equipmentTitle"></h4>
-    <el-tabs type="border-card" class="test-item-data">
-      <el-tab-pane label="温度数据">
-        <el-table
-          :data="tempTestDataTable"
-          :stripe="true"
-          border resizable
-          style="width: 100%"
-          >
-          <el-table-column
-            v-for="(item, key) in tempDataTableHeader(ids)" :key="key"
-            :prop="item['prop']"
-            :label="item['key']"
-            >
-          </el-table-column>
-        </el-table>
-      </el-tab-pane>
-      <el-tab-pane label="湿度数据">
-        <el-table
-          :data="humiTestDataTable"
-          :stripe="true"
-          border resizable
-          style="width: 100%"
-          >
-          <el-table-column
-            v-for="(item, key) in humiDataTableHeader(ids)" :key="key"
-            :prop="item['prop']"
-            :label="item['key']"
-            >
-          </el-table-column>
-        </el-table>
-      </el-tab-pane>
-    </el-tabs>
+    <div class="head">
+      <h4 v-html="equipmentTitle"></h4>
+      <el-button-group>
+        <el-button @click="tableShowIndex = 1" :type="tableShowIndex === 1 ? 'primary': ''" icon="el-icon-s-grid">温度数据</el-button>
+        <el-button @click="tableShowIndex = 2" :type="tableShowIndex === 2 ? 'primary': ''" icon="el-icon-s-grid">湿度数据</el-button>
+      </el-button-group>
+    </div>
+    <el-table
+      v-show="tableShowIndex === 1"
+      :data="tempTestDataTable"
+      :stripe="true"
+      border resizable
+      style="width: 100%"
+      >
+      <el-table-column
+        v-for="(item, key) in tempDataTableHeader(ids)" :key="key"
+        :prop="item['prop']"
+        :label="item['key']"
+        >
+      </el-table-column>
+    </el-table>
+    <el-table
+      v-show="tableShowIndex === 2"
+      :data="humiTestDataTable"
+      :stripe="true"
+      border resizable
+      style="width: 100%"
+      >
+      <el-table-column
+        v-for="(item, key) in humiDataTableHeader(ids)" :key="key"
+        :prop="item['prop']"
+        :label="item['key']"
+        >
+      </el-table-column>
+    </el-table>
   </div>
 </template>
 
@@ -40,6 +42,11 @@
 export default {
   name: 'TestItemTable',
   components: {
+  },
+  data () {
+    return {
+      tableShowIndex: 1
+    }
   },
   props: ['equipment', 'humiTestDataTable', 'tempTestDataTable', 'ids'],
   computed: {

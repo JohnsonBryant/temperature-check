@@ -1,6 +1,8 @@
 <template>
   <div class="dash-test-item">
-    <h4 v-html="equipmentTitle"></h4>
+    <div class="head">
+      <h4 v-html="equipmentTitle"></h4>
+    </div>
     <el-row :gutter="6">
       <el-col :span="12">
         <v-chart :autoresize="true" style="width:90%;height:460px;" :options="temps"/>
@@ -17,7 +19,7 @@ export default {
   name: 'TestItem',
   components: {
   },
-  props: ['equipment', 'updateTime', 'packNumber', 'testData', 'temps', 'humis'],
+  props: ['equipment', 'testData', 'temps', 'humis'],
   computed: {
     equipmentTitle () {
       return `

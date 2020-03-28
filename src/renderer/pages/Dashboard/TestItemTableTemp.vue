@@ -1,23 +1,21 @@
 <template>
   <div class="dash-test-item">
-    <h4 v-html="equipmentTitle"></h4>
-    <el-tabs type="border-card" class="test-item-data">
-      <el-tab-pane label="温度数据">
-        <el-table
-          :data="tempTestDataTable"
-          :stripe="true"
-          border resizable
-          style="width: 100%"
-          >
-          <el-table-column
-            v-for="(item, key) in tempDataTableHeader(ids)" :key="key"
-            :prop="item['prop']"
-            :label="item['key']"
-            >
-          </el-table-column>
-        </el-table>
-      </el-tab-pane>
-    </el-tabs>
+    <div class="head">
+      <h4 v-html="equipmentTitle"></h4>
+    </div>
+    <el-table
+      :data="tempTestDataTable"
+      :stripe="true"
+      border resizable
+      style="width: 100%"
+      >
+      <el-table-column
+        v-for="(item, key) in tempDataTableHeader(ids)" :key="key"
+        :prop="item['prop']"
+        :label="item['key']"
+        >
+      </el-table-column>
+    </el-table>
   </div>
 </template>
 
