@@ -73,7 +73,7 @@ export default {
         let item = {'key': `${ids[i]}`, 'prop': `${ids[i]}`}
         dataTableHeader.push(item)
       }
-      dataTableHeader.push({'key': '单次均匀度', 'prop': 'averageTemp'})
+      dataTableHeader.push({'key': '单次均匀度', 'prop': 'average'})
       return dataTableHeader
     },
     humiDataTableHeader (ids) {
@@ -84,7 +84,7 @@ export default {
         let item = {'key': `${ids[i]}`, 'prop': `${ids[i]}`}
         dataTableHeader.push(item)
       }
-      dataTableHeader.push({'key': '单次均匀度', 'prop': 'averageHumi'})
+      dataTableHeader.push({'key': '单次均匀度', 'prop': 'average'})
       return dataTableHeader
     }
   }

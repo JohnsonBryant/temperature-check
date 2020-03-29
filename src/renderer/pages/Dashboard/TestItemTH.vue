@@ -5,10 +5,10 @@
     </div>
     <el-row :gutter="6">
       <el-col :span="12">
-        <v-chart :autoresize="true" style="width:90%;height:460px;" :options="temps"/>
+        <v-chart :autoresize="true" style="width:90%;height:460px;" :options="temp"/>
       </el-col>
       <el-col :span="12">
-        <v-chart :autoresize="true" style="width:90%;height:460px;" :options="humis"/>
+        <v-chart :autoresize="true" style="width:90%;height:460px;" :options="humi"/>
       </el-col>
     </el-row>
   </div>
@@ -19,7 +19,7 @@ export default {
   name: 'TestItem',
   components: {
   },
-  props: ['equipment', 'testData', 'temps', 'humis'],
+  props: ['equipment', 'temp', 'humi'],
   computed: {
     equipmentTitle () {
       return `

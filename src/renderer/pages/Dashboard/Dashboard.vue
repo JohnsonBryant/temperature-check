@@ -12,9 +12,8 @@
       <test-item-th 
         :equipment="demo.equipment"
         :updateTime="demo.updateTime"
-        :test-data="demo.testData"
-        :temps="demo.temps"
-        :humis="demo.humis"
+        :temp="demo.temp"
+        :humi="demo.humi"
       />
     </template>
 
@@ -106,114 +105,43 @@ export default {
       const equipments = this.equipments
       let deviceTestDatas = []
       equipments.forEach((ele, index, equipments) => {
-        let deviceTestData = {}
-        deviceTestData.equipment = ele.device
-        deviceTestData.data = ele.data
-        deviceTestData.testData = []
-        if (ele.device.detectProperty === '温湿度') {
-          ele.data['IDS'].forEach((id) => {
-            let sensor = ele.data[id]
-            let len = sensor['temp'].length
-            let temp = len === 0 ? '' : sensor['temp'][len - 1]
-            let humi = len === 0 ? '' : sensor['humi'][len - 1]
-            let batt = len === 0 ? '' : sensor['batt'][len - 1]
-            let sensorData = {
-              name: `${id}-电量${batt}%`,
-              tempData: temp,
-              humiData: humi
-            }
-            deviceTestData.testData.push(sensorData)
-          })
-          let dataLen = ele.data['evennessTemp'].length
-          let evennessTemp = dataLen === 0 ? '' : ele.data['evennessTemp'][dataLen - 1]
-          let evennessHumi = dataLen === 0 ? '' : ele.data['evennessHumi'][dataLen - 1]
-          let fluctuationTemp = dataLen === 0 ? '' : ele.data['fluctuationTemp'][dataLen - 1]
-          let fluctuationHumi = dataLen === 0 ? '' : ele.data['fluctuationHumi'][dataLen - 1]
-          let deviationTempSup = dataLen === 0 ? '' : ele.data['deviationTempSup'][dataLen - 1]
-          let deviationTempSub = dataLen === 0 ? '' : ele.data['deviationTempSub'][dataLen - 1]
-          let deviationHumiSup = dataLen === 0 ? '' : ele.data['deviationHumiSup'][dataLen - 1]
-          let deviationHumiSub = dataLen === 0 ? '' : ele.data['deviationHumiSub'][dataLen - 1]
-          deviceTestData.testData.push({
-            name: '均匀度',
-            tempData: evennessTemp,
-            humiData: evennessHumi
-          })
-          deviceTestData.testData.push({
-            name: '波动度',
-            tempData: fluctuationTemp,
-            humiData: fluctuationHumi
-          })
-          deviceTestData.testData.push({
-            name: '上偏差',
-            tempData: deviationTempSup,
-            humiData: deviationHumiSup
-          })
-          deviceTestData.testData.push({
-            name: '下偏差',
-            tempData: deviationTempSub,
-            humiData: deviationHumiSub
-          })
-          deviceTestData.updateTime = dataLen === 0 ? '' : ele.data['time'][dataLen - 1]
-          deviceTestData.packNumber = dataLen
-          deviceTestData.temps = this.prepareGraphData('温度', 'temp', ele.data)
-          deviceTestData.humis = this.prepareGraphData('湿度', 'humi', ele.data)
-          deviceTestDatas.push(deviceTestData)
-        } else if (ele.device.detectProperty === '温度') {
-          ele.data['IDS'].forEach((id) => {
-            let sensor = ele.data[id]
-            let len = sensor['temp'].length
-            let temp = len === 0 ? '' : sensor['temp'][len - 1]
-            let batt = len === 0 ? '' : sensor['batt'][len - 1]
-            let sensorData = {
-              name: `${id}-电量${batt}%`,
-              tempData: temp
-            }
-            deviceTestData.testData.push(sensorData)
-          })
-          let dataLen = ele.data['evennessTemp'].length
-          let evennessTemp = dataLen === 0 ? '' : ele.data['evennessTemp'][dataLen - 1]
-          let fluctuationTemp = dataLen === 0 ? '' : ele.data['fluctuationTemp'][dataLen - 1]
-          let deviationTempSup = dataLen === 0 ? '' : ele.data['deviationTempSup'][dataLen - 1]
-          let deviationTempSub = dataLen === 0 ? '' : ele.data['deviationTempSub'][dataLen - 1]
-          deviceTestData.testData.push({
-            name: '均匀度',
-            tempData: evennessTemp
-          })
-          deviceTestData.testData.push({
-            name: '波动度',
-            tempData: fluctuationTemp
-          })
-          deviceTestData.testData.push({
-            name: '上偏差',
-            tempData: deviationTempSup
-          })
-          deviceTestData.testData.push({
-            name: '下偏差',
-            tempData: deviationTempSub
-          })
-          deviceTestData.updateTime = dataLen === 0 ? '' : ele.data['time'][dataLen - 1]
-          deviceTestData.packNumber = dataLen
-          deviceTestData.temps = this.prepareGraphData('温度', 'temp', ele.data)
-          deviceTestDatas.push(deviceTestData)
+        let dataLen = ele.data['time'].length
+        let deviceTestData = {
+          'equipment': ele.device,
+          'data': ele.data,
+          'updateTime': '',
+          'packNumber': 0
         }
+        deviceTestData.updateTime = dataLen === 0 ? '' : ele.data['time'][dataLen - 1]
+        deviceTestData.packNumber = dataLen
+        if (ele.device.detectProperty === '温湿度') {
+          Object.assign(deviceTestData, { 'temp': {}, 'humi': {} })
+          deviceTestData.temp = this.prepareGraphData('温度', 'temp', ele.data)
+          deviceTestData.humi = this.prepareGraphData('湿度', 'humi', ele.data)
+        } else if (ele.device.detectProperty === '温度') {
+          Object.assign(deviceTestData, { 'temp': {} })
+          deviceTestData.temp = this.prepareGraphData('温度', 'temp', ele.data)
+        }
+        deviceTestDatas.push(deviceTestData)
       })
       return deviceTestDatas
     },
     DeviceTestDataTable () {
-      const equipments = this.equipments
+      const equipments = JSON.parse(JSON.stringify(this.equipments))
       let deviceTestDataTable = []
       equipments.forEach((ele, index, equipments) => {
-        let IDS = ele.config.IDS
         let packCount = ele.data['time'].length
+        let deviceTestData = {
+          'ids': ele.config['IDS'].slice(),
+          'equipment': ele.device
+        }
         if (ele.device.detectProperty === '温湿度') {
-          let deviceTestData = {'tempTestDataTable': [], 'humiTestDataTable': [], 'testData': [], 'ids': []}
-          // 绑定测点ID
-          deviceTestData.ids = ele.config['IDS'].slice()
-          deviceTestData.equipment = ele.device
-          deviceTestData.testData = this.testDataTH()
+          Object.assign(deviceTestData, {
+            'testData': this.testDataTH(),
+            'tempTestDataTable': [],
+            'humiTestDataTable': []
+          })
           // 构建数据表格中规则的行列数据
-          let tempdeviations = []
-          let humideviations = []
           for (let i = 0; i < packCount; i++) {
             let rowTemp = {}
             let rowHumi = {}
@@ -224,20 +152,18 @@ export default {
             })
             // 温度数据构建
             rowTemp['count'] = i + 1
-            rowTemp['averageTemp'] = ele.data['averageTemp'][i]
-            tempdeviations.push(rowTemp['deviation'])
+            rowTemp['average'] = ele.data['averageTemp'][i]
             // 湿度数据构建
             rowHumi['count'] = i + 1
-            rowHumi['averageHumi'] = ele.data['averageHumi'][i]
-            humideviations.push(rowHumi['deviation'])
+            rowHumi['average'] = ele.data['averageHumi'][i]
             // 单行数据添加到数据序列
             deviceTestData.tempTestDataTable.push(rowTemp)
             deviceTestData.humiTestDataTable.push(rowHumi)
           }
-          // 添加最打值最小值行
-          let addonsTemp = [{'count': '最大值', 'averageTemp': this.max(ele.data['averageTemp'])}, {'count': '最小值', 'averageTemp': this.min(ele.data['averageTemp'])}]
-          let addonsHumi = [{'count': '最大值', 'averageHumi': this.max(ele.data['averageHumi'])}, {'count': '最小值', 'averageHumi': this.min(ele.data['averageHumi'])}]
-          IDS.forEach((id, index, ids) => {
+          // 添加最大值最小值行
+          let addonsTemp = [{'count': '最大值', 'average': this.max(ele.data['averageTemp'])}, {'count': '最小值', 'average': this.min(ele.data['averageTemp'])}]
+          let addonsHumi = [{'count': '最大值', 'average': this.max(ele.data['averageHumi'])}, {'count': '最小值', 'average': this.min(ele.data['averageHumi'])}]
+          ele.config['IDS'].forEach((id, index, ids) => {
             addonsTemp[0][id] = this.max(ele.data[id]['temp'])
             addonsTemp[1][id] = this.min(ele.data[id]['temp'])
             addonsHumi[0][id] = this.max(ele.data[id]['humi'])
@@ -247,25 +173,23 @@ export default {
           deviceTestData.humiTestDataTable.push(...addonsHumi)
           // 绑定最终计算数据表格
           deviceTestData.testData[0].temp = ele.config.temp
-          deviceTestData.testData[1].temp = ele.data['deviationTempSup'][packCount - 1]
-          deviceTestData.testData[3].temp = ele.data['deviationTempSub'][packCount - 1]
-          deviceTestData.testData[5].temp = ele.data['evennessTemp'][packCount - 1]
-          deviceTestData.testData[6].temp = ele.data['fluctuationTemp'][packCount - 1]
+          deviceTestData.testData[1].temp = ele.data['deviationTempSup']
+          deviceTestData.testData[3].temp = ele.data['deviationTempSub']
+          deviceTestData.testData[5].temp = ele.data['evennessTemp']
+          deviceTestData.testData[6].temp = ele.data['fluctuationTemp']
           deviceTestData.testData[0].humi = ele.config.humi
-          deviceTestData.testData[1].humi = ele.data['deviationHumiSup'][packCount - 1]
-          deviceTestData.testData[3].humi = ele.data['deviationHumiSub'][packCount - 1]
-          deviceTestData.testData[5].humi = ele.data['evennessHumi'][packCount - 1]
-          deviceTestData.testData[6].humi = ele.data['fluctuationHumi'][packCount - 1]
+          deviceTestData.testData[1].humi = ele.data['deviationHumiSup']
+          deviceTestData.testData[3].humi = ele.data['deviationHumiSub']
+          deviceTestData.testData[5].humi = ele.data['evennessHumi']
+          deviceTestData.testData[6].humi = ele.data['fluctuationHumi']
           // comment
           deviceTestDataTable.push(deviceTestData)
         } else if (ele.device.detectProperty === '温度') {
-          let deviceTestData = {'tempTestDataTable': [], 'testData': [], 'ids': []}
-          // 绑定测点ID
-          deviceTestData.ids = ele.data['IDS'].slice()
-          deviceTestData.equipment = ele.device
-          deviceTestData.testData = this.testDataTemp()
+          Object.assign(deviceTestData, {
+            'testData': this.testDataTemp(),
+            'tempTestDataTable': []
+          })
           // 构建数据表格中规则的行列数据
-          let tempdeviations = []
           for (let i = 0; i < packCount; i++) {
             let rowTemp = {}
             ele.data['IDS'].forEach((id) => {
@@ -274,24 +198,23 @@ export default {
             })
             // 温度数据构建
             rowTemp['count'] = i + 1
-            rowTemp['averageTemp'] = ele.data['averageTemp'][i]
-            tempdeviations.push(rowTemp['deviation'])
+            rowTemp['average'] = ele.data['averageTemp'][i]
             // 单行数据添加到数据序列
             deviceTestData.tempTestDataTable.push(rowTemp)
           }
-          // 添加最打值最小值行
-          let addons = [{'count': '最大值', 'averageTemp': this.max(ele.data['averageTemp'])}, {'count': '最小值', 'averageTemp': this.min(ele.data['averageTemp'])}]
-          IDS.forEach((id, index, ids) => {
-            addons[0][id] = this.max(ele.data[id]['temp'])
-            addons[1][id] = this.min(ele.data[id]['temp'])
+          // 添加最大值最小值行
+          let addonsTemp = [{'count': '最大值', 'average': this.max(ele.data['averageTemp'])}, {'count': '最小值', 'average': this.min(ele.data['averageTemp'])}]
+          ele.config['IDS'].forEach((id, index, ids) => {
+            addonsTemp[0][id] = this.max(ele.data[id]['temp'])
+            addonsTemp[1][id] = this.min(ele.data[id]['temp'])
           })
-          deviceTestData.tempTestDataTable.push(...addons)
+          deviceTestData.tempTestDataTable.push(...addonsTemp)
           // 绑定最终计算数据表格
           deviceTestData.testData[0].temp = ele.config.temp
-          deviceTestData.testData[1].temp = ele.data['deviationTempSup'][packCount - 1]
-          deviceTestData.testData[3].temp = ele.data['deviationTempSub'][packCount - 1]
-          deviceTestData.testData[5].temp = ele.data['evennessTemp'][packCount - 1]
-          deviceTestData.testData[6].temp = ele.data['fluctuationTemp'][packCount - 1]
+          deviceTestData.testData[1].temp = ele.data['deviationTempSup']
+          deviceTestData.testData[3].temp = ele.data['deviationTempSub']
+          deviceTestData.testData[5].temp = ele.data['evennessTemp']
+          deviceTestData.testData[6].temp = ele.data['fluctuationTemp']
           // comment
           deviceTestDataTable.push(deviceTestData)
         }

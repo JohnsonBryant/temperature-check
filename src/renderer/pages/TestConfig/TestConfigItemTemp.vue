@@ -2,7 +2,7 @@
 <el-card class="testEq-item" shadow="always">
   <h4>{{device.company}}  --  {{device.em}}  --  {{device.deviceName}}  --  {{device.deviceType}}  --  {{device.deviceID}}  --  {{device.detectProperty}}测量</h4>
   <div class="testEq-item-conf">
-      <el-form :inline="true">
+    <el-form :inline="true">
       <el-form-item prop="em" label="采集次数：">
         <el-input class="testEq-item-conf-input" placeholder="采集次数" v-model="config.count" :disabled="isOnTest">
         </el-input>

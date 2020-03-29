@@ -9,17 +9,15 @@
         <test-item-th 
           v-show="dataShowIndex === 1"
           :equipment="DeviceTestData.equipment"
-          :test-data="DeviceTestData.testData"
-          :temps="DeviceTestData.temps"
-          :humis="DeviceTestData.humis"
+          :temp="DeviceTestData.temp"
+          :humi="DeviceTestData.humi"
         />
       </template>
       <template v-else-if="DeviceTestData.equipment.detectProperty === '温度'">
         <test-item-temp
           v-show="dataShowIndex === 1"
           :equipment="DeviceTestData.equipment"
-          :test-data="DeviceTestData.testData"
-          :temps="DeviceTestData.temps"
+          :temp="DeviceTestData.temp"
         />
       </template>
       <template v-if="DeviceTestData.equipment.detectProperty === '温湿度'">
@@ -41,10 +39,10 @@
     <el-col :span="8">
       <test-data
         :detectProperty="DeviceTestData.equipment.detectProperty"
+        :ids="deviceTestDataTable.ids"
         :testData="deviceTestDataTable.testData"
         :updateTime="DeviceTestData.updateTime"
         :packNumber="DeviceTestData.packNumber"
-        :ids="deviceTestDataTable.ids"
         :data="DeviceTestData.data"
         />
     </el-col>

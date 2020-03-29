@@ -288,6 +288,9 @@ $nav-bar-height : 5.5rem;
     .main-page-container {
         display: flex;
         flex-direction: row;
+        &>.el-row {
+            width: 100%;
+        }
     }
     .main-page-container > div:first-child {
         padding-right: 1rem;
@@ -323,9 +326,6 @@ $nav-bar-height : 5.5rem;
     }
     .wk-item-pie.box1 {
         padding-top: 1rem;
-    }
-    .wk-item-pie.wk-template1 {
-        padding-top: 0;
     }
     .wk-template-btns {
         padding-top: 1rem;

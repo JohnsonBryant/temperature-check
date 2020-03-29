@@ -3,7 +3,7 @@
     <div class="head">
       <h4 v-html="equipmentTitle"></h4>
     </div>
-    <v-chart :autoresize="true" style="width:90%;height:460px;" :options="temps"/>
+    <v-chart :autoresize="true" style="width:90%;height:460px;" :options="temp"/>
   </div>
 </template>
 
@@ -12,7 +12,7 @@ export default {
   name: 'TestItem',
   components: {
   },
-  props: ['equipment', 'testData', 'temps'],
+  props: ['equipment', 'temp'],
   computed: {
     equipmentTitle () {
       return `

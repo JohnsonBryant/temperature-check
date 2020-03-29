@@ -212,6 +212,8 @@ body {
 .workspace .main-page-container {
   display: flex;
   flex-direction: row; }
+  .workspace .main-page-container > .el-row {
+    width: 100%; }
 .workspace .main-page-container > div:first-child {
   padding-right: 1rem; }
 .workspace .main-page-container > div:last-child {
@@ -239,8 +241,6 @@ body {
   padding-bottom: 1rem; }
 .workspace .wk-item-pie.box1 {
   padding-top: 1rem; }
-.workspace .wk-item-pie.wk-template1 {
-  padding-top: 0; }
 .workspace .wk-template-btns {
   padding-top: 1rem; }
 

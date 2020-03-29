@@ -19,7 +19,7 @@
         >
       </el-table-column>
       <el-table-column
-        prop="temp"
+        prop="humi"
         label="湿度度 / RH%"
         min-width="110"
         >

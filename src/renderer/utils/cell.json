@@ -1,0 +1,324 @@
+{
+  "A16": {},
+  "A17": {
+    "font": {
+      "size": 12,
+      "color": { "theme": 1 },
+      "name": "宋体",
+      "family": 3,
+      "charset": 134
+    },
+    "border": {
+      "left": { "style": "thin", "color": { "indexed": 64 } },
+      "right": { "style": "thin", "color": { "indexed": 64 } },
+      "top": { "style": "thin", "color": { "indexed": 64 } },
+      "bottom": { "style": "thin", "color": { "indexed": 64 } }
+    },
+    "fill": { "type": "pattern", "pattern": "none" },
+    "alignment": {
+      "horizontal": "center",
+      "vertical": "middle",
+      "wrapText": true
+    }
+  },
+  "A19": {
+    "font": {
+      "size": 12,
+      "color": { "theme": 1 },
+      "name": "宋体",
+      "family": 3,
+      "charset": 134
+    },
+    "border": {
+      "left": { "style": "thin", "color": { "indexed": 64 } },
+      "right": { "style": "thin", "color": { "indexed": 64 } },
+      "top": { "style": "thin", "color": { "indexed": 64 } },
+      "bottom": { "style": "thin", "color": { "indexed": 64 } }
+    },
+    "fill": { "type": "pattern", "pattern": "none" },
+    "alignment": { "horizontal": "center", "vertical": "middle" }
+  },
+  "A34": {
+    "font": {
+      "size": 12,
+      "color": { "theme": 1 },
+      "name": "宋体",
+      "family": 3,
+      "charset": 134
+    },
+    "border": {
+      "left": { "style": "thin", "color": { "indexed": 64 } },
+      "right": { "style": "thin", "color": { "indexed": 64 } },
+      "top": { "style": "thin", "color": { "indexed": 64 } },
+      "bottom": { "style": "thin", "color": { "indexed": 64 } }
+    },
+    "fill": { "type": "pattern", "pattern": "none" },
+    "alignment": {
+      "horizontal": "center",
+      "vertical": "middle",
+      "wrapText": true
+    }
+  },
+  "A37": {
+    "font": {
+      "size": 12,
+      "color": { "theme": 1 },
+      "name": "宋体",
+      "family": 3,
+      "charset": 134
+    },
+    "border": {
+      "left": { "style": "thin", "color": { "indexed": 64 } },
+      "right": { "style": "thin", "color": { "indexed": 64 } },
+      "top": { "style": "thin", "color": { "indexed": 64 } },
+      "bottom": { "style": "thin", "color": { "indexed": 64 } }
+    },
+    "fill": { "type": "pattern", "pattern": "none" },
+    "alignment": { "horizontal": "center", "vertical": "top", "wrapText": true }
+  },
+  "B17": {
+    "font": {
+      "size": 12,
+      "color": { "theme": 1 },
+      "name": "宋体",
+      "family": 3,
+      "charset": 134
+    },
+    "border": {
+      "left": { "style": "thin", "color": { "indexed": 64 } },
+      "right": { "style": "thin", "color": { "indexed": 64 } },
+      "top": { "style": "thin", "color": { "indexed": 64 } },
+      "bottom": { "style": "thin", "color": { "indexed": 64 } }
+    },
+    "fill": { "type": "pattern", "pattern": "none" },
+    "alignment": { "horizontal": "center", "vertical": "middle" }
+  },
+  "B16": {
+    "numFmt": "0.0_ ",
+    "font": {
+      "size": 11,
+      "color": { "theme": 1 },
+      "name": "宋体",
+      "family": 2,
+      "charset": 134,
+      "scheme": "minor"
+    },
+    "border": {},
+    "fill": {
+      "type": "pattern",
+      "pattern": "solid",
+      "fgColor": { "argb": "FFFFFF00" },
+      "bgColor": { "indexed": 64 }
+    },
+    "alignment": { "vertical": "middle" }
+  },
+  "B18": {
+    "font": {
+      "size": 12,
+      "color": { "theme": 1 },
+      "name": "宋体",
+      "family": 3,
+      "charset": 134
+    },
+    "border": {
+      "left": { "style": "thin", "color": { "indexed": 64 } },
+      "right": { "style": "thin", "color": { "indexed": 64 } },
+      "top": { "style": "thin", "color": { "indexed": 64 } },
+      "bottom": { "style": "thin", "color": { "indexed": 64 } }
+    },
+    "fill": { "type": "pattern", "pattern": "none" },
+    "alignment": { "horizontal": "center", "vertical": "middle" }
+  },
+  "B19": {
+    "numFmt": "0.00_ ",
+    "font": {
+      "size": 10,
+      "color": { "theme": 1 },
+      "name": "Calibri",
+      "family": 2
+    },
+    "border": {
+      "left": { "style": "thin", "color": { "indexed": 64 } },
+      "right": { "style": "thin", "color": { "indexed": 64 } },
+      "top": { "style": "thin", "color": { "indexed": 64 } },
+      "bottom": { "style": "thin", "color": { "indexed": 64 } }
+    },
+    "fill": {
+      "type": "pattern",
+      "pattern": "solid",
+      "fgColor": { "argb": "FFFFFF00" },
+      "bgColor": { "indexed": 64 }
+    },
+    "alignment": { "horizontal": "center", "vertical": "middle" }
+  },
+  "B34": {
+    "numFmt": "0.00_ ",
+    "font": {
+      "size": 12,
+      "color": { "theme": 1 },
+      "name": "宋体",
+      "family": 3,
+      "charset": 134
+    },
+    "border": {
+      "left": { "style": "thin", "color": { "indexed": 64 } },
+      "right": { "style": "thin", "color": { "indexed": 64 } },
+      "top": { "style": "thin", "color": { "indexed": 64 } },
+      "bottom": { "style": "thin", "color": { "indexed": 64 } }
+    },
+    "fill": { "type": "pattern", "pattern": "none" },
+    "alignment": { "horizontal": "center", "vertical": "middle" }
+  },
+  "K17": {
+    "font": {
+      "size": 10,
+      "color": { "theme": 1 },
+      "name": "宋体",
+      "family": 3,
+      "charset": 134
+    },
+    "border": {
+      "left": { "style": "thin", "color": { "indexed": 64 } },
+      "right": { "style": "thin", "color": { "indexed": 64 } },
+      "top": { "style": "thin", "color": { "indexed": 64 } },
+      "bottom": { "style": "thin", "color": { "indexed": 64 } }
+    },
+    "fill": { "type": "pattern", "pattern": "none" },
+    "alignment": {
+      "horizontal": "center",
+      "vertical": "middle",
+      "wrapText": true
+    }
+  },
+  "K19": {
+    "numFmt": "0.00_ ",
+    "font": {
+      "size": 12,
+      "color": { "theme": 1 },
+      "name": "宋体",
+      "family": 3,
+      "charset": 134
+    },
+    "border": {
+      "left": { "style": "thin", "color": { "indexed": 64 } },
+      "right": { "style": "thin", "color": { "indexed": 64 } },
+      "top": { "style": "thin", "color": { "indexed": 64 } },
+      "bottom": { "style": "thin", "color": { "indexed": 64 } }
+    },
+    "fill": { "type": "pattern", "pattern": "none" },
+    "alignment": {
+      "horizontal": "center",
+      "vertical": "middle",
+      "wrapText": true
+    }
+  },
+  "F37": {
+    "font": {
+      "size": 12,
+      "color": { "theme": 1 },
+      "name": "宋体",
+      "family": 3,
+      "charset": 134
+    },
+    "border": {
+      "left": { "style": "thin", "color": { "indexed": 64 } },
+      "right": { "style": "thin", "color": { "indexed": 64 } },
+      "top": { "style": "thin", "color": { "indexed": 64 } },
+      "bottom": { "style": "thin", "color": { "indexed": 64 } }
+    },
+    "fill": { "type": "pattern", "pattern": "none" },
+    "alignment": { "horizontal": "center", "vertical": "top", "wrapText": true }
+  },
+  "F37_Value": {
+    "richText": [
+      {
+        "font": {
+          "italic": true,
+          "size": 12,
+          "color": { "theme": 1 },
+          "name": "宋体",
+          "family": 3,
+          "charset": 134
+        },
+        "text": "U"
+      },
+      {
+        "font": {
+          "size": 12,
+          "color": { "theme": 1 },
+          "name": "宋体",
+          "family": 3,
+          "charset": 134
+        },
+        "text": "=0.2℃  （"
+      },
+      {
+        "font": {
+          "italic": true,
+          "size": 12,
+          "color": { "theme": 1 },
+          "name": "宋体",
+          "family": 3,
+          "charset": 134
+        },
+        "text": "k"
+      },
+      {
+        "font": {
+          "size": 12,
+          "color": { "theme": 1 },
+          "name": "宋体",
+          "family": 3,
+          "charset": 134
+        },
+        "text": "=2）"
+      }
+    ]
+  },
+  "F62_Value": {
+    "richText": [
+      {
+        "font": {
+          "italic": true,
+          "size": 12,
+          "color": { "theme": 1 },
+          "name": "宋体",
+          "family": 3,
+          "charset": 134
+        },
+        "text": "U"
+      },
+      {
+        "font": {
+          "size": 12,
+          "color": { "theme": 1 },
+          "name": "宋体",
+          "family": 3,
+          "charset": 134
+        },
+        "text": "=1.3%RH  （"
+      },
+      {
+        "font": {
+          "italic": true,
+          "size": 12,
+          "color": { "theme": 1 },
+          "name": "宋体",
+          "family": 3,
+          "charset": 134
+        },
+        "text": "k"
+      },
+      {
+        "font": {
+          "size": 12,
+          "color": { "theme": 1 },
+          "name": "宋体",
+          "family": 3,
+          "charset": 134
+        },
+        "text": "=2）"
+      }
+    ]
+  }
+}

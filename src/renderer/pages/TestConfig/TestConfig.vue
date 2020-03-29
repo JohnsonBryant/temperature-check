@@ -252,19 +252,24 @@ export default {
           }
         })
         Object.assign(data, {
-          'evennessTemp': [],
-          'fluctuationTemp': [],
-          'deviationTempSup': [],
-          'deviationTempSub': [],
-          'evennessHumi': [],
-          'fluctuationHumi': [],
-          'deviationHumiSup': [],
-          'deviationHumiSub': [],
+          'evennessTemp': '',
+          'fluctuationTemp': '',
+          'deviationTempSup': '',
+          'deviationTempSub': '',
+          'evennessHumi': '',
+          'fluctuationHumi': '',
+          'deviationHumiSup': '',
+          'deviationHumiSub': '',
           'averageTemp': [],
           'averageHumi': [],
           'time': []
         })
-        Object.assign(equipment, { data })
+        Object.assign(equipment, { 'data': data,
+          'exportData': {
+            'temp': [],
+            'humi': []
+          }
+        })
       })
       this.setCycleTask(cycle)
       this.setIsSenddingTask(isSendding)
