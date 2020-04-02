@@ -1,4 +1,9 @@
 /* mixin */
+h1,h2,h3,h4,h5,h6{
+    margin: 0;
+    padding: 0;
+}
+
 @mixin clearfix {
     content: '';
     display: table;
@@ -20,6 +25,8 @@ body {
       "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
     font-size: 1.4rem;
     color: #333;
+    background-color: #ededed;
+    background-color: #e1e1e1;
 }
 
 .app-main {
@@ -59,12 +66,15 @@ $nav-bar-height : 5.5rem;
     z-index: 999;
     min-height: $nav-bar-height;
     padding: 0 1rem;
-    border: 1px solid #ebeef5;
-    border-radius: 4px;
-    background-color: #fff;
+    border: 1px solid #222325;
+    color: #ccc;
+    background-image: linear-gradient(90deg, #222325, #3b3c3f, #222325);
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
     &:after {
         @include clearfix;
+    }
+    span:hover{
+        color: #fff;
     }
     .nav-state {
         float: left;
@@ -122,41 +132,41 @@ $nav-bar-height : 5.5rem;
     height: 100%;
     padding: 0 1rem;
     padding-top: 5.8rem;
-    .main-page-title {
+    .main-title {
         min-height: 6rem;
+        margin-top: 1rem;
         padding: 1rem;
-        border: 1px solid #ebeef5;
+        border: 1px solid #fafafa;
         border-radius: 4px;
-        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+        color: #666;
+        background-color: #fafafa;
+        background-color: #f5f5f5;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         font-size: 1.6rem;
         font-weight: 700;
     }
     .main-page-container {
         flex-grow: 1;
-        // display: flex;
-        // flex-direction: column;
-        margin: .5rem 0;
-        padding: 1rem 1rem 0;
+        margin-bottom: 1rem;
         overflow-y: auto;
-        // box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+        background-color: #fdfdfd;
     }
-}
-
-/* 主区域顶部功能栏 */
-.top-bar {
-    display: flex;
-    flex-direction: row;
-    .top-bar-item {
-        align-self: center;
-    }
-    .top-bar-controls {
-        flex-grow: 1;
+    /* 主区域顶部功能栏 */
+    .top-bar {
         display: flex;
-        flex-direction: row-reverse;
-    }
-    .top-bar-control-item {
-        margin-left: 3rem;
-        align-self: center;
+        flex-direction: row;
+        .item {
+            align-self: center;
+        }
+        .controls {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: row-reverse;
+            .item {
+                margin-left: 3rem;
+                align-self: center;
+            }
+        }
     }
 }
 
@@ -197,37 +207,45 @@ $nav-bar-height : 5.5rem;
 
 /* 新增仪器页 */
 .add-equipment {
-    .add-equip-header {
-        position: relative;
-        padding: 1.5rem 0 0 0;
+    .main-page-container {
+        padding: 1rem;
     }
-    .add-equip-header .company-input {
-        width: 43%;
+    .company {
+        margin-bottom: 0;
+        margin-left: 4rem;
+        width: 30rem;
+        .el-input  input{
+            transition: all .5s;
+        }
+        .el-input input:focus{
+            width: 45rem;
+        }
     }
     .box-item {
         position: relative;
-        padding-top: 3rem;
+        padding: 3rem .5rem 0;
         height: 36rem;
-        margin-bottom: 1.5rem;
-    }
-    .device-input {
-        margin-bottom: 0rem;
-    }
-    .box-add-btn .btn {
-        position: absolute;
-        width: 8rem;
-        height: 8rem;
-        font-size: 4rem;
-    }
-    .box-add-btn .btn.btn-add {
-        top: 50%;
-        left: 50%;
-        transform: translate(-125%, -50%);
-    }
-    .box-add-btn .btn.btn-delete {
-        top: 50%;
-        left: 50%;
-        transform: translate(25%, -50%);
+        margin: 0 1rem 1rem 0;
+        box-shadow: 1px 1px 1px 1px rgba(0,0,0,.1);
+        .device-input {
+            margin-bottom: 0rem;
+        }
+        .btn {
+            position: absolute;
+            width: 8rem;
+            height: 8rem;
+            font-size: 4rem;
+        }
+        .btn.btn-add {
+            top: 50%;
+            left: 50%;
+            transform: translate(-125%, -50%);
+        }
+        .btn.btn-delete {
+            top: 50%;
+            left: 50%;
+            transform: translate(25%, -50%);
+        }
     }
 }
 
@@ -252,34 +270,29 @@ $nav-bar-height : 5.5rem;
         padding-left: 2rem;
     }
     .testEq-item {
-        margin-bottom: 1rem;
-    }
-    .testEq-item h4 {
-        color: #707377;
-    }
-    .testEq-item-conf {
-        margin-top: 2.5rem;
-    }
-    .testEq-item-conf-input .el-input-group__prepend {
-        padding: 0 0 0 5px;
-    }
-    .testEq-item {
-        margin-bottom: 1rem;
-    }
-    .testEq-item h4 {
-        color: #707377;
+        margin: 2rem 1rem 1rem;
+        padding: 1.5rem .5rem 2rem;
+        border-top: 20px solid rgba(3,3,3,.6);
+        border-radius: 20px 20px 0 0;
+        box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.2);
     }
     .testEq-item-conf {
         margin-top: 2.5rem;
     }
     .testEq-item-conf-input .el-input-group__prepend {
         padding: 0 0 0 5px;
+    }
+    .testEq-item h4 {
+        color: #707377;
     }
     .warn-text {
         color: #333;
-        font-size: 1.6rem;
-        font-weight: 600;
-        font-style: italic;
+        font-size: 2rem;
+        font-weight: 700;
+        padding: 2rem 1rem;
+        height: 6rem;
+        line-height: 6rem;
+        text-align: center;
     }
 }
 
@@ -288,69 +301,104 @@ $nav-bar-height : 5.5rem;
     .main-page-container {
         display: flex;
         flex-direction: row;
-        &>.el-row {
-            width: 100%;
+        
+        &>.el-col {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        .el-form-item {
+            margin-bottom: 2rem;
         }
     }
-    .main-page-container > div:first-child {
-        padding-right: 1rem;
-    }
-    .main-page-container > div:last-child {
-        padding-left: 1rem;
-    }
-    .wk-item-title {
+    .title {
+        margin: 1rem 0 1.5rem 0;
+        padding: 1rem 0 1rem 1rem;
         font-size: 1.5rem;
-        font-weight: lighter;
-        color: #303133;
+        font-weight: 500;
+        color: #666;
+        box-shadow: 1px 1px 1px 1px rgba(0,0,0,.1);
     }
-    .wk-item-search-sensor {
+    .search-sensor {
         padding-top: 2rem;
+        .container {
+            padding: 1.5rem 0.5rem 0.5rem 0.5rem;
+            .item {
+                display: inline-block;
+                width: 3rem;
+                height: 3rem;
+                line-height: 3rem;
+                border-radius: 1.5rem;
+                text-align: center;
+                margin-right: 0.5rem;
+                color: #fff;
+                background-color: steelblue;
+            }
+        }
     }
-    .wk-item-search-sensor-container {
-        padding: 1.5rem 0.5rem 0.5rem 0.5rem;
-    }
-    .searched-sensor-item {
-        display: inline-block;
-        width: 3rem;
-        height: 3rem;
-        line-height: 3rem;
-        border-radius: 1.5rem;
-        text-align: center;
-        margin-right: 0.5rem;
-        color: #fff;
-        background-color: steelblue;
-    }
-    .wk-item-pie {
-        padding-top: 1rem;
-        padding-bottom: 1rem;
-    }
-    .wk-item-pie.box1 {
-        padding-top: 1rem;
-    }
-    .wk-template-btns {
-        padding-top: 1rem;
+    .template {
+        padding-left: 1rem;
+        border-left: 1px dashed #dfdfdf;
+        .el-form {
+            max-width: 400px;
+            margin-right: auto;
+            margin-left: auto;
+        }
+        .el-button {
+            margin-top: 2rem;
+        }
     }
 }
 
 /* 实时监测 */
 .dashboard {
-    .main-page-container > .el-row{
+    .container {
+        height: 100%;
         box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
     }
-    .main-page-container > .el-row, .main-page-container > .el-row .el-col{
-        height: 100%;
-    }
     .origin-data {
+        height: 100%;
         position: relative;
-        border: 1px solid #999;
-    }
-    .tab-btns {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 10;
-        background-color: #fff;
+        border-right: 1px solid #dfdfdf;
+        .tab-btns {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 10;
+            background-color: #fff;
+            h4 {
+                float: left;
+                padding-left: 4rem;
+                height: 4rem;
+                line-height: 4rem;
+            }
+            .el-button-group {
+                float: left;
+                font-size: 0;
+            }
+        }
+        .dash-test-item {
+            position: relative;
+            padding: 8.5rem .5rem 0;
+            height: 100%;
+            overflow: auto;
+            .el-col{
+                height: 100%;
+            }
+            .head {
+                position: absolute;
+                top: 4rem;
+                right: 0;
+                z-index: 1;
+            }
+            h4 {
+                text-align: center;
+                padding-bottom: 1rem;
+                font-size: 1.4rem;
+                color: #707377;
+            }
+        }
     }
     .testData {
         height: 100%;
@@ -359,13 +407,18 @@ $nav-bar-height : 5.5rem;
             @include clearfix;
         }
         h4 {
-            margin: .5rem 0;
-            padding: .5rem;
+            padding: 1rem .5rem;
+            z-index: 1;
+            color: #666;
+            background-color: #fafafa;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
             .left {
                 float: left;
+                padding-left: 1rem;
             }
             .right {
                 float: right;
+                padding-right: 2rem;
             }
         }
         .sensors {
@@ -382,45 +435,37 @@ $nav-bar-height : 5.5rem;
                 margin-right: 5px;
                 margin-bottom: 5px; 
                 padding: 5px;
-                border: 1px solid rgba(33,33,33, .4);
-                border-radius: 4px;
-                box-shadow: 0 0 1px rgba(33,33,33, .4);
+                border-left: 5px solid #85ce61;
+                // border-top-left-radius: 5px;
+                border-bottom-left-radius: 5px;
             }
         }
     }
-    .dash-test-item {
-        position: relative;
-        padding: 11.5rem .5rem 0;
-        height: 100%;
-        overflow: auto;
-        .head {
-            position: absolute;
-            top: 5rem;
-            right: 0;
-            left: 0;
-            z-index: 1;
-        }
-        .el-row{
-            height: 100%;
-        }
-        .el-col{
-            height: 100%;
-        }
-        h4 {
-            text-align: center;
-            padding-bottom: 1rem;
-            font-size: 1.4rem;
-            color: #707377;
-        }
-        .test-item-chart {
-            // height: 47rem;
-        }
-        .test-item-data {
-            // height: 47rem;
-            overflow: auto;
-        }
-        .test-item-col {
-            text-align: center;
-        }
+}
+
+/* 响应式布局 */
+@media only screen and (min-width: 1300px) {
+    .workspace {
+        width: 1300px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .test-config {
+        width: 1300px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .landing-page {
+        width: 1300px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .add-equipment {
+        width: 1300px;
+        margin-left: auto;
+        margin-right: auto;
     }
 }

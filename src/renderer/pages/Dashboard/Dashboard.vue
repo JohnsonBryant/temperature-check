@@ -1,20 +1,11 @@
 <template>
 <div class="dashboard main-page">
-  <div class="main-page-title top-bar">
-    <span class="top-bar-item">实时监测</span>
+  <div class="main-title top-bar">
+    <span class="item">实时监测</span>
   </div>
   <div class="main-page-container" >
     <template v-if="showMessageState">
-      <!-- <div class="warn-text">
-        <h4>当前系统未处在测试状态，如需要进行测试，请切换到设备管理页，选择测试设备，启动测试！</h4>
-        <h5>以下为测试示例，实际测试效果可参考如下图表！</h5>
-      </div> -->
-      <test-item-th 
-        :equipment="demo.equipment"
-        :updateTime="demo.updateTime"
-        :temp="demo.temp"
-        :humi="demo.humi"
-      />
+      <container :DeviceTestData=demo.DeviceTestData :deviceTestDataTable=demo.deviceTestDataTable />
     </template>
 
     <template v-for="(item,index) in DeviceTestDatas" >
@@ -139,7 +130,8 @@ export default {
           Object.assign(deviceTestData, {
             'testData': this.testDataTH(),
             'tempTestDataTable': [],
-            'humiTestDataTable': []
+            'humiTestDataTable': [],
+            'dataTableHeader': []
           })
           // 构建数据表格中规则的行列数据
           for (let i = 0; i < packCount; i++) {
@@ -171,6 +163,13 @@ export default {
           })
           deviceTestData.tempTestDataTable.push(...addonsTemp)
           deviceTestData.humiTestDataTable.push(...addonsHumi)
+          // 计算数据表格表头
+          let dataTableHeader = deviceTestData.dataTableHeader
+          let ids = ele.data['IDS']
+          for (let i = 0; i < ids.length; i++) {
+            let item = {'key': `${ids[i]}`, 'prop': `${ids[i]}`}
+            dataTableHeader.push(item)
+          }
           // 绑定最终计算数据表格
           deviceTestData.testData[0].temp = ele.config.temp
           deviceTestData.testData[1].temp = ele.data['deviationTempSup']
@@ -187,7 +186,8 @@ export default {
         } else if (ele.device.detectProperty === '温度') {
           Object.assign(deviceTestData, {
             'testData': this.testDataTemp(),
-            'tempTestDataTable': []
+            'tempTestDataTable': [],
+            'dataTableHeader': []
           })
           // 构建数据表格中规则的行列数据
           for (let i = 0; i < packCount; i++) {
@@ -209,6 +209,13 @@ export default {
             addonsTemp[1][id] = this.min(ele.data[id]['temp'])
           })
           deviceTestData.tempTestDataTable.push(...addonsTemp)
+          // 计算数据表格表头
+          let dataTableHeader = deviceTestData.dataTableHeader
+          let ids = ele.data['IDS']
+          for (let i = 0; i < ids.length; i++) {
+            let item = {'key': `${ids[i]}`, 'prop': `${ids[i]}`}
+            dataTableHeader.push(item)
+          }
           // 绑定最终计算数据表格
           deviceTestData.testData[0].temp = ele.config.temp
           deviceTestData.testData[1].temp = ele.data['deviationTempSup']

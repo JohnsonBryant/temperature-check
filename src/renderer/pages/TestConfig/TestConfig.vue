@@ -1,59 +1,33 @@
 <template>
   <div class="test-config main-page">
     <!-- 测试管理页头，工作周期输入框、控制按钮 -->
-    <div class="main-page-title top-bar">
-      <span class="top-bar-item">测试管理页</span>
+    <div class="main-title top-bar">
+      <span class="item">测试管理页</span>
       <el-form :inline="true">
         <el-form-item label="工作周期s：">
-          <el-input
-            class="cycle-input" placeholder="请输入工作周期s" v-model="localeCycle"
-            :disabled="isOnTest">
-          </el-input>
+          <el-input class="cycle-input" placeholder="请输入工作周期s" v-model="localeCycle" :disabled="isOnTest"></el-input>
         </el-form-item>
-        <el-form-item>
-          <el-switch
-            v-model="localeIsSendding"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-            active-text="周期获取数据"
-            inactive-text="仅监测数据"
-            :disabled="isOnTest"
-          ></el-switch>
+        <el-form-item label="测试模式：">
+          <el-switch v-model="localeIsSendding" active-color="#13ce66" inactive-color="#ff4949" active-text="周期获取数据" inactive-text="仅监测数据" :disabled="isOnTest"></el-switch>
         </el-form-item>
       </el-form>
-      <div class="top-bar-item">
-        <el-button
-          @click="setAllEquipment"
-          type="success" round
-          :disabled="isOnTest"
-        >一键配置</el-button>
-        <el-button
-          @click="startTest" 
-          type="success" round
-          :disabled="isOnTest"
-        >启动测试</el-button>
+      <div class="item">
+        <el-button @click="setAllEquipment" type="success" round :disabled="isOnTest">一键配置</el-button>
+        <el-button @click="startTest" type="success" round :disabled="isOnTest">启动测试</el-button>
       </div>
     </div>
     <!-- 测试仪器配置区块，展示所有测试仪器配置信息 -->
     <div class="main-page-container">
       <div v-if="getCurrentState" class="warn-text">
         <!-- 未处在测试状态，且不是从设备管理页路由并传递参数到本页时显示 -->
-        <h4>当前系统未处在测试状态，如需要进行测试，请切换到设备管理页，选择测试设备，启动测试！</h4>
+        <h4>当前系统未处在测试状态，请使用侧边导航切换到设备管理页，选择测试设备，进行测试！</h4>
       </div>
       <template v-for="(item,index) in testDeviceInfo">
         <template v-if="item.device.detectProperty === '温湿度'">
-          <test-config-item-th
-            :key="index"
-            :device="item.device"
-            :config="item.config"
-          />
+          <test-config-item-th :key="index" :device="item.device" :config="item.config"/>
         </template>
         <template v-else-if="item.device.detectProperty === '温度'">
-          <test-config-item-temp
-            :key="index"
-            :device="item.device"
-            :config="item.config"
-          />
+          <test-config-item-temp :key="index" :device="item.device" :config="item.config"/>
         </template>
       </template>
     </div>

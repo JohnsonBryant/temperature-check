@@ -8,13 +8,13 @@
     <div class="right">
       <el-button
         class="btn"
-        type="primary" round
+        type="success" round
         :disabled="!isOnTest"
         @click="StopTest"
         >停止测试</el-button>
       <el-button
         class="btn" 
-        type="primary" round
+        type="success" round
         @click="Export"
         >下载数据<i class="el-icon-download el-icon--right"></i>
       </el-button>

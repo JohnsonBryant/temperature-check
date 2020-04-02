@@ -1,88 +1,60 @@
 <template>
-  <div class="add-equipment main-page">
-    <div class="main-page-title top-bar">
-      <span class="top-bar-item">新增仪器</span>
-      <div class="top-bar-item top-bar-controls">
-        <el-button class="top-bar-control-item" type="primary" icon="el-icon-check" round
-          @click="submitAddEquipment"
-          :disabled="isOnTest"
-        >提交</el-button>
-        <el-button class="top-bar-control-item" type="primary" icon="el-icon-back" round
-          @click="goBackToLandingPage"
-        >返回</el-button>
+  <el-form class="add-equipment main-page" :model="info" :rules="rulesCompany" ref="info">
+    <div class="main-title top-bar">
+      <span class="item">新增仪器</span>
+      
+      <el-form-item class="item company" prop="company" :show-message="false">
+        <el-input placeholder="请输入委托单位名称" v-model="info.company" :disabled="isOnTest">
+          <template slot="prepend">委托单位：</template>
+        </el-input>
+      </el-form-item>
+      
+      <div class="item controls">
+        <el-button class="item" type="primary" icon="el-icon-check" round @click="submitAddEquipment" :disabled="isOnTest">提交</el-button>
+        <el-button class="item" type="primary" icon="el-icon-back" round @click="goBackToLandingPage">返回</el-button>
       </div>
     </div>
-
-    <div class="main-page-container">
-      <el-form :model="info" :rules="rulesCompany" ref="info">
-        <!-- 新增测试仪器头区块，同一委托单位下可选择批量添加或单个添加 -->
-        <div class="add-equip-header">
-          <el-form-item prop="company">
-            <el-input class="company-input" placeholder="请输入委托单位名称" v-model="info.company" :disabled="isOnTest">
-              <template slot="prepend">委托单位：</template>
-            </el-input>
-          </el-form-item>
+    <el-row class="main-page-container">
+      <!-- 单个测试仪器信息输入模块 -->
+      <el-col :span="8" v-for="(equipment, index) in info.equipmentInfo" :key="index">
+        <el-form 
+          :model="equipment" :rules="rulesEquipmentInfo" ref="'equipment'+index"
+          label-position="right" label-width="100px">
+          <div class="box-item">
+            <el-form-item prop="em" label="仪器厂家：">
+              <el-input class="device-input" placeholder="请输入仪器厂家" v-model="equipment.em" :disabled="isOnTest">
+              </el-input>
+            </el-form-item>
+            <el-form-item prop="deviceName" label="仪器名称：">
+              <el-input class="device-input" placeholder="请输入仪器名称" v-model="equipment.deviceName" :disabled="isOnTest">
+              </el-input>
+            </el-form-item>
+            <el-form-item prop="deviceType" label="仪器型号：">
+              <el-input class="device-input" placeholder="请输入仪器型号" v-model="equipment.deviceType" :disabled="isOnTest">
+              </el-input>
+            </el-form-item>
+            <el-form-item prop="deviceID" label="仪器编号：">
+              <el-input class="device-input" placeholder="请输入仪器编号" v-model="equipment.deviceID" :disabled="isOnTest">
+              </el-input>
+            </el-form-item>
+            <el-form-item label="测量类型：">
+              <el-select v-model="equipment.detectProperty" placeholder="请选择测量类型" :disabled="isOnTest">
+                <el-option v-for="item in detectPropertys" :key="item.value" :label="item.label" :value="item.value"></el-option>
+              </el-select>
+            </el-form-item>
+          </div>
+        </el-form>
+      </el-col>
+      <!-- 新增单个测试仪器信息控制按钮模块 -->
+      <el-col :span="8">
+        <div class="box-item btns">
+          <el-button class="btn btn-add" type="success" icon="el-icon-plus" circle @click="addEqInputItem" :disabled="isOnTest"
+          ></el-button>
+          <el-button class="btn btn-delete" type="danger" icon="el-icon-minus" circle @click="deleteEqInputItem" :disabled="isOnTest"></el-button>
         </div>
-        <el-divider content-position="center">仪器信息</el-divider>
-        <!-- 新增仪器主体区块 -->
-        <div class="add-equip-body">
-          <el-row :gutter="15">
-            <!-- 单个测试仪器信息输入模块 -->
-            <el-col 
-              :span="8"
-              v-for="(equipment, index) in info.equipmentInfo"
-              :key="index">
-              <el-form 
-                :model="equipment" :rules="rulesEquipmentInfo" ref="'equipment'+index"
-                label-position="right" label-width="100px">
-                <el-card class="box-item">
-                  <el-form-item prop="em" label="仪器厂家：">
-                    <el-input class="device-input" placeholder="请输入仪器厂家" v-model="equipment.em" :disabled="isOnTest">
-                    </el-input>
-                  </el-form-item>
-                  <el-form-item prop="deviceName" label="仪器名称：">
-                    <el-input class="device-input" placeholder="请输入仪器名称" v-model="equipment.deviceName" :disabled="isOnTest">
-                    </el-input>
-                  </el-form-item>
-                  <el-form-item prop="deviceType" label="仪器型号：">
-                    <el-input class="device-input" placeholder="请输入仪器型号" v-model="equipment.deviceType" :disabled="isOnTest">
-                    </el-input>
-                  </el-form-item>
-                  <el-form-item prop="deviceID" label="仪器编号：">
-                    <el-input class="device-input" placeholder="请输入仪器编号" v-model="equipment.deviceID" :disabled="isOnTest">
-                    </el-input>
-                  </el-form-item>
-                  <el-form-item label="测量类型：">
-                    <el-select v-model="equipment.detectProperty" placeholder="请选择测量类型">
-                      <el-option
-                        v-for="item in detectPropertys"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
-                      </el-option>
-                    </el-select>  
-                  </el-form-item>
-                </el-card>
-              </el-form>
-            </el-col>
-            <!-- 新增单个测试仪器信息控制按钮模块 -->
-            <el-col :span="8">
-              <el-card class="box-item box-add-btn">
-                <el-button class="btn btn-add" type="success" icon="el-icon-plus" circle
-                  @click="addEqInputItem"
-                  :disabled="isOnTest"
-                ></el-button>
-                <el-button class="btn btn-delete" type="danger" icon="el-icon-minus" circle
-                  @click="deleteEqInputItem"
-                  :disabled="isOnTest"                      
-                ></el-button>
-              </el-card>
-            </el-col>
-          </el-row>
-        </div>
-      </el-form>
-    </div>
-  </div>
+      </el-col>
+    </el-row>
+  </el-form>
 </template>
 
 <script>
@@ -161,6 +133,9 @@ export default {
       this.info.equipmentInfo.push(device)
     },
     deleteEqInputItem () {
+      if (this.info.equipmentInfo.length <= 1) {
+        return
+      }
       this.info.equipmentInfo.pop({em: '', deviceName: '', deviceType: '', deviceID: ''})
     },
     goBackToLandingPage () {

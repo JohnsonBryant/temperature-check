@@ -1,10 +1,13 @@
 <template>
-  <el-row :gutter="6">
+  <el-row class="container">
     <el-col :span="16" class="origin-data">
-      <el-button-group class="tab-btns">
-        <el-button @click="dataShowIndex = 1" :type="dataShowIndex === 1 ? 'primary': ''" icon="el-icon-s-data">数据走势</el-button>
-        <el-button @click="dataShowIndex = 2" :type="dataShowIndex === 2 ? 'primary': ''" icon="el-icon-s-grid">数据表格</el-button>
-      </el-button-group>
+      <div class="tab-btns">
+        <el-button-group>
+          <el-button @click="dataShowIndex = 1" :type="dataShowIndex === 1 ? 'info': ''" icon="el-icon-s-data">数据走势</el-button>
+          <el-button @click="dataShowIndex = 2" :type="dataShowIndex === 2 ? 'info': ''" icon="el-icon-s-grid">数据表格</el-button>
+        </el-button-group>
+        <h4 v-html="equipmentTitle"></h4>
+      </div>
       <template v-if="DeviceTestData.equipment.detectProperty === '温湿度'">
         <test-item-th 
           v-show="dataShowIndex === 1"
@@ -25,6 +28,7 @@
           :equipment="deviceTestDataTable.equipment"
           :tempTestDataTable="deviceTestDataTable.tempTestDataTable"
           :humiTestDataTable="deviceTestDataTable.humiTestDataTable"
+          :dataTableHeader="deviceTestDataTable.dataTableHeader"
           :ids="deviceTestDataTable.ids"
           />
       </template>
@@ -32,21 +36,20 @@
         <test-item-table-temp v-show="dataShowIndex === 2"
           :equipment="deviceTestDataTable.equipment"
           :tempTestDataTable="deviceTestDataTable.tempTestDataTable"
+          :dataTableHeader="deviceTestDataTable.dataTableHeader"
           :ids="deviceTestDataTable.ids"
           />
       </template>
     </el-col>
-    <el-col :span="8">
-      <test-data
-        :detectProperty="DeviceTestData.equipment.detectProperty"
-        :ids="deviceTestDataTable.ids"
-        :testData="deviceTestDataTable.testData"
-        :updateTime="DeviceTestData.updateTime"
-        :packNumber="DeviceTestData.packNumber"
-        :data="DeviceTestData.data"
-        />
-    </el-col>
-  </el-row>  
+    <test-data
+      :detectProperty="DeviceTestData.equipment.detectProperty"
+      :ids="deviceTestDataTable.ids"
+      :testData="deviceTestDataTable.testData"
+      :updateTime="DeviceTestData.updateTime"
+      :packNumber="DeviceTestData.packNumber"
+      :data="DeviceTestData.data"
+      />
+  </el-row>
 </template>
 
 <script>
@@ -72,6 +75,19 @@ export default {
   },
   props: ['deviceTestDataTable', 'DeviceTestData'],
   computed: {
+    equipmentTitle () {
+      return `
+        <span>${this.DeviceTestData.equipment.company}</span>
+        <span style="margin:0 5px;">--</span>
+        <span>${this.DeviceTestData.equipment.em}</span>
+        <span style="margin:0 5px;">--</span>
+        <span>${this.DeviceTestData.equipment.deviceName}</span>
+        <span style="margin:0 5px;">--</span>
+        <span>${this.DeviceTestData.equipment.deviceType}</span>
+        <span style="margin:0 5px;">--</span>
+        <span>${this.DeviceTestData.equipment.deviceID}</span>
+      `
+    }
   },
   methods: {
   }

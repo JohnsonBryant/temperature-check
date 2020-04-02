@@ -1,179 +1,69 @@
 <template>
   <div class="landing-page main-page">
-    <div class="main-page-title top-bar">
-      <div class="top-bar-item">仪器管理页</div>
-      <div class="top-bar-item top-bar-controls">
+    <div class="main-title top-bar">
+      <div class="item">仪器管理页</div>
+      <div class="item controls">
         <!-- 新增测试仪器按钮 -->
-        <div class="top-bar-control-item">
+        <div class="item">
           <el-button @click="routerToAdd" size="medium">新增仪器</el-button>
         </div>
-        <div class="top-bar-control-item">
+        <div class="item">
           <el-badge :value="selectedEquipments.length">
             <el-button @click="drawerSelectEq = true" size="medium">已选择仪器</el-button>
           </el-badge>
         </div>
-        <div class="top-bar-control-item">
+        <div class="item">
           <!-- 搜索委托单位（测试仪器）搜索框 -->
-          <el-input 
-            @input="getEquipmentByCompany"
-            v-model="searchText"
-            placeholder="请输入委托单位"
-            class="searchEqBox"
-          ></el-input>
+          <el-input @input="getEquipmentByCompany" v-model="searchText" placeholder="请输入委托单位" class="searchEqBox"></el-input>
         </div>
       </div>
     </div>
     <div class="main-page-container" >
       <!-- 已添加测试仪器信息展示表格，表格分页，表格可根据委托单位进行自定义检索表内已有信息 -->
       <div>
-        <el-table
-          :data="equipments"
-          border resizable stripe
-          >
-          <el-table-column
-            prop="company"
-            label="委托单位"
-            min-width="160"
-          ></el-table-column>
-          <el-table-column
-            prop="deviceName"
-            label="仪器名称"
-            min-width="150"
-          ></el-table-column>
-          <el-table-column
-            prop="deviceType"
-            label="仪器型号"
-            min-width="90"
-          ></el-table-column>
-          <el-table-column
-            prop="deviceID"
-            label="仪器编号"
-            min-width="90"
-            sortable
-          ></el-table-column>
-          <el-table-column
-            prop="em"
-            label="仪器厂家"
-            min-width="150"
-          ></el-table-column>
-          <el-table-column
-            prop="detectProperty"
-            label="测量类型"
-            min-width="100"
-          ></el-table-column>
-          <el-table-column
-            prop="insertDate"
-            label="日期"
-            min-width="140"
-            column-key="date"
-            sortable
-          ></el-table-column>
+        <el-table :data="equipments" border resizable stripe>
+          <el-table-column prop="company" label="委托单位" min-width="160"></el-table-column>
+          <el-table-column prop="deviceName" label="仪器名称" min-width="150"></el-table-column>
+          <el-table-column prop="deviceType" label="仪器型号" min-width="90"></el-table-column>
+          <el-table-column prop="deviceID" label="仪器编号" min-width="90" sortable></el-table-column>
+          <el-table-column prop="em" label="仪器厂家" min-width="150"></el-table-column>
+          <el-table-column prop="detectProperty" label="测量类型" min-width="100"></el-table-column>
+          <el-table-column prop="insertDate" label="日期" min-width="140" column-key="date" sortable></el-table-column>
           <el-table-column label="操作" min-width="200">
             <template slot-scope="scope">
-              <el-button
-                @click="handleAddToTest(scope.$index, scope.row)"
-                :disabled="isOnTest"
-                size="mini"
-              >选择</el-button>
-              <el-button
-                @click="handleDuplicate(scope.$index, scope.row)"
-                :disabled="isOnTest"
-                size="mini"
-              >复制</el-button>
-              <el-button
-                @click="handleDelete(scope.$index, scope.row)"
-                :disabled="isOnTest"
-                size="mini"
-                type="danger"
-              >删除</el-button>
+              <el-button @click="handleAddToTest(scope.$index, scope.row)" :disabled="isOnTest" size="mini">选择</el-button>
+              <el-button @click="handleDuplicate(scope.$index, scope.row)" :disabled="isOnTest" size="mini">复制</el-button>
+              <el-button @click="handleDelete(scope.$index, scope.row)" :disabled="isOnTest" size="mini" type="danger">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
       </div>
       <div>
-        <el-pagination
-          class="pagination"
-          background
-          layout="prev, pager, next"
-          :current-page.sync="page.currentPageNum"
-          :page-size="page.size"
-          :total="page.total"
-          @current-change="equipmentsCurrentChange">
-        </el-pagination>
+        <el-pagination class="pagination" background layout="prev, pager, next" :current-page.sync="page.currentPageNum" :page-size="page.size" :total="page.total"
+        @current-change="equipmentsCurrentChange"></el-pagination>
       </div>
     </div>
     <!-- 已选择测试仪器展示区域 -->
-    <el-drawer
-      :visible.sync="drawerSelectEq"
-      :direction="directionSelectEq"
-      :modal="false"
-      :show-close="false"
-      :withHeader="false"
-      size="50"
-      >
+    <el-drawer :visible.sync="drawerSelectEq" :direction="directionSelectEq" :modal="false" :show-close="false" :withHeader="false" size="50">
       <div class="selectEp-container">
-        <!-- <el-divider content-position="center">已选择仪器仪器</el-divider> -->
-        <el-table
-          border resizable
-          :data="selectedEquipments"
-          style="width: 100%; margin-top: 0px;">
-          <el-table-column
-            prop="company"
-            label="委托单位"
-            min-width="160"
-          >
-          </el-table-column>
-          <el-table-column
-            prop="deviceName"
-            label="仪器名称"
-            min-width="150">
-          </el-table-column>
-          <el-table-column
-            prop="deviceType"
-            label="仪器型号"
-            min-width="90">
-          </el-table-column>
-          <el-table-column
-            prop="deviceID"
-            label="仪器编号"
-            min-width="90">
-          </el-table-column>
-          <el-table-column
-            prop="em"
-            label="仪器厂家"
-            min-width="160">
-          </el-table-column>
-          <el-table-column
-            prop="detectProperty"
-            label="测量类型"
-            min-width="100"
-          ></el-table-column>          
-          <el-table-column
-            prop="insertDate"
-            label="日期"
-            min-width="130"
-          >
-          </el-table-column>
-          <el-table-column label="操作"
-            min-width="200"
-          >
+        <el-table border resizable :data="selectedEquipments" style="width: 100%; margin-top: 0px;">
+          <el-table-column prop="company" label="委托单位" min-width="160"></el-table-column>
+          <el-table-column prop="deviceName" label="仪器名称" min-width="150"></el-table-column>
+          <el-table-column prop="deviceType" label="仪器型号" min-width="90"></el-table-column>
+          <el-table-column prop="deviceID" label="仪器编号" min-width="90"></el-table-column>
+          <el-table-column prop="em" label="仪器厂家" min-width="160"></el-table-column>
+          <el-table-column prop="detectProperty" label="测量类型" min-width="100"></el-table-column>          
+          <el-table-column prop="insertDate" label="日期" min-width="130"></el-table-column>
+          <el-table-column label="操作" min-width="200">
             <template slot-scope="scope">
-              <el-button
-                size="mini"
-                type="danger"
-                @click="deleteSelectedEquipment(scope.$index, scope.row)"
-                :disabled="isOnTest">删除</el-button>
+              <el-button size="mini" type="danger" @click="deleteSelectedEquipment(scope.$index, scope.row)" :disabled="isOnTest">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
       </div>
       <div class="selectEp-footer">
-        <el-button class="selectEp-footer-btn left" type="info" round
-          @click="clearSelected"
-          :disabled="isOnTest">清空选择</el-button>
-        <el-button class="selectEp-footer-btn right" type="success" round
-          @click="startTest"
-          :disabled="isOnTest">进入测试</el-button>
+        <el-button class="selectEp-footer-btn left" type="info" round @click="clearSelected" :disabled="isOnTest">清空选择</el-button>
+        <el-button class="selectEp-footer-btn right" type="success" round @click="startTest" :disabled="isOnTest">进入测试</el-button>
       </div>
     </el-drawer>
   </div>
@@ -193,7 +83,7 @@ export default {
       page: {
         total: 0,
         currentPageNum: 1,
-        size: 7
+        size: 9
       },
       equipments: [] // 后端获取的测试仪器数据， 用于用户操作， 选择、复制、删除
     }

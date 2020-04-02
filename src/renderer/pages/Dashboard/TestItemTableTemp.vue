@@ -1,19 +1,16 @@
 <template>
   <div class="dash-test-item">
-    <div class="head">
-      <h4 v-html="equipmentTitle"></h4>
-    </div>
     <el-table
       :data="tempTestDataTable"
       :stripe="true"
       border resizable
-      style="width: 100%"
       >
-      <el-table-column
-        v-for="(item, key) in tempDataTableHeader(ids)" :key="key"
-        :prop="item['prop']"
-        :label="item['key']"
-        >
+      <el-table-column prop="count" label="次数" align="center" fixed></el-table-column>
+      <el-table-column label="实测湿度值" align="center">
+        <el-table-column v-for="(item, key) in dataTableHeader" :key="key" :prop="item['prop']" :label="item['key']" align="center"></el-table-column>
+      </el-table-column>
+      <el-table-column label="单次" align="center">
+        <el-table-column prop="average" label="均匀度" align="center"></el-table-column>
       </el-table-column>
     </el-table>
   </div>
@@ -24,34 +21,10 @@ export default {
   name: 'TestItemTable',
   components: {
   },
-  props: ['equipment', 'tempTestDataTable', 'ids'],
+  props: ['equipment', 'tempTestDataTable', 'ids', 'dataTableHeader'],
   computed: {
-    equipmentTitle () {
-      return `
-        <span>${this.equipment.company}</span>
-        <span style="margin:0 10px;">__</span>
-        <span>${this.equipment.em}</span>
-        <span style="margin:0 10px;">__</span>
-        <span>${this.equipment.deviceName}</span>
-        <span style="margin:0 10px;">__</span>
-        <span>${this.equipment.deviceType}</span>
-        <span style="margin:0 10px;">__</span>
-        <span>${this.equipment.deviceID}</span>
-      `
-    }
   },
   methods: {
-    tempDataTableHeader (ids) {
-      let dataTableHeader = []
-      dataTableHeader.push({'key': '次数', 'prop': 'count'})
-      ids.sort()
-      for (let i = 0; i < ids.length; i++) {
-        let item = {'key': `${ids[i]}`, 'prop': `${ids[i]}`}
-        dataTableHeader.push(item)
-      }
-      dataTableHeader.push({'key': '单次均匀度', 'prop': 'average'})
-      return dataTableHeader
-    }
   }
 }
 </script>
