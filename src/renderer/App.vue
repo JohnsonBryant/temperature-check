@@ -197,39 +197,40 @@ export default {
       equipments.forEach((equipment, index, equipments) => {
         let IDS = [...equipment.data.IDS]
         if (IDS.every(id => data.hasOwnProperty(id))) { // 仪器挂载的传感器全部收到数据
-          if (equipment.data['time'].length < equipment.config.count) {
+          let sensorsdata = equipment.data
+          if (sensorsdata['time'].length < equipment.config.count) {
             // 更新仪器下挂载的传感器的数据
             for (let i = 0; i < IDS.length; i++) {
               let id = IDS[i]
-              equipment.data[id]['temp'].push(data[id].temp)
-              equipment.data[id]['humi'].push(data[id].humi)
-              equipment.data[id]['batt'].push(data[id].batt)
+              sensorsdata[id]['temp'].push(data[id].temp)
+              sensorsdata[id]['humi'].push(data[id].humi)
+              sensorsdata[id]['batt'].push(data[id].batt)
             }
             // 更新计算仪器的 温度 / 湿度 的均匀度 evennessTemp、波动度 fluctuationTemp、上偏差 deviationTempSup、下偏差 deviationTempSub
             let allDataTemp = []
             let allDataHumi = []
             let tempConfig = equipment.config.temp
             let humiConfig = equipment.config.humi
-            let roundtemp = IDS.map(id => equipment.data[id]['temp'][equipment.data[id]['temp'].length - 1])
-            let roundhumi = IDS.map(id => equipment.data[id]['humi'][equipment.data[id]['humi'].length - 1])
+            let roundtemp = IDS.map(id => sensorsdata[id]['temp'][sensorsdata[id]['temp'].length - 1])
+            let roundhumi = IDS.map(id => sensorsdata[id]['humi'][sensorsdata[id]['humi'].length - 1])
             IDS.forEach((id) => {
-              allDataTemp.push(...equipment.data[id]['temp'])
-              allDataHumi.push(...equipment.data[id]['humi'])
+              allDataTemp.push(...sensorsdata[id]['temp'])
+              allDataHumi.push(...sensorsdata[id]['humi'])
             })
-            equipment.data['averageTemp'].push(this.$myutil.Max(roundtemp) - this.$myutil.Min(roundtemp))
-            equipment.data['averageHumi'].push(this.$myutil.Max(roundhumi) - this.$myutil.Min(roundhumi))
-            equipment.data['evennessTemp'] = parseFloat((this.$myutil.Average(equipment.data['averageTemp'])).toFixed(2))
-            equipment.data['evennessHumi'] = parseFloat((this.$myutil.Average(equipment.data['averageHumi'])).toFixed(2))
-            equipment.data['fluctuationTemp'] = parseFloat((this.$myutil.Max(equipment.data['averageTemp']) / 2.0).toFixed(2))
-            equipment.data['fluctuationHumi'] = parseFloat((this.$myutil.Max(equipment.data['averageHumi']) / 2.0).toFixed(2))
-            equipment.data['deviationTempSup'] = parseFloat((this.$myutil.Max(allDataTemp) - tempConfig).toFixed(2))
-            equipment.data['deviationTempSub'] = parseFloat((this.$myutil.Min(allDataTemp) - tempConfig).toFixed(2))
-            equipment.data['deviationHumiSup'] = parseFloat((this.$myutil.Max(allDataHumi) - humiConfig).toFixed(2))
-            equipment.data['deviationHumiSub'] = parseFloat((this.$myutil.Min(allDataHumi) - humiConfig).toFixed(2))
-            equipment.data['time'].push(time)
+            sensorsdata['averageTemp'].push(this.max(roundtemp) - this.min(roundtemp))
+            sensorsdata['averageHumi'].push(this.max(roundhumi) - this.min(roundhumi))
+            sensorsdata['evennessTemp'] = parseFloat((this.$myutil.Average(sensorsdata['averageTemp'])).toFixed(2))
+            sensorsdata['evennessHumi'] = parseFloat((this.$myutil.Average(sensorsdata['averageHumi'])).toFixed(2))
+            sensorsdata['fluctuationTemp'] = parseFloat((this.max(IDS.map(id => { return this.max(sensorsdata[id]['temp']) - this.min(sensorsdata[id]['temp']) })) / 2.0).toFixed(2))
+            sensorsdata['fluctuationHumi'] = parseFloat((this.max(IDS.map(id => { return this.max(sensorsdata[id]['humi']) - this.min(sensorsdata[id]['humi']) })) / 2.0).toFixed(2))
+            sensorsdata['deviationTempSup'] = parseFloat((this.max(allDataTemp) - tempConfig).toFixed(2))
+            sensorsdata['deviationTempSub'] = parseFloat((this.min(allDataTemp) - tempConfig).toFixed(2))
+            sensorsdata['deviationHumiSup'] = parseFloat((this.max(allDataHumi) - humiConfig).toFixed(2))
+            sensorsdata['deviationHumiSub'] = parseFloat((this.min(allDataHumi) - humiConfig).toFixed(2))
+            sensorsdata['time'].push(time)
             // 构建导出数据格式
             // 导出数据的二维数组行定义
-            let curDataCount = equipment.data['time'].length
+            let curDataCount = sensorsdata['time'].length
             let exportRow = {'temp': [], 'humi': []}
             // 添加当前采集包数到当前行
             exportRow.temp.push(curDataCount)
@@ -241,22 +242,22 @@ export default {
               exportRow.humi.push(data[id].humi)
             }
             // 添加当前单次均匀度到当前行
-            exportRow.temp.push(equipment.data['averageTemp'][curDataCount - 1])
-            exportRow.humi.push(equipment.data['averageHumi'][curDataCount - 1])
+            exportRow.temp.push(sensorsdata['averageTemp'][curDataCount - 1])
+            exportRow.humi.push(sensorsdata['averageHumi'][curDataCount - 1])
             // 添加当前每列数据的最大值最小值
             let rowMax = {'temp': ['最大值'], 'humi': ['最大值']}
             let rowMin = {'temp': ['最小值'], 'humi': ['最小值']}
             for (let i = 0; i < IDS.length; i++) {
               let id = IDS[i]
-              rowMax.temp.push(this.max(equipment.data[id]['temp']))
-              rowMin.temp.push(this.min(equipment.data[id]['temp']))
-              rowMax.humi.push(this.max(equipment.data[id]['humi']))
-              rowMin.humi.push(this.min(equipment.data[id]['humi']))
+              rowMax.temp.push(this.max(sensorsdata[id]['temp']))
+              rowMin.temp.push(this.min(sensorsdata[id]['temp']))
+              rowMax.humi.push(this.max(sensorsdata[id]['humi']))
+              rowMin.humi.push(this.min(sensorsdata[id]['humi']))
             }
-            rowMax.temp.push(this.max(equipment.data['averageTemp']))
-            rowMin.temp.push(this.min(equipment.data['averageTemp']))
-            rowMax.humi.push(this.max(equipment.data['averageHumi']))
-            rowMin.humi.push(this.min(equipment.data['averageHumi']))
+            rowMax.temp.push(this.max(sensorsdata['averageTemp']))
+            rowMin.temp.push(this.min(sensorsdata['averageTemp']))
+            rowMax.humi.push(this.max(sensorsdata['averageHumi']))
+            rowMin.humi.push(this.min(sensorsdata['averageHumi']))
             equipment.exportData.temp.splice(equipment.exportData.temp.length - 2, 2)
             equipment.exportData.humi.splice(equipment.exportData.humi.length - 2, 2)
             equipment.exportData.temp.push(exportRow.temp)

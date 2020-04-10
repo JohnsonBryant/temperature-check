@@ -69,7 +69,7 @@
             <el-button @click="SerachSensorClick" type="success" 
             >搜索传感器<i class="el-icon-check el-icon--right"></i></el-button>
             <div class="container">
-              <span class="searched-sensor-item" v-for="(sensorID) in searchedSensorIDs" :key="sensorID">{{ sensorID }}</span>
+              <span class="item" v-for="(sensorID) in searchedSensorIDs" :key="sensorID">{{ sensorID }}</span>
             </div>
           </div>
         </div>

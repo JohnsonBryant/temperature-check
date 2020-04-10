@@ -111,6 +111,20 @@ function createLoadingScreen () {
   })
 }
 
+// 检测当前是否已启动应用实例， 如已启动，则退出程序启动
+const gotTheLock = app.requestSingleInstanceLock()
+if (!gotTheLock) {
+  app.quit()
+} else {
+  app.on('second-instance', (event, commandLine, workingDirectory) => {
+    // 当运行第二个实例时,将会聚焦到mainWindow这个窗口
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore()
+      mainWindow.focus()
+      mainWindow.show()
+    }
+  })
+}
 app.on('ready', () => {
   createLoadingScreen()
 
