@@ -209,6 +209,15 @@ body {
   border-top: 20px solid rgba(3, 3, 3, 0.6);
   border-radius: 20px 20px 0 0;
   box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.2); }
+  .test-config .testEq-item .sensor-ids {
+    margin-top: 1.5rem; }
+    .test-config .testEq-item .sensor-ids .id-input {
+      width: 6rem;
+      margin-left: .75rem; }
+    .test-config .testEq-item .sensor-ids .add-id {
+      margin-left: .25rem;
+      font-size: 16px;
+      font-weight: bolder; }
 .test-config .testEq-item-conf {
   margin-top: 2.5rem; }
 .test-config .testEq-item-conf-input .el-input-group__prepend {
@@ -258,11 +267,20 @@ body {
   padding-left: 1rem;
   border-left: 1px dashed #dfdfdf; }
   .workspace .template .el-form {
-    max-width: 400px;
+    max-width: 500px;
     margin-right: auto;
     margin-left: auto; }
   .workspace .template .el-button {
     margin-top: 2rem; }
+  .workspace .template .sensor-ids {
+    margin-top: 1.5rem; }
+    .workspace .template .sensor-ids .id-input {
+      width: 6rem;
+      margin-left: .75rem; }
+    .workspace .template .sensor-ids .add-id {
+      margin-left: .25rem;
+      font-size: 16px;
+      font-weight: bolder; }
 
 /* 实时监测 */
 .dashboard .container {

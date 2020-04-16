@@ -11,7 +11,7 @@ const testTemplate = {
   cycle: 2,
   temp: 20,
   humi: 50,
-  IDS: '1,2,3',
+  IDS: [1, 2, 3],
   isSendding: true
 }
 
@@ -85,6 +85,24 @@ export const initConf = new Promise((resolve, reject) => {
       })
     })
   } else {
-    return Promise.resolve(1)
+    return new Promise((resolve, reject) => {
+      storage.get('testTemplate', (err, data) => {
+        if (err) {
+          console.log(err)
+        }
+        resolve(data)
+      })
+    })
+  }
+}).then((data) => {
+  if (!(data.IDS instanceof Array)) {
+    return new Promise((resolve, reject) => {
+      data.IDS = [1, 2, 3]
+      storage.set('testTemplate', data, function (error) {
+        if (error) throw error
+        console.log('testTemplate init done.')
+        resolve(1)
+      })
+    })
   }
 })

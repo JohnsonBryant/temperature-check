@@ -22,6 +22,8 @@
         <!-- 未处在测试状态，且不是从设备管理页路由并传递参数到本页时显示 -->
         <h4>当前系统未处在测试状态，请使用侧边导航切换到设备管理页，选择测试设备，进行测试！</h4>
       </div>
+      <!-- <test-config-item-th :device="demo.device" :config="demo.config"/> -->
+      
       <template v-for="(item,index) in testDeviceInfo">
         <template v-if="item.device.detectProperty === '温湿度'">
           <test-config-item-th :key="index" :device="item.device" :config="item.config"/>
@@ -59,7 +61,23 @@ export default {
         isSendding: true,
         count: 15
       },
-      testDeviceInfo: []
+      testDeviceInfo: [],
+      demo: {
+        device: {
+          company: '',
+          em: '',
+          deviceName: '',
+          deviceType: '',
+          deviceID: '',
+          detectProperty: ''
+        },
+        config: {
+          count: '',
+          temp: '',
+          humi: '',
+          IDS: [1]
+        }
+      }
     }
   },
   beforeMount () {
@@ -117,7 +135,7 @@ export default {
               config: {
                 temp: '',
                 humi: '',
-                IDS: '',
+                IDS: [1],
                 count: ''
               }
             }
@@ -125,7 +143,7 @@ export default {
             config = {
               config: {
                 temp: '',
-                IDS: '',
+                IDS: [1],
                 count: ''
               }
             }
@@ -144,11 +162,11 @@ export default {
         if (testDevice.device.detectProperty === '温湿度') {
           testDevice.config.temp = testTemplate.temp
           testDevice.config.humi = testTemplate.humi
-          testDevice.config.IDS = testTemplate.IDS
+          testDevice.config.IDS = testTemplate.IDS.slice()
           testDevice.config.count = testTemplate.count
         } else if (testDevice.device.detectProperty === '温度') {
           testDevice.config.temp = testTemplate.temp
-          testDevice.config.IDS = testTemplate.IDS
+          testDevice.config.IDS = testTemplate.IDS.slice()
           testDevice.config.count = testTemplate.count
         }
       })
@@ -185,11 +203,7 @@ export default {
       }
       // 测试仪器下挂载的其他传感器ID的转换及检查
       selectedEquipments.forEach((ele) => {
-        let s, ids
-        s = ele.config.IDS.trim() === '' ? '' : ele.config.IDS.replace(/,|，/g, ',')
-        ids = s === '' ? [] : s.split(',').map(id => parseInt(id))
-        ele.config.IDS = ids
-        IDS.push(...ids)
+        IDS.push(...ele.config.IDS)
       })
       if (IDS.some((item) => !this.$myutil.isInteger(item) || (item > 255 || item < 0))) {
         this.addMessage('仪器挂载的传感器ID输入有错误，请检查后重试 ！', 'warning')

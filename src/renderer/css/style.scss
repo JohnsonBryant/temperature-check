@@ -275,6 +275,18 @@ $nav-bar-height : 5.5rem;
         border-top: 20px solid rgba(3,3,3,.6);
         border-radius: 20px 20px 0 0;
         box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.2);
+        .sensor-ids {
+            margin-top: 1.5rem;
+            .id-input {
+                width: 6rem;
+                margin-left: .75rem;
+            }
+            .add-id {
+                margin-left: .25rem;
+                font-size: 16px;
+                font-weight: bolder;
+            }
+        }
     }
     .testEq-item-conf {
         margin-top: 2.5rem;
@@ -340,12 +352,24 @@ $nav-bar-height : 5.5rem;
         padding-left: 1rem;
         border-left: 1px dashed #dfdfdf;
         .el-form {
-            max-width: 400px;
+            max-width: 500px;
             margin-right: auto;
             margin-left: auto;
         }
         .el-button {
             margin-top: 2rem;
+        }
+        .sensor-ids {
+            margin-top: 1.5rem;
+            .id-input {
+                width: 6rem;
+                margin-left: .75rem;
+            }
+            .add-id {
+                margin-left: .25rem;
+                font-size: 16px;
+                font-weight: bolder;
+            }
         }
     }
 }

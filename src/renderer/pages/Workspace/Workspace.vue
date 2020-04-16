@@ -100,26 +100,28 @@
         <h4 class="title">测试模板配置</h4>
         <el-form :model="testTemplate" :rules="rulestestTemplate" ref="testTemplate" label-position="left" label-width="150px">
           <el-form-item prop="cycle" label="工作周期(s/秒)：">
-            <el-input class="cycle-input" placeholder="请输入工作周期s" v-model.trim="testTemplate.cycle" :disabled="isOnTest">
+            <el-input class="cycle-input" placeholder="请输入工作周期s" v-model.number="testTemplate.cycle" :disabled="isOnTest">
             </el-input>
           </el-form-item>
           <el-form-item prop="humi" label="湿度示值(%RH)：">
-            <el-input class="testEq-item-conf-input" placeholder="输入湿度示值" v-model.trim="testTemplate.humi" :disabled="isOnTest">
+            <el-input class="testEq-item-conf-input" placeholder="输入湿度示值" v-model="testTemplate.humi" :disabled="isOnTest">
             </el-input>
           </el-form-item>
           <el-form-item prop="temp" label="温度示值(℃)：">
-            <el-input class="testEq-item-conf-input" placeholder="输入温度示值" v-model.trim="testTemplate.temp" :disabled="isOnTest">
-            </el-input>
-          </el-form-item>
-          <el-form-item prop="IDS" label="传感器ID：">
-            <el-input class="testEq-item-conf-input" placeholder="输入传感器ID：1,2" v-model.trim="testTemplate.IDS" :disabled="isOnTest">
-              <template slot="prepend"></template>
+            <el-input class="testEq-item-conf-input" placeholder="输入温度示值" v-model="testTemplate.temp" :disabled="isOnTest">
             </el-input>
           </el-form-item>
           <el-form-item label="测试模式：">
             <el-switch v-model="testTemplate.isSendding" active-color="#13ce66" inactive-color="#ff4949" active-text="周期获取数据" inactive-text="仅监测数据" :disabled="isOnTest">
             </el-switch>
           </el-form-item>
+          <div class="sensor-ids">
+            <label for="传感器ID：">传感器ID：</label>
+            <el-input v-for="(id,index) in testTemplate.IDS" :key="index"
+              class="id-input" v-model.number="testTemplate.IDS[index]" :disabled="isOnTest"></el-input>
+            <el-button @click="add_id(testTemplate.IDS)" class="add-id" type="success" icon="el-icon-plus" circle></el-button>
+            <el-button @click="del_id(testTemplate.IDS)" class="add-id" type="danger" icon="el-icon-minus" circle></el-button>
+          </div>
           <el-button @click="TestTemplateSaveClick" type="primary" :disabled="isOnTest">保存测试模板<i class="el-icon-check el-icon--right"></i></el-button>
         </el-form>
       </el-col>
@@ -203,7 +205,7 @@ export default {
         cycle: '',
         temp: '',
         humi: '',
-        IDS: '',
+        IDS: [1],
         isSendding: true
       },
       sensorCalibration: {
@@ -375,16 +377,16 @@ export default {
         if (valid) {
           const testTemplate = this.testTemplate
           // 检查IDS中是否包含非法字符
-          if (/[^\d,，]/.test(testTemplate.IDS)) {
-            this.addMessage('输入的其他传感器ID中包含非法字符，只允许输入整数的传感器ID，且以 "," 隔开！', 'warning')
-            return
-          }
+          // if (/[^\d,，]/.test(testTemplate.IDS)) {
+          //   this.addMessage('输入的其他传感器ID中包含非法字符，只允许输入整数的传感器ID，且以 "," 隔开！', 'warning')
+          //   return
+          // }
           // 获取数据周期检查，周期应为正整数，且在 1 - 65535 范围内
           let cycle = parseInt(testTemplate.cycle, 10)
           let temp = parseFloat(testTemplate.temp)
           let humi = parseFloat(testTemplate.humi)
           let IDS = testTemplate.IDS
-          IDS = testTemplate.IDS.split(',').map(id => parseInt(id))
+          // IDS = testTemplate.IDS.split(',').map(id => parseInt(id))
           if (!this.$myutil.isPositiveInteger(cycle) || cycle < 1 || cycle > 65535) {
             this.addMessage('工作周期应输入数值，且在 1 - 65535 范围内，请重新输入！', 'warning')
             return
@@ -400,10 +402,10 @@ export default {
             return
           }
           // IDD检查， IDS输入要求为数值数组
-          if (!(IDS instanceof Array) || IDS.length < 1) {
-            this.addMessage('其他传感器ID输入内容有误，请重新输入！', 'warning')
-            return
-          }
+          // if (!(IDS instanceof Array) || IDS.length < 1) {
+          //   this.addMessage('其他传感器ID输入内容有误，请重新输入！', 'warning')
+          //   return
+          // }
           let idsCheck = IDS.some((elem, index, arr) => {
             return !this.$myutil.isPositiveInteger(elem) || elem <= 0 || elem > 255 || (arr.indexOf(elem) !== arr.lastIndexOf(elem))
           })
@@ -420,7 +422,7 @@ export default {
             data.cycle = cycle
             data.temp = temp
             data.humi = humi
-            data.IDS = IDS.join(',')
+            data.IDS = IDS
             data.isSendding = testTemplate.isSendding
             this.$storage.set('testTemplate', data, (err) => {
               if (err) {
@@ -478,6 +480,15 @@ export default {
         message: message,
         type: messageType
       })
+    },
+    add_id (ids) {
+      ids.push(ids[ids.length - 1] + 1)
+    },
+    del_id (ids) {
+      if (ids.length === 1) {
+        return
+      }
+      ids.pop()
     }
   }
 }
