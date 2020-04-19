@@ -195,47 +195,7 @@ export default class MenuBuilder {
         }
       ]
     }
-    const subMenuView = {
-      label: '&View',
-      submenu:
-        process.env.NODE_ENV === 'development'
-          ? [
-            {
-              label: '&Reload',
-              accelerator: 'Ctrl+R',
-              click: () => {
-                this.mainWindow.webContents.reload()
-              }
-            },
-            {
-              label: 'Toggle &Full Screen',
-              accelerator: 'F11',
-              click: () => {
-                this.mainWindow.setFullScreen(
-                  !this.mainWindow.isFullScreen()
-                )
-              }
-            },
-            {
-              label: 'Toggle &Developer Tools',
-              accelerator: 'Alt+Ctrl+I',
-              click: () => {
-                this.mainWindow.toggleDevTools()
-              }
-            }
-          ]
-          : [
-            {
-              label: 'Toggle &Full Screen',
-              accelerator: 'F11',
-              click: () => {
-                this.mainWindow.setFullScreen(
-                  !this.mainWindow.isFullScreen()
-                )
-              }
-            }
-          ]
-    }
+
     const subMenuHelp = {
       label: 'Help',
       submenu: [
@@ -263,6 +223,28 @@ export default class MenuBuilder {
           label: 'Search Issues',
           click () {
             shell.openExternal('https://github.com/atom/electron/issues')
+          }
+        }
+      ]
+    }
+
+    const subMenuView = {
+      label: '&工具',
+      submenu: [
+        {
+          label: '进入/退出 全屏',
+          accelerator: 'F11',
+          click: () => {
+            this.mainWindow.setFullScreen(
+              !this.mainWindow.isFullScreen()
+            )
+          }
+        },
+        {
+          label: '打开/关闭 调试工具',
+          accelerator: 'Alt+Ctrl+I',
+          click: () => {
+            this.mainWindow.toggleDevTools()
           }
         }
       ]

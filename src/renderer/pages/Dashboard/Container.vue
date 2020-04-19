@@ -1,14 +1,14 @@
 <template>
-  <el-row class="container">
-    <el-col :span="16" class="origin-data">
-      <div class="tab-btns">
+  <el-container class="container">
+    <el-main class="origin-data">
+      <!-- <div class="tab-btns">
         <el-button-group>
           <el-button @click="dataShowIndex = 1" :type="dataShowIndex === 1 ? 'info': ''" icon="el-icon-s-data">数据走势</el-button>
           <el-button @click="dataShowIndex = 2" :type="dataShowIndex === 2 ? 'info': ''" icon="el-icon-s-grid">数据表格</el-button>
         </el-button-group>
         <h4 v-html="equipmentTitle"></h4>
-      </div>
-      <template v-if="DeviceTestData.equipment.detectProperty === '温湿度'">
+      </div> -->
+      <!-- <template v-if="DeviceTestData.equipment.detectProperty === '温湿度'">
         <test-item-th 
           v-show="dataShowIndex === 1"
           :equipment="DeviceTestData.equipment"
@@ -22,9 +22,10 @@
           :equipment="DeviceTestData.equipment"
           :temp="DeviceTestData.temp"
         />
-      </template>
+      </template> -->
       <template v-if="DeviceTestData.equipment.detectProperty === '温湿度'">
-        <test-item-table-th v-show="dataShowIndex === 2"
+        <!-- <test-item-table-th v-show="dataShowIndex === 2" -->
+        <test-item-table-th
           :equipment="deviceTestDataTable.equipment"
           :tempTestDataTable="deviceTestDataTable.tempTestDataTable"
           :humiTestDataTable="deviceTestDataTable.humiTestDataTable"
@@ -33,15 +34,17 @@
           />
       </template>
       <template v-else-if="DeviceTestData.equipment.detectProperty === '温度'">
-        <test-item-table-temp v-show="dataShowIndex === 2"
+        <!-- <test-item-table-temp v-show="dataShowIndex === 2" -->
+        <test-item-table-temp
           :equipment="deviceTestDataTable.equipment"
           :tempTestDataTable="deviceTestDataTable.tempTestDataTable"
           :dataTableHeader="deviceTestDataTable.dataTableHeader"
           :ids="deviceTestDataTable.ids"
           />
       </template>
-    </el-col>
+    </el-main>
     <test-data
+      :equipmentTitle="equipmentTitle"
       :detectProperty="DeviceTestData.equipment.detectProperty"
       :ids="deviceTestDataTable.ids"
       :testData="deviceTestDataTable.testData"
@@ -49,7 +52,7 @@
       :packNumber="DeviceTestData.packNumber"
       :data="DeviceTestData.data"
       />
-  </el-row>
+  </el-container>
 </template>
 
 <script>

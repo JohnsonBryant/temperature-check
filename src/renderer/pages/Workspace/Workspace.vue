@@ -6,7 +6,7 @@
 
     <el-row class="main-page-container">
       <el-col :span="12">
-        <div class="">
+        <div>
           <h4 class="title">参数配置</h4>
           <el-form :model="SerialPort" :rules="rulesSerialPort" ref="SerialPort" label-position="left" label-width="100px">
             <el-row :gutter="10">
@@ -73,7 +73,7 @@
             </div>
           </div>
         </div>
-        <div class="">
+        <!-- <div>
           <h4 class="title">传感器标定</h4>
           <el-form :model="sensorCalibration" :rules="rulesSensorCalibration" ref="sensorCalibration" label-position="left" label-width="100px">
             <el-row :gutter="10">
@@ -94,7 +94,7 @@
               </el-col>
             </el-row>
           </el-form>
-        </div>
+        </div> -->
       </el-col>
       <el-col :span="12" class="template">
         <h4 class="title">测试模板配置</h4>
@@ -435,39 +435,39 @@ export default {
         }
       })
     },
-    SubmitSensorCalibration () {
-      this.$refs['sensorCalibration'].validate((valid) => {
-        if (valid) {
-          // id 必须为正整数
-          let param = this.sensorCalibration
-          param.id = parseInt(param.id)
-          param.resistance = parseFloat(param.resistance)
-          if (!this.$myutil.isPositiveInteger(param.id)) {
-            this.addMessage('传感器ID输入有误，必须为正整数，请检查后重新提交！', 'warning')
-            return
-          }
-          // 电阻值必须为正浮点数
-          if (!this.$myutil.isPositiveNumber(param.resistance)) {
-            this.addMessage('电阻值输入有误，不可输入负数，请检查后重新提交！', 'warning')
-            return
-          }
-          // 解析打包数据(构建为约定的数据格式)
-          let buffer = Buffer.alloc(4)
-          buffer.writeFloatLE(param.resistance)
-          let resistanceHex = buffer.toString('hex')
-          let bufstr = 'AA55' + 'A2' + '06' + '0A' + param.id.toString(16).padStart(2, '0') + resistanceHex + '0000'
-          let buf = Buffer.from(bufstr, 'hex')
-          // 调用串口发送数据到主节点
-          this.$port.serialport.write(buf, (err) => {
-            if (!err) {
-              this.addMessage('标定传感器指令发送成功！', 'success')
-            } else {
-              this.addMessage('串口写入错误，发送停止测试指令失败，请重新操作！！！', 'warning')
-            }
-          })
-        }
-      })
-    },
+    // SubmitSensorCalibration () {
+    //   this.$refs['sensorCalibration'].validate((valid) => {
+    //     if (valid) {
+    //       // id 必须为正整数
+    //       let param = this.sensorCalibration
+    //       param.id = parseInt(param.id)
+    //       param.resistance = parseFloat(param.resistance)
+    //       if (!this.$myutil.isPositiveInteger(param.id)) {
+    //         this.addMessage('传感器ID输入有误，必须为正整数，请检查后重新提交！', 'warning')
+    //         return
+    //       }
+    //       // 电阻值必须为正浮点数
+    //       if (!this.$myutil.isPositiveNumber(param.resistance)) {
+    //         this.addMessage('电阻值输入有误，不可输入负数，请检查后重新提交！', 'warning')
+    //         return
+    //       }
+    //       // 解析打包数据(构建为约定的数据格式)
+    //       let buffer = Buffer.alloc(4)
+    //       buffer.writeFloatLE(param.resistance)
+    //       let resistanceHex = buffer.toString('hex')
+    //       let bufstr = 'AA55' + 'A2' + '06' + '0A' + param.id.toString(16).padStart(2, '0') + resistanceHex + '0000'
+    //       let buf = Buffer.from(bufstr, 'hex')
+    //       // 调用串口发送数据到主节点
+    //       this.$port.serialport.write(buf, (err) => {
+    //         if (!err) {
+    //           this.addMessage('标定传感器指令发送成功！', 'success')
+    //         } else {
+    //           this.addMessage('串口写入错误，发送停止测试指令失败，请重新操作！！！', 'warning')
+    //         }
+    //       })
+    //     }
+    //   })
+    // },
     setData (originData, newData) {
       Object.keys(newData).forEach((key) => {
         if (originData.hasOwnProperty(key)) {

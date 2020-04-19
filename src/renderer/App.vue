@@ -202,8 +202,8 @@ export default {
             // 更新仪器下挂载的传感器的数据
             for (let i = 0; i < IDS.length; i++) {
               let id = IDS[i]
-              sensorsdata[id]['temp'].push(data[id].temp)
-              sensorsdata[id]['humi'].push(data[id].humi)
+              sensorsdata[id]['temp'].push(data[id].temp).toFixed(2)
+              sensorsdata[id]['humi'].push(data[id].humi).toFixed(2)
               sensorsdata[id]['batt'].push(data[id].batt)
             }
             // 更新计算仪器的 温度 / 湿度 的均匀度 evennessTemp、波动度 fluctuationTemp、上偏差 deviationTempSup、下偏差 deviationTempSub
@@ -217,16 +217,16 @@ export default {
               allDataTemp.push(...sensorsdata[id]['temp'])
               allDataHumi.push(...sensorsdata[id]['humi'])
             })
-            sensorsdata['averageTemp'].push(this.max(roundtemp) - this.min(roundtemp))
-            sensorsdata['averageHumi'].push(this.max(roundhumi) - this.min(roundhumi))
-            sensorsdata['evennessTemp'] = parseFloat((this.$myutil.Average(sensorsdata['averageTemp'])).toFixed(2))
-            sensorsdata['evennessHumi'] = parseFloat((this.$myutil.Average(sensorsdata['averageHumi'])).toFixed(2))
-            sensorsdata['fluctuationTemp'] = parseFloat((this.max(IDS.map(id => { return this.max(sensorsdata[id]['temp']) - this.min(sensorsdata[id]['temp']) })) / 2.0).toFixed(2))
-            sensorsdata['fluctuationHumi'] = parseFloat((this.max(IDS.map(id => { return this.max(sensorsdata[id]['humi']) - this.min(sensorsdata[id]['humi']) })) / 2.0).toFixed(2))
-            sensorsdata['deviationTempSup'] = parseFloat((this.max(allDataTemp) - tempConfig).toFixed(2))
-            sensorsdata['deviationTempSub'] = parseFloat((this.min(allDataTemp) - tempConfig).toFixed(2))
-            sensorsdata['deviationHumiSup'] = parseFloat((this.max(allDataHumi) - humiConfig).toFixed(2))
-            sensorsdata['deviationHumiSub'] = parseFloat((this.min(allDataHumi) - humiConfig).toFixed(2))
+            sensorsdata['averageTemp'].push((this.max(roundtemp) - this.min(roundtemp)).toFixed(2))
+            sensorsdata['averageHumi'].push((this.max(roundhumi) - this.min(roundhumi)).toFixed(2))
+            sensorsdata['evennessTemp'] = (this.$myutil.Average(sensorsdata['averageTemp'])).toFixed(2)
+            sensorsdata['evennessHumi'] = (this.$myutil.Average(sensorsdata['averageHumi'])).toFixed(2)
+            sensorsdata['fluctuationTemp'] = (this.max(IDS.map(id => { return this.max(sensorsdata[id]['temp']) - this.min(sensorsdata[id]['temp']) })) / 2.0).toFixed(2)
+            sensorsdata['fluctuationHumi'] = (this.max(IDS.map(id => { return this.max(sensorsdata[id]['humi']) - this.min(sensorsdata[id]['humi']) })) / 2.0).toFixed(2)
+            sensorsdata['deviationTempSup'] = (this.max(allDataTemp) - tempConfig).toFixed(2)
+            sensorsdata['deviationTempSub'] = (this.min(allDataTemp) - tempConfig).toFixed(2)
+            sensorsdata['deviationHumiSup'] = (this.max(allDataHumi) - humiConfig).toFixed(2)
+            sensorsdata['deviationHumiSub'] = (this.min(allDataHumi) - humiConfig).toFixed(2)
             sensorsdata['time'].push(time)
             // 构建导出数据格式
             // 导出数据的二维数组行定义

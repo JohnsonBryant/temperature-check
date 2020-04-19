@@ -1,5 +1,6 @@
 <template>
-  <el-col :span="8" class="testData">
+  <el-aside width="335px" class="testData">
+    <h4 v-html="equipmentTitle"></h4>
     <h4><span class="left">时间：{{updateTime}}</span><span class="right">包数：{{packNumber}}</span></h4>
     <el-table v-if="detectProperty === '温湿度'" :data="testData" :stripe="true" border resizable>
       <el-table-column prop="param" label="校准参数" min-width="110" ></el-table-column>
@@ -12,20 +13,24 @@
     </el-table>
     <div class="sensors">
       <div class="sensor" v-for="(id,index) in ids" :key="index">
-        <div class="sensor-content">ID:{{id}} 电量:{{data[id].batt.length === 0 ? '' : data[id].batt[data[id].batt.length-1]}}%</div>
+        <div class="sensor-content" :class="{'low-battery': data[id].batt[data[id].batt.length-1] <= lowBattery}">ID:{{id}} 电量:{{data[id].batt.length === 0 ? '' : data[id].batt[data[id].batt.length-1]}}%</div>
       </div>
     </div>
-  </el-col>
+  </el-aside>
 </template>
 
 <script>
 export default {
   name: 'TestDataTH',
+  data () {
+    return {
+      lowBattery: 20
+    }
+  },
   components: {
   },
-  props: ['detectProperty', 'testData', 'updateTime', 'packNumber', 'ids', 'data'],
+  props: ['equipmentTitle', 'detectProperty', 'testData', 'updateTime', 'packNumber', 'ids', 'data'],
   computed: {
-
   },
   methods: {
   }

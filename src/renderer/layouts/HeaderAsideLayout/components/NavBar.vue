@@ -279,7 +279,7 @@ export default {
         specValue1 = cellStyles.F37_Value
         rowNum = equipment.exportData.temp.length
         data = equipment.exportData.temp
-        testConfig = equipment.config.temp
+        testConfig = parseFloat(equipment.config.temp).toFixed(2)
         evenness = equipment.data.evennessTemp
         fluctuation = equipment.data.fluctuationTemp
         deviationSup = equipment.data.deviationTempSup
@@ -288,7 +288,7 @@ export default {
         specValue1 = cellStyles.F62_Value
         rowNum = equipment.exportData.temp.length
         data = equipment.exportData.humi
-        testConfig = equipment.config.humi
+        testConfig = parseFloat(equipment.config.humi).toFixed(2)
         evenness = equipment.data.evennessHumi
         fluctuation = equipment.data.fluctuationHumi
         deviationSup = equipment.data.deviationHumiSup

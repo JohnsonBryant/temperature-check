@@ -1,5 +1,4 @@
 'use strict'
-
 import {
   app,
   dialog,
@@ -7,6 +6,15 @@ import {
   BrowserWindow
 } from 'electron'
 import MenuBuilder from './menu.js'
+require('electron-debug')({ showDevTools: true })
+require('electron').app.on('ready', () => {
+  let installExtension = require('electron-devtools-installer')
+  installExtension.default(installExtension.VUEJS_DEVTOOLS)
+    .then(() => {})
+    .catch(err => {
+      console.log('Unable to install `vue-devtools`: \n', err)
+    })
+})
 /**
  * Set `__static` path to static files in production
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
@@ -35,7 +43,7 @@ function createWindow () {
   })
 
   mainWindow.loadURL(winURL)
-  mainWindow.setMenuBarVisibility(false) // 隐藏顶部菜单栏
+  mainWindow.setMenuBarVisibility(true) // 隐藏顶部菜单栏
 
   // @TODO: Use 'ready-to-show' event
   mainWindow.webContents.on('did-finish-load', () => {

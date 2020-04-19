@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  name: 'TestItem',
+  name: 'TestItemTH',
   components: {
   },
   props: ['equipment', 'temp', 'humi'],

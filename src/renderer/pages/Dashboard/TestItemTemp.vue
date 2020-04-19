@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: 'TestItem',
+  name: 'TestItemTemp',
   components: {
   },
   props: ['equipment', 'temp'],

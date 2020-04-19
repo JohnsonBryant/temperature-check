@@ -290,6 +290,25 @@ body {
   height: 100%;
   position: relative;
   border-right: 1px solid #dfdfdf; }
+  .dashboard .origin-data .dash-test-item {
+    position: relative;
+    padding: 4rem .5rem 0;
+    height: 100%;
+    overflow: auto; }
+    .dashboard .origin-data .dash-test-item .el-col {
+      height: 100%; }
+    .dashboard .origin-data .dash-test-item .head {
+      position: absolute;
+      top: 0rem;
+      right: 0;
+      z-index: 1; }
+    .dashboard .origin-data .dash-test-item h4 {
+      text-align: center;
+      padding-bottom: 1rem;
+      font-size: 1.4rem;
+      color: #707377; }
+  .dashboard .origin-data .dash-test-item-t {
+    padding-top: 0; }
   .dashboard .origin-data .tab-btns {
     position: absolute;
     top: 0;
@@ -305,23 +324,6 @@ body {
     .dashboard .origin-data .tab-btns .el-button-group {
       float: left;
       font-size: 0; }
-  .dashboard .origin-data .dash-test-item {
-    position: relative;
-    padding: 8.5rem .5rem 0;
-    height: 100%;
-    overflow: auto; }
-    .dashboard .origin-data .dash-test-item .el-col {
-      height: 100%; }
-    .dashboard .origin-data .dash-test-item .head {
-      position: absolute;
-      top: 4rem;
-      right: 0;
-      z-index: 1; }
-    .dashboard .origin-data .dash-test-item h4 {
-      text-align: center;
-      padding-bottom: 1rem;
-      font-size: 1.4rem;
-      color: #707377; }
 .dashboard .testData {
   height: 100%;
   overflow: auto; }
@@ -357,6 +359,8 @@ body {
       padding: 5px;
       border-left: 5px solid #85ce61;
       border-bottom-left-radius: 5px; }
+    .dashboard .testData .sensors .low-battery {
+      color: crimson; }
 
 /* 响应式布局 */
 @media only screen and (min-width: 1300px) {

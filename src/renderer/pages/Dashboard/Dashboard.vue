@@ -63,10 +63,10 @@ const template = () => {
     yAxis: {
       type: 'value',
       max: function (value) {
-        return parseFloat((value.max + (value.max - value.min) * 0.1).toFixed(2)) + 1
+        return value.max
       },
       min: function (value) {
-        return parseFloat((value.min - (value.max - value.min) * 0.1).toFixed(2)) - 1
+        return value.min
       }
     },
     series: [
@@ -139,8 +139,8 @@ export default {
             let rowHumi = {}
             ele.data['IDS'].forEach((id) => {
               let key = `${id}`
-              rowTemp[key] = ele.data[id]['temp'][i]
-              rowHumi[key] = ele.data[id]['humi'][i]
+              rowTemp[key] = ele.data[id]['temp'][i].toFixed(2)
+              rowHumi[key] = ele.data[id]['humi'][i].toFixed(2)
             })
             // 温度数据构建
             rowTemp['count'] = i + 1
@@ -153,16 +153,20 @@ export default {
             deviceTestData.humiTestDataTable.push(rowHumi)
           }
           // 添加最大值最小值行
-          let addonsTemp = [{'count': '最大值', 'average': this.max(ele.data['averageTemp'])}, {'count': '最小值', 'average': this.min(ele.data['averageTemp'])}]
-          let addonsHumi = [{'count': '最大值', 'average': this.max(ele.data['averageHumi'])}, {'count': '最小值', 'average': this.min(ele.data['averageHumi'])}]
+          let addonsTemp = packCount === 0 ? [{'count': '最大值', 'average': ''}, {'count': '最小值', 'average': ''}]
+            : [{'count': '最大值', 'average': this.max(ele.data['averageTemp']).toFixed(2)}, {'count': '最小值', 'average': this.min(ele.data['averageTemp']).toFixed(2)}]
+          let addonsHumi = packCount === 0 ? [{'count': '最大值', 'average': ''}, {'count': '最小值', 'average': ''}]
+            : [{'count': '最大值', 'average': this.max(ele.data['averageHumi']).toFixed(2)}, {'count': '最小值', 'average': this.min(ele.data['averageHumi']).toFixed(2)}]
           ele.config['IDS'].forEach((id, index, ids) => {
-            addonsTemp[0][id] = this.max(ele.data[id]['temp'])
-            addonsTemp[1][id] = this.min(ele.data[id]['temp'])
-            addonsHumi[0][id] = this.max(ele.data[id]['humi'])
-            addonsHumi[1][id] = this.min(ele.data[id]['humi'])
+            addonsTemp[0][id] = packCount === 0 ? '' : this.max(ele.data[id]['temp']).toFixed(2)
+            addonsTemp[1][id] = packCount === 0 ? '' : this.min(ele.data[id]['temp']).toFixed(2)
+            addonsHumi[0][id] = packCount === 0 ? '' : this.max(ele.data[id]['humi']).toFixed(2)
+            addonsHumi[1][id] = packCount === 0 ? '' : this.min(ele.data[id]['humi']).toFixed(2)
           })
-          deviceTestData.tempTestDataTable.push(...addonsTemp)
-          deviceTestData.humiTestDataTable.push(...addonsHumi)
+          deviceTestData.tempTestDataTable.sort((a, b) => b.count - a.count)
+          deviceTestData.humiTestDataTable.sort((a, b) => b.count - a.count)
+          deviceTestData.tempTestDataTable.splice(0, 0, ...addonsTemp)
+          deviceTestData.humiTestDataTable.splice(0, 0, ...addonsHumi)
           // 计算数据表格表头
           let dataTableHeader = deviceTestData.dataTableHeader
           let ids = ele.data['IDS']
@@ -171,16 +175,16 @@ export default {
             dataTableHeader.push(item)
           }
           // 绑定最终计算数据表格
-          deviceTestData.testData[0].temp = ele.config.temp
+          deviceTestData.testData[0].temp = parseFloat(ele.config.temp).toFixed(2)
           deviceTestData.testData[1].temp = ele.data['deviationTempSup']
-          deviceTestData.testData[3].temp = ele.data['deviationTempSub']
-          deviceTestData.testData[5].temp = ele.data['evennessTemp']
-          deviceTestData.testData[6].temp = ele.data['fluctuationTemp']
-          deviceTestData.testData[0].humi = ele.config.humi
+          deviceTestData.testData[2].temp = ele.data['deviationTempSub']
+          deviceTestData.testData[3].temp = ele.data['evennessTemp']
+          deviceTestData.testData[4].temp = ele.data['fluctuationTemp']
+          deviceTestData.testData[0].humi = parseFloat(ele.config.humi).toFixed(2)
           deviceTestData.testData[1].humi = ele.data['deviationHumiSup']
-          deviceTestData.testData[3].humi = ele.data['deviationHumiSub']
-          deviceTestData.testData[5].humi = ele.data['evennessHumi']
-          deviceTestData.testData[6].humi = ele.data['fluctuationHumi']
+          deviceTestData.testData[2].humi = ele.data['deviationHumiSub']
+          deviceTestData.testData[3].humi = ele.data['evennessHumi']
+          deviceTestData.testData[4].humi = ele.data['fluctuationHumi']
           // comment
           deviceTestDataTable.push(deviceTestData)
         } else if (ele.device.detectProperty === '温度') {
@@ -194,7 +198,7 @@ export default {
             let rowTemp = {}
             ele.data['IDS'].forEach((id) => {
               let key = `${id}`
-              rowTemp[key] = ele.data[id]['temp'][i]
+              rowTemp[key] = ele.data[id]['temp'][i].toFixed(2)
             })
             // 温度数据构建
             rowTemp['count'] = i + 1
@@ -203,12 +207,14 @@ export default {
             deviceTestData.tempTestDataTable.push(rowTemp)
           }
           // 添加最大值最小值行
-          let addonsTemp = [{'count': '最大值', 'average': this.max(ele.data['averageTemp'])}, {'count': '最小值', 'average': this.min(ele.data['averageTemp'])}]
+          let addonsTemp = packCount === 0 ? [{'count': '最大值', 'average': ''}, {'count': '最小值', 'average': ''}]
+            : [{'count': '最大值', 'average': this.max(ele.data['averageTemp']).toFixed(2)}, {'count': '最小值', 'average': this.min(ele.data['averageTemp']).toFixed(2)}]
           ele.config['IDS'].forEach((id, index, ids) => {
-            addonsTemp[0][id] = this.max(ele.data[id]['temp'])
-            addonsTemp[1][id] = this.min(ele.data[id]['temp'])
+            addonsTemp[0][id] = packCount === 0 ? '' : this.max(ele.data[id]['temp']).toFixed(2)
+            addonsTemp[1][id] = packCount === 0 ? '' : this.min(ele.data[id]['temp']).toFixed(2)
           })
-          deviceTestData.tempTestDataTable.push(...addonsTemp)
+          deviceTestData.tempTestDataTable.sort((a, b) => b.count - a.count)
+          deviceTestData.tempTestDataTable.splice(0, 0, ...addonsTemp)
           // 计算数据表格表头
           let dataTableHeader = deviceTestData.dataTableHeader
           let ids = ele.data['IDS']
@@ -217,11 +223,11 @@ export default {
             dataTableHeader.push(item)
           }
           // 绑定最终计算数据表格
-          deviceTestData.testData[0].temp = ele.config.temp
+          deviceTestData.testData[0].temp = parseFloat(ele.config.temp).toFixed(2)
           deviceTestData.testData[1].temp = ele.data['deviationTempSup']
-          deviceTestData.testData[3].temp = ele.data['deviationTempSub']
-          deviceTestData.testData[5].temp = ele.data['evennessTemp']
-          deviceTestData.testData[6].temp = ele.data['fluctuationTemp']
+          deviceTestData.testData[2].temp = ele.data['deviationTempSub']
+          deviceTestData.testData[3].temp = ele.data['evennessTemp']
+          deviceTestData.testData[4].temp = ele.data['fluctuationTemp']
           // comment
           deviceTestDataTable.push(deviceTestData)
         }
@@ -237,9 +243,7 @@ export default {
       return [
         { 'param': '设定值', 'temp': '' },
         { 'param': '上偏差', 'temp': '' },
-        { 'param': '上偏差校准不确定度', 'temp': 'U=0.2℃  （k=2）' },
         { 'param': '下偏差', 'temp': '' },
-        { 'param': '下偏差校准不确定度', 'temp': 'U=0.2℃  （k=2）' },
         { 'param': '均匀度', 'temp': '' },
         { 'param': '波动度', 'temp': '' }
       ]
@@ -248,9 +252,7 @@ export default {
       return [
         { 'param': '设定值', 'temp': '', 'humi': '' },
         { 'param': '上偏差', 'temp': '', 'humi': '' },
-        { 'param': '上偏差校准不确定度', 'temp': 'U=0.2℃  （k=2）', 'humi': 'U=1.3%RH （k=2）' },
         { 'param': '下偏差', 'temp': '', 'humi': '' },
-        { 'param': '下偏差校准不确定度', 'temp': 'U=0.2℃  （k=2）', 'humi': 'U=1.3%RH （k=2）' },
         { 'param': '均匀度', 'temp': '', 'humi': '' },
         { 'param': '波动度', 'temp': '', 'humi': '' }
       ]
