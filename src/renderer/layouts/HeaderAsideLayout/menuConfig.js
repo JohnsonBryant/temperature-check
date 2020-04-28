@@ -22,12 +22,12 @@ const asideMenuConfig = [
     path: '/workplace',
     name: '功能配置',
     icon: 'el-icon-setting'
+  },
+  {
+    path: '/SensorCalibration',
+    name: '传感器标定',
+    icon: 'el-icon-setting'
   }
-  // {
-  //   path: '/history',
-  //   name: '历史数据',
-  //   icon: 'el-icon-menu'
-  // },
 ]
 
 export { asideMenuConfig }

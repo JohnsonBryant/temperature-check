@@ -254,15 +254,13 @@ $nav-bar-height : 5.5rem;
     .top-bar {
         padding-top: 0;
         padding-bottom: 0;
+        justify-content: space-between;
     }
     .el-form--inline {
         padding-top: 8px;
     }
     .el-form-item {
         margin-bottom: 0;
-    }
-    .top-bar {
-        justify-content: space-between;
     }
     .cycle-switch {
         display: inline-block;
@@ -473,6 +471,57 @@ $nav-bar-height : 5.5rem;
     }
 }
 
+/* 传感器标定页 */
+.sensor-calib {
+    .top-bar {
+        .right {
+            flex-grow: 1;
+            text-align: right;
+            padding-right: 1rem;
+        }
+    }
+    .wraper{
+        width: 1000px;
+        padding: 2rem 0 2rem;
+        margin: 0 auto;
+        // border: 1px solid crimson;
+        background-color: #f8f8f8;
+        height: 100%;
+        &::after {
+            @include clearfix();
+        }
+        form {
+            float: left;
+            width: 50%;
+            padding-right: 2rem;
+            border-right: 1px solid rgba(33,33,33,.2);
+            h4 {
+                padding-left: 2rem;
+            }
+        }
+        h4 {
+            margin: 2rem 0;
+        }
+        .sensors {
+            float: left;
+            width: 50%;
+            padding-left: 2rem;
+            .sensor {
+                padding-left: 1rem;
+                padding-top: .5rem;
+                padding-bottom: .5rem;
+                span {
+                    display: inline-block;
+                    width: 31%;
+                    padding: 0 1rem;
+                    border-left: 3px solid steelblue;
+                    border-bottom-left-radius: 3px;
+                }
+            }
+        }
+    }
+}
+
 /* 响应式布局 */
 @media only screen and (min-width: 1300px) {
     .workspace {
@@ -494,6 +543,12 @@ $nav-bar-height : 5.5rem;
     }
 
     .add-equipment {
+        width: 1300px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .sensor-calib {
         width: 1300px;
         margin-left: auto;
         margin-right: auto;

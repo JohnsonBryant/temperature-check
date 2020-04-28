@@ -26,7 +26,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isOnTest', 'IDS', 'equipments', 'TestTime'])
+    ...mapState(['isOnTest', 'IDS', 'equipments', 'TestTime', 'sensorCalibMode'])
   },
   mounted () {
     this.InitApp()
@@ -36,7 +36,8 @@ export default {
     ...mapActions([
       'setIsOnTestTask',
       'addToSearchedSensorIDsTask',
-      'setEquiptmentsTask'
+      'setEquiptmentsTask',
+      'setSensorCalibSensorsTask'
     ]),
     InitApp () {
       this.$storage.get('config', (err, data) => {
@@ -102,36 +103,36 @@ export default {
       }
     },
     parseSensorData (packbuf) {
-      try {
-        let IDS = this.IDS
-        let AppConf = this.AppConf
-        // 解析处理传感器数据
-        let DataPack = this.$Packet.DataPackParser.parse(packbuf)
-        if (IDS.includes(DataPack.deviceID)) {
-          // 传感器ID在配置中， 对应测试中的某个仪器
-          // let temp = parseFloat((DataPack.temp / 100.0).toFixed(2))
-          // let humi = parseFloat((DataPack.humi / 100.0).toFixed(2))
-          let temp = parseFloat(DataPack.temp.toFixed(2))
-          let humi = parseFloat(DataPack.humi.toFixed(2))
-          let batt = (DataPack.batt / 1000.0)
-          if (batt >= AppConf.BatteryHigh) {
-            batt = 100
-          } else if (batt <= AppConf.BatteryLow) {
-            batt = 0
+      if (!this.sensorCalibMode) {
+        try {
+          let IDS = this.IDS
+          // let AppConf = this.AppConf
+          // 解析处理传感器数据
+          let DataPack = this.$Packet.DataPackParser.parse(packbuf)
+          if (IDS.includes(DataPack.deviceID)) {
+            // 传感器ID在配置中， 对应测试中的某个仪器
+            // let temp = parseFloat((DataPack.temp / 100.0).toFixed(2))
+            // let humi = parseFloat((DataPack.humi / 100.0).toFixed(2))
+            let temp = parseFloat(DataPack.temp.toFixed(2))
+            let humi = parseFloat(DataPack.humi.toFixed(2))
+            let batt = this.calcBatt(DataPack.batt)
+            // 缓存在配置中的传感器的温湿度数据
+            this.program.cache[DataPack.deviceID.toString()] = { temp, humi, batt }
+            console.log(`${this.$myutil.nowtime()} 收到传感器ID:${DataPack.deviceID} 数据`)
           } else {
-            batt = (batt - AppConf.BatteryLow) / (AppConf.BatteryHigh - AppConf.BatteryLow) * 100
+            // 传感器ID不在配置中， 推送未在配置中的传感器数据包到前端
+            let dataNotInTest = `ID：${DataPack.deviceID}，温度：${parseFloat(DataPack.temp.toFixed(2))}，湿度：${parseFloat(DataPack.humi.toFixed(2))}`
+            this.addMessage(`收到未在配置中传感器数据 ${dataNotInTest}`)
           }
-          batt = parseFloat(batt.toFixed(0))
-          // 缓存在配置中的传感器的温湿度数据
-          this.program.cache[DataPack.deviceID.toString()] = { temp, humi, batt }
-          console.log(`${this.$myutil.nowtime()} 收到传感器ID:${DataPack.deviceID} 数据`)
-        } else {
-          // 传感器ID不在配置中， 推送未在配置中的传感器数据包到前端
-          let dataNotInTest = `ID：${DataPack.deviceID}，温度：${parseFloat(DataPack.temp.toFixed(2))}，湿度：${parseFloat(DataPack.humi.toFixed(2))}`
-          this.addMessage(`收到未在配置中传感器数据 ${dataNotInTest}`)
+        } catch (e) {
+          console.log(e.message)
         }
-      } catch (e) {
-        console.log(e.message)
+      } else {
+        let DataPack = this.$Packet.DataPackParser.parse(packbuf)
+        let id = DataPack.deviceID
+        let temp = parseFloat(DataPack.temp.toFixed(2))
+        let batt = this.calcBatt(DataPack.batt)
+        this.setSensorCalibSensorsTask({id, temp, batt})
       }
     },
     directiveAction (pack) {
@@ -296,6 +297,19 @@ export default {
         })
       }
       this.program.cache = {}
+    },
+    calcBatt (value) {
+      let AppConf = this.AppConf
+      let batt = (value / 1000.0)
+      if (batt >= AppConf.BatteryHigh) {
+        batt = 100
+      } else if (batt <= AppConf.BatteryLow) {
+        batt = 0
+      } else {
+        batt = (batt - AppConf.BatteryLow) / (AppConf.BatteryHigh - AppConf.BatteryLow) * 100
+      }
+      batt = parseFloat(batt.toFixed(0))
+      return batt
     },
     addMessage (message, messageType) {
       this.$message({

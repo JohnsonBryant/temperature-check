@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+// import { stat } from 'fs'
 // import { createPersistedState, createSharedMutations } from 'vuex-electron'
 // import { createPersistedState } from 'vuex-electron'
 
@@ -13,7 +14,13 @@ const state = {
   duplicatedEquipment: {}, // 复制传感器时，临时存储位置
   searchedSensorIDs: [], // 搜索传感器，收到应答结果的存储位置
   TestTime: '', // 测试开始时间
-  sensorDataNotInTest: []
+  sensorDataNotInTest: [],
+  sensorCalibMode: false,
+  sensorCalibSensors: [
+    // { id: 1, temp: 20.56, batt: 100 },
+    // { id: 2, temp: 20.56, batt: 100 },
+    // { id: 3, temp: 20.56, batt: 100 }
+  ]
 }
 
 const mutations = {
@@ -93,6 +100,22 @@ const mutations = {
   },
   clearSensorDataNotInTest: (state) => {
     state.sensorDataNotInTest.splice(0, state.state.sensorDataNotInTest.length)
+  },
+  setSensorCalibMode: (state, OnOff) => {
+    state.sensorCalibMode = OnOff
+    if (!OnOff) {
+      state.sensorCalibSensors = []
+    }
+  },
+  setSensorCalibSensors: (state, sensor) => {
+    let sensordata = state.sensorCalibSensors.find((s) => s.id === sensor.id)
+    if (sensordata) {
+      let sensorIndex = state.sensorCalibSensors.findIndex(s => s.id === sensor.id)
+      state.sensorCalibSensors.splice(sensorIndex, 1, sensor)
+    } else {
+      state.sensorCalibSensors.push(sensor)
+      state.sensorCalibSensors.sort((a, b) => a.id - b.id)
+    }
   }
 }
 
@@ -148,6 +171,12 @@ const actions = {
   },
   clearSensorDataNotInTestTask ({ commit }) {
     commit('clearSensorDataNotInTest')
+  },
+  setSensorCalibModeTask ({ commit }, OnOff) {
+    commit('setSensorCalibMode', OnOff)
+  },
+  setSensorCalibSensorsTask ({ commit }, sensor) {
+    commit('setSensorCalibSensors', sensor)
   }
 }
 

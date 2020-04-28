@@ -192,13 +192,12 @@ body {
 /* 测试配置 */
 .test-config .top-bar {
   padding-top: 0;
-  padding-bottom: 0; }
+  padding-bottom: 0;
+  justify-content: space-between; }
 .test-config .el-form--inline {
   padding-top: 8px; }
 .test-config .el-form-item {
   margin-bottom: 0; }
-.test-config .top-bar {
-  justify-content: space-between; }
 .test-config .cycle-switch {
   display: inline-block;
   padding-top: 1rem;
@@ -362,6 +361,45 @@ body {
     .dashboard .testData .sensors .low-battery {
       color: crimson; }
 
+/* 传感器标定页 */
+.sensor-calib .top-bar .right {
+  flex-grow: 1;
+  text-align: right;
+  padding-right: 1rem; }
+.sensor-calib .wraper {
+  width: 1000px;
+  padding: 2rem 0 2rem;
+  margin: 0 auto;
+  background-color: #f8f8f8;
+  height: 100%; }
+  .sensor-calib .wraper::after {
+    content: '';
+    display: table;
+    clear: both; }
+  .sensor-calib .wraper form {
+    float: left;
+    width: 50%;
+    padding-right: 2rem;
+    border-right: 1px solid rgba(33, 33, 33, 0.2); }
+    .sensor-calib .wraper form h4 {
+      padding-left: 2rem; }
+  .sensor-calib .wraper h4 {
+    margin: 2rem 0; }
+  .sensor-calib .wraper .sensors {
+    float: left;
+    width: 50%;
+    padding-left: 2rem; }
+    .sensor-calib .wraper .sensors .sensor {
+      padding-left: 1rem;
+      padding-top: .5rem;
+      padding-bottom: .5rem; }
+      .sensor-calib .wraper .sensors .sensor span {
+        display: inline-block;
+        width: 31%;
+        padding: 0 1rem;
+        border-left: 3px solid steelblue;
+        border-bottom-left-radius: 3px; }
+
 /* 响应式布局 */
 @media only screen and (min-width: 1300px) {
   .workspace {
@@ -380,6 +418,11 @@ body {
     margin-right: auto; }
 
   .add-equipment {
+    width: 1300px;
+    margin-left: auto;
+    margin-right: auto; }
+
+  .sensor-calib {
     width: 1300px;
     margin-left: auto;
     margin-right: auto; } }

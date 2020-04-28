@@ -8,7 +8,7 @@ import AddEquipment from './pages/AddEquipment'
 import TestConfig from './pages/TestConfig'
 import Dashboard from './pages/Dashboard'
 import Workspace from './pages/Workspace'
-// import History from './pages/History'
+import SensorCalibration from './pages/SensorCalibration'
 // import NotFound from './pages/NotFound'
 // import Main from './components/Main.vue'
 
@@ -42,6 +42,11 @@ const routerConfig = [
     path: '/workplace',
     layout: HeaderAsideLayout,
     component: Workspace
+  },
+  {
+    path: '/SensorCalibration',
+    layout: HeaderAsideLayout,
+    component: SensorCalibration
   }
   // {
   //   path: '*',
