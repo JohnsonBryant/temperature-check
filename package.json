@@ -62,7 +62,7 @@
     "electron-json-storage": "^4.1.8",
     "element-ui": "^2.13.0",
     "exceljs": "^3.8.2",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "serialport": "^8.0.5",
     "vue": "^2.5.16",
     "vue-echarts": "^4.1.0",
